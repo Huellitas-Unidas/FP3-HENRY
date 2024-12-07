@@ -1,1 +1,0 @@
-//Página dinámica para un ID de publicación
