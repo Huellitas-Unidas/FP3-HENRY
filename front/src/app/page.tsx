@@ -1,4 +1,4 @@
-{/*import React from 'react'
+import React from 'react'
 
 const Homeview = () => {
   return (
@@ -8,4 +8,4 @@ const Homeview = () => {
   )
 }
 
-export default Homeview */}
+export default Homeview; 
