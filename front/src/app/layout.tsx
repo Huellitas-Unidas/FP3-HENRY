@@ -1,4 +1,4 @@
-import type {Metadata} from "next";
+{/*import type {Metadata} from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,11 +15,12 @@ export default function RootLayout({
     <html lang="en" >
       <body className="flex flex-col  bg-gray-50 text-gray-900 h-screen justify-around p-4 overflow-y-scroll">
        {/* <Navbar /> */}
-        <main className="flex-grow w-full">
+      {/*  <main className="flex-grow w-full">
            {children}
         </main>
      {/*   <Footer /> */}
-      </body>
+  {/*    </body>
     </html>
   );
 }
+*/}
