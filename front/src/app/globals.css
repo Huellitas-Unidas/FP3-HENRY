@@ -3,5 +3,25 @@
 @tailwind utilities;
 
 
-
+:root {
+    --background: #ffffff;
+    --foreground: #1e0c01;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Arial", sans-serif;
+    background-color: #dbdcec;
+  }
+  
+  @layer utilities {
+    .text-stroke-black {
+        -webkit-text-stroke: 1px black;
+    }
+  }
  
