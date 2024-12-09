@@ -4,7 +4,7 @@ import React from 'react'
 const Homeview = () => {
   return (
     <div>
-      <h1>Este es el home :</h1>
+      <h1>Este es el home</h1>
       <SearchBar/>
     </div>
   )
