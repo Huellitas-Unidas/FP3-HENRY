@@ -59,7 +59,7 @@ export class UserService {
 
     return {
       message: `Te has logueado exitosamente.`,
-      token: token
+      token: token,
     };
   }
 
