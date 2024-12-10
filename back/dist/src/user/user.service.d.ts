@@ -19,8 +19,27 @@ export declare class UserService {
         message: string;
         token: string;
     }>;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateUserDto: UpdateUserDto): string;
-    remove(id: number): string;
+    findAll(): Promise<{
+        email: string;
+        username: string;
+        name: string;
+        id: number;
+    }[]>;
+    findOne(id: number): Promise<{
+        email: string;
+        username: string;
+        password: string;
+        name: string;
+        id: number;
+    }>;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        email: string;
+        username: string;
+        password: string;
+        name: string;
+        id: number;
+    }>;
+    remove(id: number): Promise<{
+        message: string;
+    }>;
 }
