@@ -1,9 +1,10 @@
-import React from 'react'
+"use client";
 
-const Register = () => {
-  return (
-    <div>Register</div>
-  )
-}
+import RegisterCard from "@/components/Forms/Register";
+import React from "react";
 
-export default Register; 
+const Register: React.FC = () => {
+  return <RegisterCard />;
+};
+
+export default Register;
