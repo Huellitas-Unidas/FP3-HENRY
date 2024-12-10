@@ -1,8 +1,8 @@
 import validate from "@/helpers/validate";
 import { useFormik } from "formik";
 import React from "react";
-import Enviar from "../Buttons/Enviar";
 import Link from "next/link";
+import GreenButton from "../Buttons/GreenButton";
 
 const RegisterCard: React.FC = () => {
   const formik = useFormik({
@@ -18,7 +18,7 @@ const RegisterCard: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col place-items-center mt-6">
       <div className="rounded-xl border-2 border-green500 shadow-2xl p-8 w-1/3 ">
         <form className="flex flex-col gap-4 items-center text-2xl">
           <input
@@ -73,7 +73,7 @@ const RegisterCard: React.FC = () => {
             </Link>
           </label>
 
-          <Enviar />
+          <GreenButton props="Enviar" />
         </form>
       </div>
     </div>
