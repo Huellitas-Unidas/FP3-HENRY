@@ -1,9 +1,10 @@
-import React from 'react'
+"use client";
 
-const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
+import LoginCard from "@/components/Forms/Login";
+import React from "react";
+
+const Login: React.FC = () => {
+  return <LoginCard />;
+};
 
 export default Login;
