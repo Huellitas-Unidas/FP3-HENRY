@@ -6,27 +6,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PublicationsService = void 0;
+exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
-let PublicationsService = class PublicationsService {
-    create(createPublicationDto) {
-        return 'This action adds a new publication';
+let PostsService = class PostsService {
+    create(createPostDto) {
+        return 'This action adds a new post';
     }
     findAll() {
-        return `This action returns all publications`;
+        return `This action returns all posts`;
     }
     findOne(id) {
-        return `This action returns a #${id} publication`;
+        return `This action returns a #${id} post`;
     }
-    update(id, updatePublicationDto) {
-        return `This action updates a #${id} publication`;
+    update(id, updatePostDto) {
+        return `This action updates a #${id} post`;
     }
     remove(id) {
-        return `This action removes a #${id} publication`;
+        return `This action removes a #${id} post`;
     }
 };
-exports.PublicationsService = PublicationsService;
-exports.PublicationsService = PublicationsService = __decorate([
+exports.PostsService = PostsService;
+exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)()
-], PublicationsService);
-//# sourceMappingURL=publications.service.js.map
+], PostsService);
+//# sourceMappingURL=posts.service.js.map
