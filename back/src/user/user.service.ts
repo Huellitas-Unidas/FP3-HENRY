@@ -59,23 +59,46 @@ export class UserService {
 
     return {
       message: `Te has logueado exitosamente.`,
-      token: token
+      token: token,
     };
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    return users.map(({ password, ...user }) => user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new Error(`Usuario con ID ${id} no encontrado`);
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
+  
+    return updatedUser;
   }
+  
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      throw new Error(`Usuario con ID ${id} no encontrado`);
+    }
+    await this.prisma.user.delete({
+      where: { id },
+    });
+    return { message: `Usuario con ID ${id} eliminado exitosamente` };
   }
 }
