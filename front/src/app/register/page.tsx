@@ -1,6 +1,6 @@
 "use client";
 
-import RegisterCard from "@/components/Formularios/Register";
+import RegisterCard from "@/components/Forms/Register";
 import React from "react";
 
 const Register: React.FC = () => {
