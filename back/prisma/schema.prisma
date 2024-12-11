@@ -8,11 +8,10 @@ datasource db {
 }
 model User {
   id          Int          @id @default(autoincrement())
-  email       String       @unique
-  username    String       @unique
-  password    String
   name        String
-  createdAt   DateTime     @default(now())  // Asegúrate de que esta línea esté presente
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())  
   posts       Post[]
   donations   Donations[]
   notifications Notifications[]
