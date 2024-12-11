@@ -7,11 +7,11 @@ export declare class UserController {
     constructor(userService: UserService);
     create(createUserDto: CreateUserDto): Promise<{
         user: {
+            id: number;
+            createdAt: Date;
+            name: string;
             email: string;
             password: string;
-            name: string;
-            id: number;
-            username: string;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -19,24 +19,24 @@ export declare class UserController {
         token: string;
     }>;
     findAll(): Promise<{
-        email: string;
-        name: string;
         id: number;
-        username: string;
+        createdAt: Date;
+        name: string;
+        email: string;
     }[]>;
     findOne(id: string): Promise<{
+        id: number;
+        createdAt: Date;
+        name: string;
         email: string;
         password: string;
-        name: string;
-        id: number;
-        username: string;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        id: number;
+        createdAt: Date;
+        name: string;
         email: string;
         password: string;
-        name: string;
-        id: number;
-        username: string;
     }>;
     remove(id: number): Promise<{
         message: string;

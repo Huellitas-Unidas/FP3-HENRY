@@ -15,6 +15,7 @@ const prisma_service_1 = require("../../prisma/prisma.service");
 let PostsService = class PostsService {
     constructor(prisma) {
         this.prisma = prisma;
+        console.log('Prisma Service Models:', Object.keys(this.prisma));
     }
     async create(createPostDto) {
         const { title, description, petType, dateLost, location, contactInfo, photoUrl, userId, } = createPostDto;
