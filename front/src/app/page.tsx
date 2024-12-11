@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 import Image from "next/image";
-=======
-import SearchBar from '@/components/SearchBar/SearchBar';
-import React from 'react'
->>>>>>> 0190fb5b877b2d5eac0096a7d2fc0d8d93268a64
 
 export default function Home() {
   return (
-<<<<<<< HEAD
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
@@ -28,14 +22,6 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
-=======
-    <div>
-      <h1>Este es el home</h1>
-      <SearchBar/>
-    </div>
-  )
-}
->>>>>>> 0190fb5b877b2d5eac0096a7d2fc0d8d93268a64
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
