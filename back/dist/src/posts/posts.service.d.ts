@@ -6,6 +6,7 @@ export declare class PostsService {
     constructor(prisma: PrismaService);
     create(createPostDto: CreatePostDto): Promise<{
         id: number;
+        createdAt: Date;
         title: string;
         description: string;
         petType: string;
@@ -14,11 +15,11 @@ export declare class PostsService {
         contactInfo: string;
         photoUrl: string;
         userId: number;
-        createdAt: Date;
         updatedAt: Date;
     }>;
     findAll(): Promise<{
         id: number;
+        createdAt: Date;
         title: string;
         description: string;
         petType: string;
@@ -27,10 +28,38 @@ export declare class PostsService {
         contactInfo: string;
         photoUrl: string;
         userId: number;
-        createdAt: Date;
         updatedAt: Date;
     }[]>;
-    findOne(id: number): string;
-    update(id: number, updatePostDto: UpdatePostDto): string;
-    remove(id: number): string;
+    findOne(id: number): Promise<{
+        id: number;
+        createdAt: Date;
+        title: string;
+        description: string;
+        petType: string;
+        dateLost: Date;
+        location: string;
+        contactInfo: string;
+        photoUrl: string;
+        userId: number;
+        updatedAt: Date;
+    }>;
+    update(id: number, updatePostDto: UpdatePostDto): Promise<{
+        message: string;
+        updatedPost: {
+            id: number;
+            createdAt: Date;
+            title: string;
+            description: string;
+            petType: string;
+            dateLost: Date;
+            location: string;
+            contactInfo: string;
+            photoUrl: string;
+            userId: number;
+            updatedAt: Date;
+        };
+    }>;
+    remove(id: number): Promise<{
+        message: string;
+    }>;
 }

@@ -27,13 +27,13 @@ let PostsController = class PostsController {
     async findAll() {
         return this.postsService.findAll();
     }
-    findOne(id) {
+    async findOne(id) {
         return this.postsService.findOne(+id);
     }
-    update(id, updatePostDto) {
+    async update(id, updatePostDto) {
         return this.postsService.update(+id, updatePostDto);
     }
-    remove(id) {
+    async remove(id) {
         return this.postsService.remove(+id);
     }
 };
@@ -56,22 +56,22 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_post_dto_1.UpdatePostDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "remove", null);
 exports.PostsController = PostsController = __decorate([
     (0, common_1.Controller)('posts'),
