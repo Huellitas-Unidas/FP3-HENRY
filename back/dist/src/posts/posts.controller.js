@@ -24,7 +24,7 @@ let PostsController = class PostsController {
     create(createPostDto) {
         return this.postsService.create(createPostDto);
     }
-    findAll() {
+    async findAll() {
         return this.postsService.findAll();
     }
     findOne(id) {
@@ -49,7 +49,7 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], PostsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),

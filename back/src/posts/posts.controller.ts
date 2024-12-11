@@ -13,7 +13,7 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.postsService.findAll();
   }
 
