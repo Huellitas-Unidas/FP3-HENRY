@@ -9,22 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserDto = void 0;
+exports.CreatePostDto = void 0;
 const class_validator_1 = require("class-validator");
-class CreateUserDto {
+class CreatePostDto {
 }
-exports.CreateUserDto = CreateUserDto;
-__decorate([
-    (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "email", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "password", void 0);
+exports.CreatePostDto = CreatePostDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "name", void 0);
-//# sourceMappingURL=create-user.dto.js.map
+], CreatePostDto.prototype, "title", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePostDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePostDto.prototype, "petType", void 0);
+__decorate([
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], CreatePostDto.prototype, "dateLost", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePostDto.prototype, "location", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePostDto.prototype, "contactInfo", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePostDto.prototype, "photoUrl", void 0);
+__decorate([
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreatePostDto.prototype, "userId", void 0);
+//# sourceMappingURL=create-post.dto.js.map

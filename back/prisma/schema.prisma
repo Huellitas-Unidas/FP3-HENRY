@@ -6,22 +6,49 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  username String @unique
-  password String
-  name     String
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())  
+  posts       Post[]
+  donations   Donations[]
+  notifications Notifications[]
 }
-model Publication {
-  id          Int       @id @default(autoincrement())
+
+
+
+model Post {
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   petType     String
   dateLost    DateTime
   location    String
   contactInfo String
-  photoUrl    String?
+  photoUrl    String
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())  
+  updatedAt   DateTime @updatedAt
 }
 
+
+
+model Donations {
+  id          Int         @id @default(autoincrement())
+  amount      Float
+  userId      Int          
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+model Notifications {
+  id          Int         @id @default(autoincrement())
+  content     String
+  type        String
+  isRead      Boolean      @default(false)
+  userId      Int         
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}

@@ -10,58 +10,57 @@ export class UserService {
     private prisma: PrismaService,
     private authService: AuthService,
   ) {}
-
   async create(createUserDto: CreateUserDto) {
-    const { email, username, password, name } = createUserDto;
-
+    const { email, password, name } = createUserDto;
+  
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
-
+  
     if (existingUser) {
       throw new Error('El correo electrónico ya está en uso');
     }
-
+  
     const hashedPassword = await this.authService.hashPassword(password);
-
+  
     const user = await this.prisma.user.create({
       data: {
         email,
-        username,
         password: hashedPassword,
         name,
       },
     });
-
+  
     return { user };
   }
-
+  
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
-
+  
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
-
+  
     const isPasswordValid = await this.authService.validatePassword(
       password,
       user.password,
     );
-
+  
     if (!isPasswordValid) {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
-
-    const payload = { username: user.username, sub: user.id };
+  
+    const payload = { email: user.email, sub: user.id };
     const token = this.authService.generateToken(payload);
-
+  
     return {
       message: `Te has logueado exitosamente.`,
       token: token,
     };
   }
+  
 
   async findAll() {
     const users = await this.prisma.user.findMany();
