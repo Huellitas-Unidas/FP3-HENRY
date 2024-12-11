@@ -31,7 +31,7 @@ export default function Home() {
 
           <div className="p-4 flex gap-6 rounded-lg hover:shadow-md hover:scale-105 transition-all duration-300">
             <div className="flex space-x-2 mb-3">
-              <HiOutlineMail size={60} className="text-[#1e1612]" />
+              <HiOutlineMail size={30} className="text-[#1e1612]" />
             </div>
             <div>
               <h3 className="text-gray-800 text-xl font-semibold mb-3">
@@ -42,6 +42,7 @@ export default function Home() {
               </p>
             </div>
           </div>
+
           <div className="p-4 flex gap-6 rounded-lg hover:shadow-md hover:scale-105 transition-all duration-300">
             <BsChatLeftHeart size={70} />
             <div>
