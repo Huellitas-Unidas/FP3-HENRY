@@ -18,9 +18,9 @@ const RegisterCard: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center mt-6">
-      <div className="rounded-xl border-2 border-green500 shadow-2xl p-8 w-1/3 ">
-        <form className="flex flex-col gap-4 items-center text-2xl">
+    <div className="flex flex-col place-items-center mt-9">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+        <form className="flex flex-col gap-4 items-center text-xl">
           <input
             placeholder="Nombre completo"
             type="name"
@@ -66,7 +66,7 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
 
-          <label className="text-base">
+          <label className="text-sm">
             Ya tienes una cuenta?{" "}
             <Link href={"/login"} className="underline hover:no-underline">
               Loguéate
