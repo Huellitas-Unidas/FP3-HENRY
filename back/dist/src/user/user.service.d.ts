@@ -9,10 +9,10 @@ export declare class UserService {
     create(createUserDto: CreateUserDto): Promise<{
         user: {
             email: string;
-            username: string;
             password: string;
             name: string;
             id: number;
+            createdAt: Date;
         };
     }>;
     login(email: string, password: string): Promise<{
@@ -21,23 +21,23 @@ export declare class UserService {
     }>;
     findAll(): Promise<{
         email: string;
-        username: string;
         name: string;
         id: number;
+        createdAt: Date;
     }[]>;
     findOne(id: number): Promise<{
         email: string;
-        username: string;
         password: string;
         name: string;
         id: number;
+        createdAt: Date;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         email: string;
-        username: string;
         password: string;
         name: string;
         id: number;
+        createdAt: Date;
     }>;
     remove(id: number): Promise<{
         message: string;
