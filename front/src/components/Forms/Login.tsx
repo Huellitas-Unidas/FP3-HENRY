@@ -22,7 +22,7 @@ const LoginCard: React.FC = () => {
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 items-center text-xl"
+          className="flex flex-col gap-2 items-center text-xl"
         >
           <input
             placeholder="Email"
@@ -33,7 +33,9 @@ const LoginCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">{formik.errors.email}</span>
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.email}
+            </span>
           )}
 
           <input
@@ -45,12 +47,12 @@ const LoginCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">
+            <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
 
-          <label className="text-sm">
+          <label className="text-sm mb-2">
             No tienes una cuenta?{" "}
             <Link href={"/register"} className="underline hover:no-underline">
               Regístrate
