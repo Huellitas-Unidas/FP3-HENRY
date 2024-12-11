@@ -19,7 +19,7 @@ let UserService = class UserService {
         this.authService = authService;
     }
     async create(createUserDto) {
-        const { email, username, password, name } = createUserDto;
+        const { email, password, name } = createUserDto;
         const existingUser = await this.prisma.user.findUnique({
             where: { email },
         });
@@ -30,7 +30,6 @@ let UserService = class UserService {
         const user = await this.prisma.user.create({
             data: {
                 email,
-                username,
                 password: hashedPassword,
                 name,
             },
@@ -48,7 +47,7 @@ let UserService = class UserService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Contraseña incorrecta');
         }
-        const payload = { username: user.username, sub: user.id };
+        const payload = { email: user.email, sub: user.id };
         const token = this.authService.generateToken(payload);
         return {
             message: `Te has logueado exitosamente.`,
