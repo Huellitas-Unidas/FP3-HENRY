@@ -9,7 +9,14 @@ import { DonationModule } from './donation/donation.module';
 import { PostsModule } from './posts/posts.module';
 
 @Module({
-  imports: [UserModule,  NotificationsModule, MapModule, AdministrationModule, DonationModule, PostsModule],
+  imports: [
+    UserModule,
+    NotificationsModule,
+    MapModule,
+    AdministrationModule,
+    DonationModule,
+    PostsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

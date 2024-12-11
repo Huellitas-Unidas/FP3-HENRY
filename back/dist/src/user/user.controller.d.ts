@@ -11,7 +11,7 @@ export declare class UserController {
             password: string;
             name: string;
             id: number;
-            createdAt: Date;
+            username: string;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -22,21 +22,21 @@ export declare class UserController {
         email: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }[]>;
     findOne(id: string): Promise<{
         email: string;
         password: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         email: string;
         password: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }>;
     remove(id: number): Promise<{
         message: string;

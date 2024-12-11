@@ -12,7 +12,7 @@ export declare class UserService {
             password: string;
             name: string;
             id: number;
-            createdAt: Date;
+            username: string;
         };
     }>;
     login(email: string, password: string): Promise<{
@@ -23,21 +23,21 @@ export declare class UserService {
         email: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }[]>;
     findOne(id: number): Promise<{
         email: string;
         password: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         email: string;
         password: string;
         name: string;
         id: number;
-        createdAt: Date;
+        username: string;
     }>;
     remove(id: number): Promise<{
         message: string;
