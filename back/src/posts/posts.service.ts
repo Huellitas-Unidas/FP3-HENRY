@@ -38,15 +38,39 @@ export class PostsService {
     return posts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: number) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+    });
+    if (!post) {
+      throw new Error(`Post con ID ${id} no encontrado`);
+    }
+    return post;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: number, updatePostDto: UpdatePostDto) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new Error(`Post con ID ${id} no encontrado`);
+    }
+    const updatedPost = await this.prisma.post.update({
+      where: { id },
+      data: updatePostDto,
+    });
+
+    return {
+      message: `Post con ID ${id} actualizado correctamente`,
+      updatedPost,
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: number) {
+    const post = await this.prisma.post.delete({
+      where: { id },
+    });
+    return { message: `Post con ID ${id} eliminado correctamente` };
   }
 }
