@@ -52,20 +52,40 @@ let UserService = class UserService {
         const token = this.authService.generateToken(payload);
         return {
             message: `Te has logueado exitosamente.`,
-            token: token
+            token: token,
         };
     }
-    findAll() {
-        return `This action returns all user`;
+    async findAll() {
+        const users = await this.prisma.user.findMany();
+        return users.map(({ password, ...user }) => user);
     }
-    findOne(id) {
-        return `This action returns a #${id} user`;
+    async findOne(id) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+        });
+        if (!user) {
+            throw new Error(`Usuario con ID ${id} no encontrado`);
+        }
+        return user;
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async update(id, updateUserDto) {
+        const updatedUser = await this.prisma.user.update({
+            where: { id },
+            data: updateUserDto,
+        });
+        return updatedUser;
     }
-    remove(id) {
-        return `This action removes a #${id} user`;
+    async remove(id) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+        });
+        if (!user) {
+            throw new Error(`Usuario con ID ${id} no encontrado`);
+        }
+        await this.prisma.user.delete({
+            where: { id },
+        });
+        return { message: `Usuario con ID ${id} eliminado exitosamente` };
     }
 };
 exports.UserService = UserService;

@@ -18,8 +18,27 @@ export declare class UserController {
         message: string;
         token: string;
     }>;
-    findAll(): string;
-    findOne(id: string): string;
-    update(id: string, updateUserDto: UpdateUserDto): string;
-    remove(id: string): string;
+    findAll(): Promise<{
+        email: string;
+        username: string;
+        name: string;
+        id: number;
+    }[]>;
+    findOne(id: string): Promise<{
+        email: string;
+        username: string;
+        password: string;
+        name: string;
+        id: number;
+    }>;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        email: string;
+        username: string;
+        password: string;
+        name: string;
+        id: number;
+    }>;
+    remove(id: number): Promise<{
+        message: string;
+    }>;
 }
