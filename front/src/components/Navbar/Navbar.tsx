@@ -18,9 +18,9 @@ const Navbar = () => {
             ></Image>
           </Link>
           <div className="hidden w-3/5 items-center justify-evenly font-semibold md:flex">
-            <a href="">Buscados/Encontrados</a>
+            <a href="/lostFound">Buscados/Encontrados</a>
             <a href="">Ayudanos donando</a>
-            <a href="">Sobre Huellitas Unidas</a>
+            <a href="/maps">Mapa Interactivo</a>
             <a href="">Recomendaciones</a>
           </div>
           <div className="hidden w-1/5 items-center justify-evenly font-semibold md:flex">
