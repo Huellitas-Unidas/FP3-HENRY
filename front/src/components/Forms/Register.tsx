@@ -14,13 +14,19 @@ const RegisterCard: React.FC = () => {
       phone: "",
     },
     validate: validate,
-    onSubmit: validate, //!
+    onSubmit: (values, { resetForm }) => {
+      console.log(values);
+      resetForm();
+    },
   });
 
   return (
-    <div className="flex flex-col place-items-center mt-9">
+    <div className="flex flex-col place-items-center my-8">
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
-        <form className="flex flex-col gap-4 items-center text-xl">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-2 items-center text-xl"
+        >
           <input
             placeholder="Nombre completo"
             type="name"
@@ -29,6 +35,11 @@ const RegisterCard: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.name}
+            </span>
+          )}
 
           <input
             placeholder="Email"
@@ -38,6 +49,11 @@ const RegisterCard: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.email}
+            </span>
+          )}
 
           <input
             placeholder="Contraseña"
@@ -47,6 +63,11 @@ const RegisterCard: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.password}
+            </span>
+          )}
 
           <input
             placeholder="Confirma tu contraseña"
@@ -56,6 +77,11 @@ const RegisterCard: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.confirm}
+            </span>
+          )}
 
           <input
             placeholder="Teléfono"
@@ -65,8 +91,13 @@ const RegisterCard: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.phone}
+            </span>
+          )}
 
-          <label className="text-sm">
+          <label className="text-sm mb-2">
             Ya tienes una cuenta?{" "}
             <Link href={"/login"} className="underline hover:no-underline">
               Loguéate
