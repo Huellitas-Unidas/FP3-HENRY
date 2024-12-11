@@ -7,9 +7,10 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { MapModule } from './map/map.module';
 import { AdministrationModule } from './administration/administration.module';
 import { DonationModule } from './donation/donation.module';
+import { FilesUploadModule } from './files-upload/files-upload.module';
 
 @Module({
-  imports: [UserModule, PublicationsModule, NotificationsModule, MapModule, AdministrationModule, DonationModule],
+  imports: [UserModule, PublicationsModule, NotificationsModule, MapModule, AdministrationModule, DonationModule, FilesUploadModule],
   controllers: [AppController],
   providers: [AppService],
 })
