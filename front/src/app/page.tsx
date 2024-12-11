@@ -42,7 +42,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-
           <div className="p-4 flex gap-6 rounded-lg hover:shadow-md hover:scale-105 transition-all duration-300">
             <BsChatLeftHeart size={70} />
             <div>
