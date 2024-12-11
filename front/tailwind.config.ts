@@ -9,6 +9,7 @@ export default {
   ],
   theme: {
     extend: {
+      
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -16,5 +17,6 @@ export default {
       },
     },
   },
+  
   plugins: [],
 } satisfies Config;
