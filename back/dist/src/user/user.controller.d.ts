@@ -8,10 +8,10 @@ export declare class UserController {
     create(createUserDto: CreateUserDto): Promise<{
         user: {
             email: string;
-            username: string;
             password: string;
             name: string;
             id: number;
+            username: string;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -20,23 +20,23 @@ export declare class UserController {
     }>;
     findAll(): Promise<{
         email: string;
-        username: string;
         name: string;
         id: number;
+        username: string;
     }[]>;
     findOne(id: string): Promise<{
         email: string;
-        username: string;
         password: string;
         name: string;
         id: number;
+        username: string;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         email: string;
-        username: string;
         password: string;
         name: string;
         id: number;
+        username: string;
     }>;
     remove(id: number): Promise<{
         message: string;
