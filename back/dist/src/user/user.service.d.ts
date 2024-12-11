@@ -8,11 +8,11 @@ export declare class UserService {
     constructor(prisma: PrismaService, authService: AuthService);
     create(createUserDto: CreateUserDto): Promise<{
         user: {
+            id: number;
+            createdAt: Date;
+            name: string;
             email: string;
             password: string;
-            name: string;
-            id: number;
-            username: string;
         };
     }>;
     login(email: string, password: string): Promise<{
@@ -20,24 +20,24 @@ export declare class UserService {
         token: string;
     }>;
     findAll(): Promise<{
-        email: string;
-        name: string;
         id: number;
-        username: string;
+        createdAt: Date;
+        name: string;
+        email: string;
     }[]>;
     findOne(id: number): Promise<{
+        id: number;
+        createdAt: Date;
+        name: string;
         email: string;
         password: string;
-        name: string;
-        id: number;
-        username: string;
     }>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        id: number;
+        createdAt: Date;
+        name: string;
         email: string;
         password: string;
-        name: string;
-        id: number;
-        username: string;
     }>;
     remove(id: number): Promise<{
         message: string;
