@@ -16,12 +16,13 @@ const notifications_module_1 = require("./notifications/notifications.module");
 const map_module_1 = require("./map/map.module");
 const administration_module_1 = require("./administration/administration.module");
 const donation_module_1 = require("./donation/donation.module");
+const files_upload_module_1 = require("./files-upload/files-upload.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, publications_module_1.PublicationsModule, notifications_module_1.NotificationsModule, map_module_1.MapModule, administration_module_1.AdministrationModule, donation_module_1.DonationModule],
+        imports: [user_module_1.UserModule, publications_module_1.PublicationsModule, notifications_module_1.NotificationsModule, map_module_1.MapModule, administration_module_1.AdministrationModule, donation_module_1.DonationModule, files_upload_module_1.FilesUploadModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
