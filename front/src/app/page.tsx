@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       <SearchBar/>
-     {/* <Carousel/> */}
+    {/*  <Carousel/> */}
       <div className="max-w-6xl mx-auto font-[sans-serif]">
       <h2 className="text-gray-800 sm:text-4xl text-lg font-extrabold text-center my-10">Mirá lo que nos caracteriza</h2>
 
