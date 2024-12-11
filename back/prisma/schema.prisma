@@ -14,3 +14,14 @@ model User {
   password String
   name     String
 }
+model Publication {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  petType     String
+  dateLost    DateTime
+  location    String
+  contactInfo String
+  photoUrl    String?
+}
+

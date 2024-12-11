@@ -10,13 +10,14 @@ exports.PublicationsModule = void 0;
 const common_1 = require("@nestjs/common");
 const publications_service_1 = require("./publications.service");
 const publications_controller_1 = require("./publications.controller");
+const prisma_service_1 = require("../../prisma/prisma.service");
 let PublicationsModule = class PublicationsModule {
 };
 exports.PublicationsModule = PublicationsModule;
 exports.PublicationsModule = PublicationsModule = __decorate([
     (0, common_1.Module)({
         controllers: [publications_controller_1.PublicationsController],
-        providers: [publications_service_1.PublicationsService],
+        providers: [publications_service_1.PublicationsService, prisma_service_1.PrismaService],
     })
 ], PublicationsModule);
 //# sourceMappingURL=publications.module.js.map
