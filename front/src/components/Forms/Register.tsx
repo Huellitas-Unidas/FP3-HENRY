@@ -21,11 +21,11 @@ const RegisterCard: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center my-4">
+    <div className="flex flex-col place-items-center my-8">
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 items-center text-xl"
+          className="flex flex-col gap-2 items-center text-xl"
         >
           <input
             placeholder="Nombre completo"
@@ -36,7 +36,9 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">{formik.errors.name}</span>
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.name}
+            </span>
           )}
 
           <input
@@ -48,7 +50,9 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">{formik.errors.email}</span>
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.email}
+            </span>
           )}
 
           <input
@@ -60,7 +64,7 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">
+            <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
@@ -74,7 +78,7 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">
+            <span className="text-red-500 text-sm text-center">
               {formik.errors.confirm}
             </span>
           )}
@@ -88,10 +92,12 @@ const RegisterCard: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
-            <span className="text-red-500 text-sm">{formik.errors.phone}</span>
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.phone}
+            </span>
           )}
 
-          <label className="text-sm">
+          <label className="text-sm mb-2">
             Ya tienes una cuenta?{" "}
             <Link href={"/login"} className="underline hover:no-underline">
               Loguéate
