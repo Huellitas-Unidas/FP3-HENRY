@@ -6,6 +6,7 @@ export declare class PostsController {
     constructor(postsService: PostsService);
     create(createPostDto: CreatePostDto): Promise<{
         id: string;
+        createdAt: Date;
         title: string;
         description: string;
         petType: string;
@@ -14,11 +15,11 @@ export declare class PostsController {
         contactInfo: string;
         photoUrl: string;
         userId: string;
-        createdAt: Date;
         updatedAt: Date;
     }>;
     findAll(): Promise<{
         id: string;
+        createdAt: Date;
         title: string;
         description: string;
         petType: string;
@@ -27,7 +28,6 @@ export declare class PostsController {
         contactInfo: string;
         photoUrl: string;
         userId: string;
-        createdAt: Date;
         updatedAt: Date;
     }[]>;
     findOne(id: string): string;
