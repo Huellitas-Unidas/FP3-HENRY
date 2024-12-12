@@ -1,7 +1,11 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
@@ -71,17 +75,18 @@ export class UserService {
       where: { id },
       include: {
         posts: true,
-        notifications: true
-      }
+        notifications: true,
+      },
     });
 
     if (!user) {
       throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    const {password, ...responseUser}=user
-    const responsePost = user.posts.map(({userId, ...post})=>post)
+    const { password, ...responseUser } = user;
+    const responsePost = user.posts.map(({ userId, ...post }) => post);
     return {
-        ...responseUser, posts: responsePost
+      ...responseUser,
+      posts: responsePost,
     };
   }
 

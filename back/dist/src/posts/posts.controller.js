@@ -15,14 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsController = void 0;
 const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
-const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
 let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
-    }
-    create(createPostDto) {
-        return this.postsService.create(createPostDto);
     }
     async findAll() {
         return this.postsService.findAll();
@@ -38,13 +34,6 @@ let PostsController = class PostsController {
     }
 };
 exports.PostsController = PostsController;
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
-    __metadata("design:returntype", void 0)
-], PostsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),

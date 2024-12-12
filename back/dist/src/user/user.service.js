@@ -63,8 +63,8 @@ let UserService = class UserService {
             where: { id },
             include: {
                 posts: true,
-                notifications: true
-            }
+                notifications: true,
+            },
         });
         if (!user) {
             throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
@@ -72,7 +72,8 @@ let UserService = class UserService {
         const { password, ...responseUser } = user;
         const responsePost = user.posts.map(({ userId, ...post }) => post);
         return {
-            ...responseUser, posts: responsePost
+            ...responseUser,
+            posts: responsePost,
         };
     }
     async update(id, updateUserDto) {

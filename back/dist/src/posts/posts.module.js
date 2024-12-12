@@ -11,11 +11,13 @@ const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
 const posts_controller_1 = require("./posts.controller");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const files_upload_module_1 = require("../files-upload/files-upload.module");
 let PostsModule = class PostsModule {
 };
 exports.PostsModule = PostsModule;
 exports.PostsModule = PostsModule = __decorate([
     (0, common_1.Module)({
+        imports: [files_upload_module_1.FilesUploadModule],
         controllers: [posts_controller_1.PostsController],
         providers: [posts_service_1.PostsService, prisma_service_1.PrismaService],
     })
