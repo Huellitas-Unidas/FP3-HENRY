@@ -4,11 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <div>
-<<<<<<< HEAD
-      <footer className= "rounded-lg shadow dark:bg-gray-800 border border-[#3c9083]">
-=======
-      <footer className="rounded-lg shadow dark:bg-gray-800 bg-gray-50 border border-[#3c9083]">
->>>>>>> 1faae245e11bb8066dd41da3ae54a59c488cc76d
+      <footer className="rounded-lg shadow dark:bg-gray-800 bg-white border border-[#3c9083]">
         <div className="w-full mx-auto max-w-screen-xl p-5 md:flex md:justify-between sm:flex sm:items-center sm:justify-between">
           <div className="text-sm text-gray-700 sm:text-center dark:text-gray-400 pl-2 text-left">
             © 2025
@@ -19,8 +15,8 @@ const Footer = () => {
           </div>
           <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-700 dark:text-gray-400 sm:mt-0 text-right">
             <li>
-              <Link href="#" className="hover:underline me-4 md:me-6">
-                Sobre Huellas Unidas
+              <Link href="/pqr" className="hover:underline me-4 md:me-6">
+                Pqr
               </Link>
             </li>
             <li>
@@ -29,12 +25,12 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:underline me-4 md:me-6">
+              <Link href="not-found" className="hover:underline me-4 md:me-6">
                 Ayudanos donando
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:underline">
+              <Link href="/pqr" className="hover:underline">
                 Contacto
               </Link>
             </li>
