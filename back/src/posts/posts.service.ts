@@ -7,17 +7,9 @@ import { FilesUploadService } from '../files-upload/files-upload.service';
 
 @Injectable()
 export class PostsService {
-<<<<<<< HEAD
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly filesUploadService: FilesUploadService,
-  ) {}
-  async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
-=======
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPostDto: CreatePostDto) {
->>>>>>> 28bf8e46b172a66ad9f88ed4cc7b25f5e64ddbd2
     const {
       title,
       description,
@@ -29,33 +21,12 @@ export class PostsService {
       userId,
     } = createPostDto;
 
-<<<<<<< HEAD
-    if (!isUUID(userId)) {
-      throw new HttpException('userId debe ser un UUID válido', 400);
-    }
-
     if (!isUUID(userId)) throw new HttpException('El UUID no es valido', 404);
-=======
-    if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
->>>>>>> 28bf8e46b172a66ad9f88ed4cc7b25f5e64ddbd2
 
-  
     const userFound = await this.prisma.user.findUnique({
-<<<<<<< HEAD
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!userFound) {
-      throw new HttpException('No existe el usuario', 404);
-    }
-=======
       where: { id: userId },
     });
     if (!userFound) throw new HttpException('El usuario no existe', 404);
-
->>>>>>> 28bf8e46b172a66ad9f88ed4cc7b25f5e64ddbd2
 
     const post = await this.prisma.post.create({
       data: {
@@ -90,7 +61,7 @@ export class PostsService {
     return post;
   }
 
-  async update(id: string, updatePostDto: UpdatePostDto) { 
+  async update(id: string, updatePostDto: UpdatePostDto) {
     if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
 
     const post = await this.prisma.post.findUnique({
@@ -112,7 +83,7 @@ export class PostsService {
     };
   }
 
-  async remove(id: string) { 
+  async remove(id: string) {
     if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
 
     const post = await this.prisma.post.delete({
