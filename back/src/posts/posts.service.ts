@@ -7,9 +7,12 @@ import { FilesUploadService } from '../files-upload/files-upload.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly filesUploadService: FilesUploadService,
+  ) {}
 
-  async create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
     const {
       title,
       description,
@@ -17,23 +20,32 @@ export class PostsService {
       dateLost,
       location,
       contactInfo,
-      photoUrl,
       userId,
     } = createPostDto;
 
-    if (!isUUID(userId)) throw new HttpException('El UUID no es valido', 404);
+    if (!isUUID(userId)) throw new HttpException('el uuid no es valido', 404);
 
+    console.log('userId:', userId); // Para verificar el valor
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
     });
     if (!userFound) throw new HttpException('El usuario no existe', 404);
+
+    // Subimos la imagen a Cloudinary
+    let photoUrl = '';
+    if (file) {
+      const uploadResult = await this.filesUploadService.uploadPostImage(file);
+      photoUrl = uploadResult.secure_url; // Obtenemos la URL de la imagen subida
+    }
+
+    const formattedDateLost = new Date(dateLost);
 
     const post = await this.prisma.post.create({
       data: {
         title,
         description,
         petType,
-        dateLost,
+        dateLost: formattedDateLost,
         location,
         contactInfo,
         photoUrl,
