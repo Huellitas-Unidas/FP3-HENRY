@@ -4,7 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <div>
-      <footer className= "rounded-lg shadow dark:bg-gray-800 bg-gray-50 border border-[#3c9083]">
+      <footer className= "rounded-lg shadow dark:bg-gray-800 border border-[#3c9083]">
         <div className="w-full mx-auto max-w-screen-xl p-5 md:flex md:justify-between sm:flex sm:items-center sm:justify-between">
           <div className="text-sm text-gray-700 sm:text-center dark:text-gray-400 pl-2 text-left">
           © 2025 
