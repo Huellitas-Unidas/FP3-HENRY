@@ -20,7 +20,7 @@ const validate = (values: IValidateErrors): IValidateErrors => {
 
   if (values.password && !/(?=.*[A-Z])(?=.*\d).{6,}/.test(values.password)) {
     errors.password =
-      "La contraseña debe tener al menos una mayúscula, un número y 6 caracteres.";
+      "La contraseña debe tener al menos 6 caracteres, con una mayúscula y un número.";
   }
 
   if (values.confirm && values.confirm !== values.password) {
