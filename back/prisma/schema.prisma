@@ -8,18 +8,28 @@ datasource db {
 }
 
 model User {
+<<<<<<< HEAD
   id            Int             @id @default(autoincrement())
   name          String
   email         String          @unique
   password      String
   createdAt     DateTime        @default(now())
   donations     Donations[]
+=======
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())  
+  posts       Post[]
+  donations   Donations[]
+>>>>>>> 1c03a9d18216e947d63ae9eceaafce28459ae1b8
   notifications Notifications[]
   posts         Post[]
 }
 
 model Post {
-  id          Int      @id @default(autoincrement())
+  id          String     @id @default(uuid()) @db.Uuid
   title       String
   description String
   userId      Int
@@ -30,6 +40,7 @@ model Post {
   dateLost    DateTime
   location    String
   photoUrl    String
+<<<<<<< HEAD
   user        User     @relation(fields: [userId], references: [id])
 }
 
@@ -49,4 +60,28 @@ model Notifications {
   userId    Int
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+=======
+  userId      String    @db.Uuid
+  user        User       @relation(fields: [userId], references: [id])
+  createdAt   DateTime   @default(now())  
+  updatedAt   DateTime   @updatedAt
+}
+
+model Donations {
+  id          String        @id @default(uuid()) @db.Uuid
+  amount      Float
+  userId      String         @db.Uuid
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+
+model Notifications {
+  id          String         @id @default(uuid()) @db.Uuid
+  content     String
+  type        String
+  isRead      Boolean      @default(false)
+  userId      String       @db.Uuid  
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+>>>>>>> 1c03a9d18216e947d63ae9eceaafce28459ae1b8
 }
