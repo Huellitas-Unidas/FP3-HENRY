@@ -7,10 +7,10 @@ export declare class UserController {
     constructor(userService: UserService);
     create(createUserDto: CreateUserDto): Promise<{
         user: {
-            id: string;
-            name: string;
             email: string;
             password: string;
+            name: string;
+            id: string;
             createdAt: Date;
         };
     }>;
@@ -19,23 +19,42 @@ export declare class UserController {
         token: string;
     }>;
     findAll(): Promise<{
-        id: string;
-        name: string;
         email: string;
+        name: string;
+        id: string;
         createdAt: Date;
     }[]>;
     findOne(id: string): Promise<{
-        id: string;
-        name: string;
+        posts: {
+            id: string;
+            createdAt: Date;
+            title: string;
+            description: string;
+            petType: string;
+            dateLost: Date;
+            location: string;
+            contactInfo: string;
+            photoUrl: string;
+            updatedAt: Date;
+        }[];
+        notifications: {
+            id: string;
+            createdAt: Date;
+            userId: string;
+            content: string;
+            type: string;
+            isRead: boolean;
+        }[];
         email: string;
-        password: string;
+        name: string;
+        id: string;
         createdAt: Date;
     }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
-        id: string;
-        name: string;
         email: string;
         password: string;
+        name: string;
+        id: string;
         createdAt: Date;
     }>;
     remove(id: string): Promise<{
