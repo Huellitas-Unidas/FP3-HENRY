@@ -3,8 +3,11 @@ import { useFormik } from "formik";
 import React from "react";
 import Link from "next/link";
 import GreenButton from "../Buttons/GreenButton";
+import { useRouter } from "next/navigation";
 
 const LoginCard: React.FC = () => {
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -14,6 +17,8 @@ const LoginCard: React.FC = () => {
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       resetForm();
+      localStorage.setItem("userData", JSON.stringify(values));
+      router.push("/");
     },
   });
 
