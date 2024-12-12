@@ -3,6 +3,8 @@ import { HiOutlineLocationMarker, HiOutlineMail } from "react-icons/hi";
 import { BsChatLeftHeart } from "react-icons/bs";
 import React from "react";
 import SearchBar from "@/components/SearchBar/SearchBar";
+import Link from "next/link";
+
 
 export default function Home() {
   return (
@@ -19,6 +21,7 @@ export default function Home() {
             <HiOutlineLocationMarker size={60} className="text-[#1e1612]" />
 
             <div>
+              <Link href='/maps'>
               <h3 className="text-gray-800 text-xl font-semibold mb-3">
                 Mapa Interactivo
               </h3>
@@ -26,6 +29,7 @@ export default function Home() {
                 Ubica mascotas perdidas, encontradas y servicios en tu área con
                 nuestro mapa interactivo.
               </p>
+              </Link>
             </div>
           </div>
 
