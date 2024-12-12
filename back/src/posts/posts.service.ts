@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -8,40 +8,53 @@ import { isUUID } from 'class-validator';
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createPostDto: CreatePostDto) {
-    const {
-      title,
-      description,
-      petType,
-      dateLost,
-      location,
-      contactInfo,
-      photoUrl,
-      userId,
-    } = createPostDto;
+  async create(userId: string, createPostDto: CreatePostDto) {
+    const postsArray = [];
+    let total = 0;
 
-    if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-  
-    const userFound = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!userFound) throw new HttpException('El usuario no existe', 404);
+    if(!user) throw new NotFoundException("el usuario no existe")
+
+        
 
 
-    const post = await this.prisma.post.create({
-      data: {
-        title,
-        description,
-        petType,
-        dateLost,
-        location,
-        contactInfo,
-        photoUrl,
-        userId,
-      },
-    });
-    return post;
+    const newPost = {...createPostDto, userId: user.id} 
+
+//    const createPost = this.prisma.post.create({data:newPost})
+
+    // if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
+
+    // const userFound = await this.prisma.user.findUnique({
+    //   where: { id: userId },
+    // });
+    // if (!userFound) throw new HttpException('El usuario no existe', 404);
+
+    // const post = await this.prisma.post.create({
+    //   data: {
+    //     title,
+    //     description,
+    //     petType,
+    //     dateLost,
+    //     location,
+    //     contactInfo,
+    //     photoUrl,
+    //     userId,
+    //   },
+    // });
+    // return post;
+
+
+    // { userId: string;
+    //      title: string; 
+    //      description: string; 
+    //      petType: string; 
+    //      dateLost: Date; 
+    //      location: string;
+    //       contactInfo: string
+    //       ; photoUrl?: string; }
+
+
   }
 
   async findAll() {
@@ -62,7 +75,7 @@ export class PostsService {
     return post;
   }
 
-  async update(id: string, updatePostDto: UpdatePostDto) { 
+  async update(id: string, updatePostDto: UpdatePostDto) {
     if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
 
     const post = await this.prisma.post.findUnique({
@@ -84,7 +97,7 @@ export class PostsService {
     };
   }
 
-  async remove(id: string) { 
+  async remove(id: string) {
     if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
 
     const post = await this.prisma.post.delete({

@@ -22,7 +22,5 @@ export class CreatePostDto {
   @IsOptional()
   @IsString()
   photoUrl?: string;
-  @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
-  @IsInt()
-  userId: string; 
+
 }
