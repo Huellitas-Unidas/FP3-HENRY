@@ -1,11 +1,5 @@
-import {
-  IsString,
-  IsDate,
-  IsOptional,
-  IsInt,
-  isUUID,
-  IsUUID,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -31,6 +25,5 @@ export class CreatePostDto {
   photoUrl?: string;
 
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
-  @IsString()
   userId: string;
 }

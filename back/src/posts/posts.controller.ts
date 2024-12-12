@@ -24,20 +24,12 @@ export class PostsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
-  async createPost(
-    @UploadedFile() file: Express.Multer.File,
+  async create(
     @Body() createPostDto: CreatePostDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    let photoUrl: string | undefined;
-
-    if (file) {
-      const uploadResult = await this.filesUploadService.uploadPostImage(file);
-      photoUrl = uploadResult.secure_url;
-    }
-
-    createPostDto.photoUrl = photoUrl;
-
-    return this.postsService.create(createPostDto);
+    const post = await this.postsService.create(createPostDto, file);
+    return post;
   }
 
   @Get()
