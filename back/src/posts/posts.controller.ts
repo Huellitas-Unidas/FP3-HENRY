@@ -3,10 +3,16 @@ import {
   Get,
   Post,
   Body,
+<<<<<<< HEAD
   Patch,
   Param,
   Delete,
   ParseUUIDPipe,
+=======
+  Param,
+  Delete,
+  Put,
+>>>>>>> 28bf8e46b172a66ad9f88ed4cc7b25f5e64ddbd2
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,20 +28,26 @@ export class PostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.postsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.postsService.findOne(id);
   }
 
+<<<<<<< HEAD
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePostDto: UpdatePostDto,
   ) {
     return this.postsService.update(+id, updatePostDto);
+=======
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postsService.update(id, updatePostDto);
+>>>>>>> 28bf8e46b172a66ad9f88ed4cc7b25f5e64ddbd2
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.postsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.postsService.remove(id);
   }
 }
