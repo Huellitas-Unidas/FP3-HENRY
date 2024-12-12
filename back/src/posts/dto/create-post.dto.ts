@@ -24,5 +24,5 @@ export class CreatePostDto {
   photoUrl?: string;
 
   @IsInt()
-  userId: number; 
+  userId: string; 
 }
