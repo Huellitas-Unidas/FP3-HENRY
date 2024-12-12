@@ -19,13 +19,15 @@ let PostsService = class PostsService {
     }
     async create(createPostDto) {
         const { title, description, petType, dateLost, location, contactInfo, photoUrl, userId, } = createPostDto;
+        if (!(0, class_validator_1.isUUID)(userId))
+            throw new common_1.HttpException("El UUID no es valido", 404);
         const userFound = await this.prisma.user.findUnique({
             where: {
                 id: userId
             },
         });
-        if (!userId || !(0, class_validator_1.isUUID)(userId))
-            throw new common_1.HttpException('No existe el usuario', 404);
+        if (!userFound)
+            throw new common_1.HttpException('El usuario no existe', 404);
         const post = await this.prisma.post.create({
             data: {
                 title,
