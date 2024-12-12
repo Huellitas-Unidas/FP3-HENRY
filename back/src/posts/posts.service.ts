@@ -7,6 +7,7 @@ import { isUUID } from 'class-validator';
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
+
   async create(createPostDto: CreatePostDto) {
     const {
       title,
@@ -19,14 +20,15 @@ export class PostsService {
       userId,
     } = createPostDto;
 
-    if(!isUUID(userId)) throw new HttpException("El UUID no es valido", 404)
+    if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
 
+  
     const userFound = await this.prisma.user.findUnique({
-        where: {
-          id: userId
-        },
-      });
-if(!userFound) throw new HttpException('El usuario no existe', 404)
+      where: { id: userId },
+    });
+    if (!userFound) throw new HttpException('El usuario no existe', 404);
+
+
     const post = await this.prisma.post.create({
       data: {
         title,
@@ -39,23 +41,56 @@ if(!userFound) throw new HttpException('El usuario no existe', 404)
         userId,
       },
     });
-    return post
- 
+    return post;
   }
+
   async findAll() {
-    const posts = await this.prisma.post.findMany();
-    return posts;
+    return await this.prisma.post.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string) {
+    if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
+
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new HttpException(`Post con ID ${id} no encontrado`, 404);
+    }
+
+    return post;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto) { 
+    if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
+
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) {
+      throw new HttpException(`Post con ID ${id} no encontrado`, 404);
+    }
+
+    const updatedPost = await this.prisma.post.update({
+      where: { id },
+      data: updatePostDto,
+    });
+
+    return {
+      message: `Post con ID ${id} actualizado correctamente`,
+      updatedPost,
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) { 
+    if (!isUUID(id)) throw new HttpException('El UUID no es válido', 404);
+
+    const post = await this.prisma.post.delete({
+      where: { id },
+    });
+
+    return { message: `Post con ID ${id} eliminado correctamente` };
   }
 }
