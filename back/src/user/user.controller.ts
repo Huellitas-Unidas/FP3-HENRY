@@ -35,7 +35,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.userService.findOne((id));
+    return await this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -45,7 +45,6 @@ export class UserController {
   ) {
     return await this.userService.update(id, updateUserDto);
   }
-  
 
   @Delete(':id')
   async remove(@Param('id', ParseUUIDPipe) id: string) {
