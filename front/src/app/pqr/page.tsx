@@ -7,7 +7,7 @@ const Pqr = () => {
     const [pqrData, setPqrData] = useState({
         nombre: "Lulu Alvarado",
         email: "lulu.alvarado@mail.com",
-        tipo: "queja",
+        tipo: "peticion",
         descripcion: "En este espacio puedes escribir y detallar tú solicitud",
     });
 
@@ -19,7 +19,7 @@ const Pqr = () => {
                 icon: "error",
                 confirmButtonText: "OK",
                 customClass: {
-                    confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+                    confirmButton: "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
                 },
             });
             return;
@@ -44,17 +44,17 @@ const Pqr = () => {
     };
 
     return (
-        <section className="bg-white p-8 text-teal-700 flex justify-center min-h-screen items-center">
-            <div className="w-full max-w-screen-md border-2 border-gray-300 p-10 mb-8 rounded-lg shadow-lg">
-                <h1 className="text-2xl text-center font-bold mb-8">Ayúdanos a Mejorar: Sugerencias y Opiniones</h1>
-                <p className="mb-6">
+        <section className="flex flex-col place-items-center mt-8 mb-8">
+            <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+                <h1 className="text-xl text-center font-bold mt-2 mb-8 w-9/1212">Ayúdanos a Mejorar: Sugerencias y Opiniones</h1>
+                <p className="mb-6 text-center">
                     Por favor, completa este formulario para que podamos procesar tu solicitud. ¡Gracias! 😊{" "}
                 </p>
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6 flex flex-col gap-2 items-center text-lg w-full" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Nombre"
-                        className="border rounded w-full p-2"
+                        className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
                         name="Lulu Alvarado"
                         value={pqrData.nombre}
                         onChange={handleChange}
@@ -62,13 +62,14 @@ const Pqr = () => {
                     <input
                         type="email"
                         placeholder="Correo Electrónico"
-                        className="border rounded w-full p-2"
+                        className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
                         name="email"
                         value={pqrData.email}
                         onChange={handleChange}
+                       
                     />
                     <select
-                        className="border rounded w-full p-2"
+                        className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
                         name="tipo"
                         value={pqrData.tipo}
                         onChange={handleChange}
@@ -80,15 +81,15 @@ const Pqr = () => {
 
                     <textarea
                         placeholder="Descripción"
-                        className="border rounded w-full p-2"
+                        className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
                         rows={4}
                         name="descripcion"
                         value={pqrData.descripcion}
                         onChange={handleChange}
                     ></textarea>
 
-                    <button type="submit" className="bg-teal-500 text-white rounded px-4 py-2 hover:bg-teal-600">
-                        Enviar mi Solicitud !
+                    <button type="submit" className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300">
+                        Enviar mi Solicitud 
                     </button>
                 </form>
             </div>
