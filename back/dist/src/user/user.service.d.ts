@@ -1,6 +1,6 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { AuthService } from 'src/auth/auth.service';
 export declare class UserService {
     private prisma;
@@ -8,17 +8,11 @@ export declare class UserService {
     constructor(prisma: PrismaService, authService: AuthService);
     create(createUserDto: CreateUserDto): Promise<{
         user: {
-            id: number;
-            createdAt: Date;
-            name: string;
             email: string;
             password: string;
-<<<<<<< HEAD
-=======
             name: string;
             id: string;
             createdAt: Date;
->>>>>>> 1c03a9d18216e947d63ae9eceaafce28459ae1b8
         };
     }>;
     login(email: string, password: string): Promise<{
@@ -26,28 +20,6 @@ export declare class UserService {
         token: string;
     }>;
     findAll(): Promise<{
-<<<<<<< HEAD
-        id: number;
-        createdAt: Date;
-        name: string;
-        email: string;
-    }[]>;
-    findOne(id: number): Promise<{
-        id: number;
-        createdAt: Date;
-        name: string;
-        email: string;
-        password: string;
-    }>;
-    update(id: number, updateUserDto: UpdateUserDto): Promise<{
-        id: number;
-        createdAt: Date;
-        name: string;
-        email: string;
-        password: string;
-    }>;
-    remove(id: number): Promise<{
-=======
         email: string;
         name: string;
         id: string;
@@ -60,9 +32,9 @@ export declare class UserService {
             title: string;
             description: string;
             petType: string;
+            contactInfo: string;
             dateLost: Date;
             location: string;
-            contactInfo: string;
             photoUrl: string;
             updatedAt: Date;
         }[];
@@ -87,7 +59,6 @@ export declare class UserService {
         createdAt: Date;
     }>;
     remove(id: string): Promise<{
->>>>>>> 1c03a9d18216e947d63ae9eceaafce28459ae1b8
         message: string;
     }>;
 }

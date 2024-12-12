@@ -13,20 +13,25 @@ exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const class_validator_1 = require("class-validator");
+const files_upload_service_1 = require("../files-upload/files-upload.service");
 let PostsService = class PostsService {
-    constructor(prisma) {
+    constructor(prisma, filesUploadService) {
         this.prisma = prisma;
-        console.log('Prisma Service Models:', Object.keys(this.prisma));
+        this.filesUploadService = filesUploadService;
     }
-    async create(createPostDto) {
+    async create(createPostDto, file) {
         const { title, description, petType, dateLost, location, contactInfo, photoUrl, userId, } = createPostDto;
+        if (!(0, class_validator_1.isUUID)(userId)) {
+            throw new common_1.HttpException('userId debe ser un UUID válido', 400);
+        }
         const userFound = await this.prisma.user.findUnique({
             where: {
-                id: userId
+                id: userId,
             },
         });
-        if (!userId || !(0, class_validator_1.isUUID)(userId))
+        if (!userFound) {
             throw new common_1.HttpException('No existe el usuario', 404);
+        }
         const post = await this.prisma.post.create({
             data: {
                 title,
@@ -58,6 +63,7 @@ let PostsService = class PostsService {
 exports.PostsService = PostsService;
 exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        files_upload_service_1.FilesUploadService])
 ], PostsService);
 //# sourceMappingURL=posts.service.js.map
