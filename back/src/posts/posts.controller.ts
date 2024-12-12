@@ -8,6 +8,7 @@ import {
   Put,
   UploadedFile,
   UseInterceptors,
+  HttpException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -23,13 +24,17 @@ export class PostsController {
   ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('photo'))
+  @UseInterceptors(FileInterceptor('photoUrl'))
   async create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const post = await this.postsService.create(createPostDto, file);
-    return post;
+    try {
+      const post = await this.postsService.create(createPostDto, file);
+      return post;
+    } catch (error) {
+      throw new HttpException(`Error al crear la publicación: `, 500);
+    }
   }
 
   @Get()

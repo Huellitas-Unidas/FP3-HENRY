@@ -25,7 +25,6 @@ export class PostsService {
 
     if (!isUUID(userId)) throw new HttpException('el uuid no es valido', 404);
 
-    console.log('userId:', userId); // Para verificar el valor
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -34,18 +33,20 @@ export class PostsService {
     // Subimos la imagen a Cloudinary
     let photoUrl = '';
     if (file) {
-      const uploadResult = await this.filesUploadService.uploadPostImage(file);
-      photoUrl = uploadResult.secure_url; // Obtenemos la URL de la imagen subida
+      try {
+        const uploadResult =
+          await this.filesUploadService.uploadPostImage(file);
+        photoUrl = uploadResult.secure_url;
+      } catch (error) {
+        throw new HttpException('Error al subir la imagen: ', 500);
+      }
     }
-
-    const formattedDateLost = new Date(dateLost);
-
     const post = await this.prisma.post.create({
       data: {
         title,
         description,
         petType,
-        dateLost: formattedDateLost,
+        dateLost,
         location,
         contactInfo,
         photoUrl,
