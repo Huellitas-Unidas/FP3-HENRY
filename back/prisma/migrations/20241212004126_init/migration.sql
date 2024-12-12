@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -11,12 +11,15 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Post" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "imgUrl" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "petType" TEXT NOT NULL,
+    "dateLost" TIMESTAMP(3) NOT NULL,
+    "location" TEXT NOT NULL,
+    "contactInfo" TEXT NOT NULL,
+    "photoUrl" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -25,9 +28,9 @@ CREATE TABLE "Post" (
 
 -- CreateTable
 CREATE TABLE "Donations" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Donations_pkey" PRIMARY KEY ("id")
@@ -35,11 +38,11 @@ CREATE TABLE "Donations" (
 
 -- CreateTable
 CREATE TABLE "Notifications" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "content" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "isRead" BOOLEAN NOT NULL DEFAULT false,
-    "userId" INTEGER NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Notifications_pkey" PRIMARY KEY ("id")

@@ -24,7 +24,7 @@ let UserService = class UserService {
             where: { email },
         });
         if (existingUser) {
-            throw new Error('El correo electrónico ya está en uso');
+            throw new common_1.HttpException('El correo electrónico ya está en uso', 409);
         }
         const hashedPassword = await this.authService.hashPassword(password);
         const user = await this.prisma.user.create({
@@ -63,7 +63,7 @@ let UserService = class UserService {
             where: { id },
         });
         if (!user) {
-            throw new Error(`Usuario con ID ${id} no encontrado`);
+            throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
         }
         return user;
     }
@@ -79,7 +79,7 @@ let UserService = class UserService {
             where: { id },
         });
         if (!user) {
-            throw new Error(`Usuario con ID ${id} no encontrado`);
+            throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
         }
         await this.prisma.user.delete({
             where: { id },
