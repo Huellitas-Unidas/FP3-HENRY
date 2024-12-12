@@ -1,3 +1,4 @@
+"use client";
 import { IButton } from "@/interfaces/types";
 
 const GreenButton: React.FC<IButton> = ({ props }) => {
