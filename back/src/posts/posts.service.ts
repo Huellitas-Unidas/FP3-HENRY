@@ -24,7 +24,7 @@ export class PostsService {
           id: userId
         },
       });
-      if  (!userId || !isUUID(userId)) throw new HttpException('No existe el usuario', 404);
+      if  (!userFound || !isUUID(userId)) throw new HttpException('No existe el usuario', 404);
 
     const post = await this.prisma.post.create({
       data: {
