@@ -6,7 +6,11 @@ import Image from "next/image";
 const Navbar = () => {
   return (
     <div>
+<<<<<<< HEAD
+      <nav className="flex shadow-lg rounded-lg justify-between md:h-16 border border-[#3c9083]">
+=======
       <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083] bg-gray-50">
+>>>>>>> 1faae245e11bb8066dd41da3ae54a59c488cc76d
         <div className="flex w-full justify-between">
           <Link href="/">
             <Image
