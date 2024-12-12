@@ -20,7 +20,7 @@ const Terms = () => {
         icon: "question",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
         }
       });
       return;
@@ -34,7 +34,7 @@ const Terms = () => {
       confirmButtonText: `Continuar <i class="fa fa-arrow-right"></i>`,
       customClass: {
         confirmButton:
-          "bg-teal-600  hover:bg-teal-650 text-white font-bold py-2 px-4 rounded"
+          "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
       },
       inputValidator: (result) => {
         return !result && "Debes aceptar los términos y condiciones.";
@@ -49,7 +49,7 @@ const Terms = () => {
         confirmButtonText: "OK",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
         }
       });
       router.push("/register");
@@ -60,7 +60,7 @@ const Terms = () => {
         icon: "warning",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
         }
       });
     }
@@ -69,7 +69,7 @@ const Terms = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-teal-50 shadow-2xl shadow-teal-950 rounded-lg"
+      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-teal-50 shadow-xl shadow-teal-950 rounded-lg"
     >
       <h1 className="text-center text-xl text-teal-950 md:text-2xl mb-7 font-bold">
         Términos y Condiciones
@@ -284,10 +284,10 @@ const Terms = () => {
       </div>
       <button
         type="submit"
-        className={`w-full md:w-auto px-4 py-2 rounded font-bold text-teal-950 ${
+        className={`w-full md:w-auto bg-green500 text-white text-lg p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300 ${
           isChecked
-            ? "bg-teal-800 hover:bg-teal-600"
-            : "bg-teal-200 shadow-teal-900 shadow-md cursor-not-allowed"
+            ? "bg-green500 hover:bg-teal-800"
+            : "bg-green500 shadow-teal-50 shadow-md cursor-not-allowed"
         }`}
       >
         seguir
