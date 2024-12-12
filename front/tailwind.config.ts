@@ -15,6 +15,21 @@ export default {
         foreground: "var(--foreground)",
         green500: "#3c9083",
       },
+
+      keyframes: {
+        jump: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        run: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(100px)' },
+        },
+      },
+      animation: {
+        jump: 'jump 1s ease-in-out infinite',
+        run: 'run 1s linear infinite',
+      },
     },
   },
   
