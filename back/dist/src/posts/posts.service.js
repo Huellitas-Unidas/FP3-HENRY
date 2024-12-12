@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const class_validator_1 = require("class-validator");
 let PostsService = class PostsService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -19,6 +20,13 @@ let PostsService = class PostsService {
     }
     async create(createPostDto) {
         const { title, description, petType, dateLost, location, contactInfo, photoUrl, userId, } = createPostDto;
+        const userFound = await this.prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+        });
+        if (!userId || !(0, class_validator_1.isUUID)(userId))
+            throw new common_1.HttpException('No existe el usuario', 404);
         const post = await this.prisma.post.create({
             data: {
                 title,

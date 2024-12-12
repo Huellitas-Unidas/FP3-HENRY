@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+<<<<<<< HEAD
 import { PrismaService } from '../../prisma/prisma.service';
+=======
+import { PrismaService } from 'prisma/prisma.service';
+import { isUUID } from 'class-validator';
+>>>>>>> 1c03a9d18216e947d63ae9eceaafce28459ae1b8
 
 @Injectable()
 export class PostsService {
@@ -20,6 +25,13 @@ export class PostsService {
       userId,
     } = createPostDto;
 
+    const userFound = await this.prisma.user.findUnique({
+        where: {
+          id: userId
+        },
+      });
+      if  (!userFound || !isUUID(userId)) throw new HttpException('No existe el usuario', 404);
+
     const post = await this.prisma.post.create({
       data: {
         title,
@@ -32,8 +44,8 @@ export class PostsService {
         userId,
       },
     });
-
-    return post;
+    return post
+ 
   }
   async findAll() {
     const posts = await this.prisma.post.findMany();

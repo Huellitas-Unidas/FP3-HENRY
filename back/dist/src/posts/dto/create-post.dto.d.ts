@@ -6,5 +6,5 @@ export declare class CreatePostDto {
     location: string;
     contactInfo: string;
     photoUrl?: string;
-    userId: number;
+    userId: string;
 }
