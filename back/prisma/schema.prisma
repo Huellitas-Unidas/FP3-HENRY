@@ -6,8 +6,9 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid()) @db.Uuid
   name        String
   email       String       @unique
   password    String
@@ -17,10 +18,8 @@ model User {
   notifications Notifications[]
 }
 
-
-
 model Post {
-  id          Int      @id @default(autoincrement())
+  id          String     @id @default(uuid()) @db.Uuid
   title       String
   description String
   petType     String
@@ -28,27 +27,26 @@ model Post {
   location    String
   contactInfo String
   photoUrl    String
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())  
-  updatedAt   DateTime @updatedAt
+  userId      String    @db.Uuid
+  user        User       @relation(fields: [userId], references: [id])
+  createdAt   DateTime   @default(now())  
+  updatedAt   DateTime   @updatedAt
 }
 
-
-
 model Donations {
-  id          Int         @id @default(autoincrement())
+  id          String        @id @default(uuid()) @db.Uuid
   amount      Float
-  userId      Int          
+  userId      String         @db.Uuid
   user        User         @relation(fields: [userId], references: [id])
   createdAt   DateTime     @default(now())
 }
+
 model Notifications {
-  id          Int         @id @default(autoincrement())
+  id          String         @id @default(uuid()) @db.Uuid
   content     String
   type        String
   isRead      Boolean      @default(false)
-  userId      Int         
+  userId      String       @db.Uuid  
   user        User         @relation(fields: [userId], references: [id])
   createdAt   DateTime     @default(now())
 }
