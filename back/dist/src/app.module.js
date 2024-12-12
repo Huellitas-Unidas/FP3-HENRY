@@ -11,17 +11,24 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const user_module_1 = require("./user/user.module");
-const publications_module_1 = require("./publications/publications.module");
 const notifications_module_1 = require("./notifications/notifications.module");
 const map_module_1 = require("./map/map.module");
 const administration_module_1 = require("./administration/administration.module");
 const donation_module_1 = require("./donation/donation.module");
+const posts_module_1 = require("./posts/posts.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, publications_module_1.PublicationsModule, notifications_module_1.NotificationsModule, map_module_1.MapModule, administration_module_1.AdministrationModule, donation_module_1.DonationModule],
+        imports: [
+            user_module_1.UserModule,
+            notifications_module_1.NotificationsModule,
+            map_module_1.MapModule,
+            administration_module_1.AdministrationModule,
+            donation_module_1.DonationModule,
+            posts_module_1.PostsModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

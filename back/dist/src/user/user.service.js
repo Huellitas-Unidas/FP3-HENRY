@@ -19,18 +19,17 @@ let UserService = class UserService {
         this.authService = authService;
     }
     async create(createUserDto) {
-        const { email, username, password, name } = createUserDto;
+        const { email, password, name } = createUserDto;
         const existingUser = await this.prisma.user.findUnique({
             where: { email },
         });
         if (existingUser) {
-            throw new Error('El correo electrónico ya está en uso');
+            throw new common_1.HttpException('El correo electrónico ya está en uso', 409);
         }
         const hashedPassword = await this.authService.hashPassword(password);
         const user = await this.prisma.user.create({
             data: {
                 email,
-                username,
                 password: hashedPassword,
                 name,
             },
@@ -48,7 +47,7 @@ let UserService = class UserService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Contraseña incorrecta');
         }
-        const payload = { username: user.username, sub: user.id };
+        const payload = { email: user.email, sub: user.id };
         const token = this.authService.generateToken(payload);
         return {
             message: `Te has logueado exitosamente.`,
@@ -62,11 +61,19 @@ let UserService = class UserService {
     async findOne(id) {
         const user = await this.prisma.user.findUnique({
             where: { id },
+            include: {
+                posts: true,
+                notifications: true
+            }
         });
         if (!user) {
-            throw new Error(`Usuario con ID ${id} no encontrado`);
+            throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
         }
-        return user;
+        const { password, ...responseUser } = user;
+        const responsePost = user.posts.map(({ userId, ...post }) => post);
+        return {
+            ...responseUser, posts: responsePost
+        };
     }
     async update(id, updateUserDto) {
         const updatedUser = await this.prisma.user.update({
@@ -80,7 +87,7 @@ let UserService = class UserService {
             where: { id },
         });
         if (!user) {
-            throw new Error(`Usuario con ID ${id} no encontrado`);
+            throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
         }
         await this.prisma.user.delete({
             where: { id },
