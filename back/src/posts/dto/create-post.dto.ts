@@ -1,4 +1,4 @@
-import { IsString, IsDate, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsDate, IsOptional, IsInt, isUUID, IsUUID } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -23,6 +23,4 @@ export class CreatePostDto {
   @IsString()
   photoUrl?: string;
 
-  @IsInt()
-  userId: number; 
 }

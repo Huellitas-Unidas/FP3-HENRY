@@ -22,7 +22,7 @@ export class FilesUploadService {
         upload.end(file.buffer);
       });
     } catch (error) {
-      throw new Error(`Failed to upload image: ${error.message}`);
+      throw new Error(`Failed to upload image: ${error}`);
     }
   }
 }

@@ -1,18 +1,15 @@
-"use client";
 import validate from "@/helpers/validate";
-import React from "react";
-import Link from "next/link";
-import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
+import React from "react";
+import GreenButton from "../Buttons/GreenButton";
 
-const RegisterCard: React.FC = () => {
+const PetRegisterCard: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      email: "",
-      password: "",
-      confirm: "",
-      phone: "",
+      type: "",
+      description: "",
+      status: "",
     },
     validate: validate,
     onSubmit: (values, { resetForm }) => {
@@ -29,7 +26,7 @@ const RegisterCard: React.FC = () => {
           className="flex flex-col gap-2 items-center text-xl"
         >
           <input
-            placeholder="Nombre completo"
+            placeholder="Nombre de tu mascota"
             type="name"
             name="name"
             value={formik.values.name}
@@ -43,67 +40,53 @@ const RegisterCard: React.FC = () => {
           )}
 
           <input
-            placeholder="Email"
-            type="email"
-            name="email"
-            value={formik.values.email}
+            placeholder="Tipo"
+            type="text"
+            name="type"
+            value={formik.values.type}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
-              {formik.errors.email}
+              {formik.errors.type}
             </span>
           )}
 
           <input
-            placeholder="Contraseña"
-            type="password"
-            name="password"
-            value={formik.values.password}
+            placeholder="Descripción"
+            type="text"
+            name="description"
+            value={formik.values.description}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
-              {formik.errors.password}
+              {formik.errors.description}
             </span>
           )}
 
           <input
-            placeholder="Confirma tu contraseña"
-            type="password"
-            name="confirm"
-            value={formik.values.confirm}
+            placeholder="FOTO !!!"
+            type="text"
+            name="description"
+            value={formik.values.description}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
-              {formik.errors.confirm}
+              {formik.errors.description}
             </span>
           )}
 
-          <input
-            placeholder="Teléfono"
-            type="number"
-            name="phone"
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.phone}
-            </span>
-          )}
-
-          <div>
-            <label className="text-sm mb-2">Ya tienes una cuenta? </label>
+          {/* <label className="text-sm mb-2">
+            Ya tienes una cuenta?{" "}
             <Link href={"/login"} className="underline hover:no-underline">
               Loguéate
             </Link>
-          </div>
+          </label> */}
 
           <GreenButton props="Enviar" />
         </form>
@@ -112,4 +95,4 @@ const RegisterCard: React.FC = () => {
   );
 };
 
-export default RegisterCard;
+export default PetRegisterCard;
