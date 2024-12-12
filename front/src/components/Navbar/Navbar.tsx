@@ -5,8 +5,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div>
-      <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083] bg-gray-50">
+      <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083]">
         <div className="flex w-full justify-between">
           <Link href="/">
             <Image
@@ -18,10 +17,10 @@ const Navbar = () => {
             ></Image>
           </Link>
           <div className="hidden w-3/5 items-center justify-evenly font-semibold md:flex">
-            <a href="">Buscados / Encontrados</a>
-            <a href="">Ayudanos donando</a>
-            <a href="">Sobre Huellas Unidas</a>
-            <a href="">Recomendaciones</a>
+            <a href="/lostFound">Buscados / Encontrados</a>
+            <a href="not-found">Ayudanos donando</a>
+            <a href="/aboutUs">Sobre Huellas Unidas</a>
+            <a href="not-found">🐾Recomendaciones</a>
           </div>
           <div className="hidden w-1/5 items-center justify-evenly font-semibold md:flex">
             <button>
@@ -33,7 +32,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-    </div>
   );
 };
 

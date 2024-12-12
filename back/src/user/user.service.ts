@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -18,7 +18,7 @@ export class UserService {
     });
   
     if (existingUser) {
-      throw new Error('El correo electrónico ya está en uso');
+      throw new HttpException('El correo electrónico ya está en uso', 409);
     }
   
     const hashedPassword = await this.authService.hashPassword(password);
@@ -67,18 +67,26 @@ export class UserService {
     return users.map(({ password, ...user }) => user);
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
+      include: {
+        posts: true,
+        notifications: true
+      }
     });
 
     if (!user) {
-      throw new Error(`Usuario con ID ${id} no encontrado`);
+      throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    return user;
+    const {password, ...responseUser}=user
+    const responsePost = user.posts.map(({userId, ...post})=>post)
+    return {
+        ...responseUser, posts: responsePost
+    };
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updateUserDto,
@@ -88,12 +96,12 @@ export class UserService {
   }
   
 
-  async remove(id: number) {
+  async remove(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
     });
     if (!user) {
-      throw new Error(`Usuario con ID ${id} no encontrado`);
+      throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
     await this.prisma.user.delete({
       where: { id },

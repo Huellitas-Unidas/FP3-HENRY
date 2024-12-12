@@ -4,9 +4,9 @@ const SearchBar = () => {
   return (
     <div>
         <div className='py-8'>
-    <form className="flex rounded-md border-2 border-[#3c9083] overflow-hidden max-w-md mx-auto bg-gray-50 shadow-md">
+    <form className="flex rounded-md border-2 border-[#3c9083] overflow-hidden max-w-md mx-auto shadow-md">
 
-      <input type="text" placeholder="Buscar..." className="w-full outline-none bg-gray-50 text-gray-600 text-sm px-4 py-3"
+      <input type="text" placeholder="Buscar..." className="w-full outline-none text-gray-600 text-sm px-4 py-3"
        
       />
 
