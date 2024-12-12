@@ -61,11 +61,19 @@ let UserService = class UserService {
     async findOne(id) {
         const user = await this.prisma.user.findUnique({
             where: { id },
+            include: {
+                posts: true,
+                notifications: true
+            }
         });
         if (!user) {
             throw new common_1.HttpException(`Usuario con ID ${id} no encontrado`, 404);
         }
-        return user;
+        const { password, ...responseUser } = user;
+        const responsePost = user.posts.map(({ userId, ...post }) => post);
+        return {
+            ...responseUser, posts: responsePost
+        };
     }
     async update(id, updateUserDto) {
         const updatedUser = await this.prisma.user.update({

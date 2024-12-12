@@ -44,6 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "photoUrl", void 0);
 __decorate([
+    (0, class_validator_1.IsUUID)('4', { message: 'El userId debe ser un UUID válido de versión 4' }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "userId", void 0);
