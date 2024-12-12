@@ -49,7 +49,7 @@ const Dashboard = () => {
           </p>
           <br />
           <p className="underline text-sm">Modificar contraseña</p>
-          <Link href={"/petsregister"}>
+          <Link href={"/petregister"}>
             <GreenButton props="Añadir mascota" />
           </Link>
         </div>
