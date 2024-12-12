@@ -88,7 +88,7 @@ const Pqr = () => {
                     ></textarea>
 
                     <button type="submit" className="bg-teal-500 text-white rounded px-4 py-2 hover:bg-teal-600">
-                        Enviar mi Solicitud!
+                        Enviar mi Solicitud !
                     </button>
                 </form>
             </div>
