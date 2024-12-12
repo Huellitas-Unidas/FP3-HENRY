@@ -52,7 +52,7 @@ const Terms = () => {
             "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
         }
       });
-      router.push("/dashboard");
+      router.push("/register");
     }
     else {
       Swal.fire({
@@ -69,9 +69,9 @@ const Terms = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-teal-50 shadow-md rounded-lg"
+      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-teal-50 shadow-2xl shadow-teal-950 rounded-lg"
     >
-      <h1 className="text-center text-xl md:text-2xl mb-7 font-bold">
+      <h1 className="text-center text-xl text-teal-950 md:text-2xl mb-7 font-bold">
         Términos y Condiciones
       </h1>
       <section className="mb-6">
@@ -284,10 +284,10 @@ const Terms = () => {
       </div>
       <button
         type="submit"
-        className={`w-full md:w-auto px-4 py-2 rounded font-bold text-white ${
+        className={`w-full md:w-auto px-4 py-2 rounded font-bold text-teal-950 ${
           isChecked
             ? "bg-teal-800 hover:bg-teal-600"
-            : "bg-teal-200 cursor-not-allowed"
+            : "bg-teal-200 shadow-teal-900 shadow-md cursor-not-allowed"
         }`}
       >
         seguir
