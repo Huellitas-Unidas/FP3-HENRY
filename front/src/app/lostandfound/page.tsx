@@ -5,10 +5,10 @@ import React from 'react'
 const LostAndFound = () => {
   return (
     <div>
-        <CardList/>
+      <CardList />
     </div>
-  )
-}
+  );
+};
 
 export default LostAndFound; 
 
