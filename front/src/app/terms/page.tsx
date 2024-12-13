@@ -69,9 +69,9 @@ const Terms = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-teal-50 shadow-xl shadow-teal-950 rounded-lg"
+      className="w-full max-w-screen-xl p-6 sm:p-8 lg:p-10 bg-[#F3FAF8] shadow-xl shadow-[#0E2523] rounded-lg"
     >
-      <h1 className="text-center text-xl text-teal-950 md:text-2xl mb-7 font-bold">
+      <h1 className="text-center text-xl text-[#0E2523] md:text-2xl mb-7 font-bold">
         Términos y Condiciones
       </h1>
       <section className="mb-6">
@@ -139,7 +139,7 @@ const Terms = () => {
         <h2 className="text-lg md:text-xl font-semibold mb-4">
           4. Contenido Generado por el Usuario
         </h2>
-        <h3 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h3 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           Enviar Contenido:
         </h3>
         <p className="text-sm md:text-base mb-4">
@@ -161,10 +161,10 @@ const Terms = () => {
           contenido enviado para mejorar sus servicios, sin necesidad de
           compensación.
         </p>
-        <h3 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h3 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           Reglas de Conducta:
         </h3>
-        <h4 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h4 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           No se permite:
         </h4>
         <ul className="list-disc list-inside text-sm md:text-base mb-6">
@@ -206,7 +206,7 @@ const Terms = () => {
         <h2 className="text-lg md:text-xl font-semibold mb-4">
           7. Garantías y Exoneración de Responsabilidad
         </h2>
-        <h3 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h3 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           Garantías:
         </h3>
         <p className="text-sm md:text-base mb-4">
@@ -217,7 +217,7 @@ const Terms = () => {
           <li>El Sitio estará libre de errores o interrupciones..</li>
           <li>La información publicada sea completa, precisa o actualizada.</li>
         </ul>
-        <h3 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h3 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           Limitación de Responsabilidad:
         </h3>
         <p>
@@ -231,7 +231,7 @@ const Terms = () => {
         <h2 className="text-lg md:text-xl font-semibold mb-4">
           8. Actividades Prohibidas
         </h2>
-        <h3 className="text-md md:text-lg font-medium mb-2 text-teal-950">
+        <h3 className="text-md md:text-lg font-medium mb-2 text-[#0E2523]">
           Está prohibido:
         </h3>
         <ul className="list-disc list-inside text-sm md:text-base mb-6">
@@ -276,7 +276,7 @@ const Terms = () => {
           id="terms"
           checked={isChecked}
           onChange={handleboxChanged}
-          className="w-5 h-5 md:w-6 md:h-6 text-teal-800 rounded-md focus:ring-2 focus:ring-teal-600"
+          className="w-5 h-5 md:w-6 md:h-6 text-[#244B47] rounded-md focus:ring-2 focus:ring-[#2E736A]"
         />
         <label htmlFor="terms" className="ml-4 text-sm md:text-base">
           He leído los Términos y Condiciones!
@@ -286,8 +286,8 @@ const Terms = () => {
         type="submit"
         className={`w-full md:w-auto bg-green500 text-white text-lg p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300 ${
           isChecked
-            ? "bg-green500 hover:bg-teal-800"
-            : "bg-green500 shadow-teal-50 shadow-md cursor-not-allowed"
+            ? "bg-green500 hover:bg-[#244B47]"
+            : "bg-green500 shadow-[#F3FAF8] shadow-md cursor-not-allowed"
         }`}
       >
         seguir

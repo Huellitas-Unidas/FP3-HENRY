@@ -5,6 +5,7 @@ import React from "react";
 import profile from "../../../public/images/profile.jpg";
 import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
+import { RiEmotionSadLine } from "react-icons/ri";
 import Link from "next/link";
 import petsArray from "@/helpers/petsArray";
 
@@ -58,25 +59,29 @@ const Dashboard = () => {
       <div className="flex flex-col mt-16 p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
         <p className="text-lg italic">Mis mascotas:</p>
 
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-4">
           {petsArray &&
             petsArray.map((animal) => {
               return (
-                <div key={animal.id} className="w-40 h-40">
+                <div
+                  key={animal.id}
+                  className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
+                >
                   <img
                     src={animal.image}
                     alt="animalImg"
-                    width={500}
-                    height={500}
-                    className="w-full h-full object-cover rounded-lg"
-                    key={animal.id}
-                  ></img>
-                  <div className="my-2">
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                  <div className="flex-grow mt-2">
                     <p className="font-semibold">{animal.name}</p>
                     <p>Tipo: {animal.type}</p>
                     <p>{animal.genre}</p>
                     <p>{animal.description}</p>
                   </div>
+                  <button className="mt-1 text-sm text-green500 hover:underline flex flex-row gap-1">
+                    <RiEmotionSadLine className="text-lg" />
+                    Marcar como perdida
+                  </button>
                 </div>
               );
             })}
@@ -88,5 +93,5 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-// BOTON "marcar como perdida" que modifique el status a "lost" para que la mascota 
+// BOTON "marcar como perdida" que modifique el status a "lost" para que la mascota
 // sea posteada y visualizada en lostandfound

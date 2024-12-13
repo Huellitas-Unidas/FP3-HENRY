@@ -19,30 +19,7 @@ export interface IButton {
   props: string;
 }
 
-export interface IPetValidateErrors {
-  name: string;
-  type: string;
-  genre: string;
-  description: string;
-}
-
-export interface IUserLogin {
-  email: string;
-  password: string;
-}
-
-/* export interface IPost {
-  title: string;
-  description: string;
-  petType: string;
-  dateLost: Date;
-  location: string;
-  contactInfo: string;
-  photoUrl: string;
-  userId: string
-} */
-
-  {/* export interface IUserData {
+{/* export interface IUserData {
   email?: string;
   password?: string;
 }
@@ -70,3 +47,16 @@ export interface IPost {
 }
 
 */}
+
+export interface IPetValidateErrors {
+  name: string;
+  type: string;
+  genre: string;
+  description: string;
+} 
+
+export interface IUserLogin {
+  email: string;
+  password: string; 
+}
+

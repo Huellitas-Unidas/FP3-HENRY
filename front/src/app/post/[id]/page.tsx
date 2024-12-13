@@ -1,12 +1,15 @@
+//Detalles de un post de Lost & Found
 import React from 'react'
 
 const EditPost = () => {
   return (
-    <div>aqui se edita el posteo</div>
+    <div>EditPost</div>
   )
 }
 
-export default EditPost
+export default EditPost; 
+
+// Corregir info de descripción, 
 
 
-//aqui se corrije informacion del post ANTES de enviarlo alostandfound
+
