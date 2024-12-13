@@ -8,53 +8,39 @@ import { isUUID } from 'class-validator';
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, createPostDto: CreatePostDto) {
-    const postsArray = [];
-    let total = 0;
-
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-
-    if(!user) throw new NotFoundException("el usuario no existe")
-
-        
-
-
-    const newPost = {...createPostDto, userId: user.id} 
-
-//    const createPost = this.prisma.post.create({data:newPost})
-
-    // if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
-
-    // const userFound = await this.prisma.user.findUnique({
-    //   where: { id: userId },
-    // });
-    // if (!userFound) throw new HttpException('El usuario no existe', 404);
-
-    // const post = await this.prisma.post.create({
-    //   data: {
-    //     title,
-    //     description,
-    //     petType,
-    //     dateLost,
-    //     location,
-    //     contactInfo,
-    //     photoUrl,
-    //     userId,
-    //   },
-    // });
-    // return post;
-
-
-    // { userId: string;
-    //      title: string; 
-    //      description: string; 
-    //      petType: string; 
-    //      dateLost: Date; 
-    //      location: string;
-    //       contactInfo: string
-    //       ; photoUrl?: string; }
-
-
+  async create(createPostDto: CreatePostDto) {
+    const {
+      title,
+      description,
+      petType,
+      dateLost,
+      location,
+      contactInfo,
+      photoUrl,
+      userId,
+    } = createPostDto;
+    if (!isUUID(userId)) {
+      throw new HttpException('El userId no es un UUID válido', 400);
+    }
+    const userFound = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userFound) {
+      throw new HttpException('El usuario no existe', 404);
+    }
+    const post = await this.prisma.post.create({
+      data: {
+        title,
+        description,
+        petType,
+        dateLost,
+        location,
+        contactInfo,
+        photoUrl,
+        userId,
+      },
+    });
+    return post
   }
 
   async findAll() {
