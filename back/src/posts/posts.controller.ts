@@ -9,6 +9,9 @@ import {
   UploadedFile,
   UseInterceptors,
   HttpException,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -24,19 +27,34 @@ export class PostsController {
   ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('photoUrl'))
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createPostDto: CreatePostDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 2000000 }),
+          new FileTypeValidator({ fileType: /(jpg|jpeg|png|webp)$/ }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
   ) {
     try {
       const post = await this.postsService.create(createPostDto, file);
-      return post;
+
+      return {
+        message: 'Publicación creada y archivo subido exitosamente',
+        post,
+      };
     } catch (error) {
-      throw new HttpException(`Error al crear la publicación: `, 500);
+      console.error('Error al crear la publicación:', error);
+      throw new HttpException(
+        `Error al crear la publicación:  'Error desconocido'}`,
+        500,
+      );
     }
   }
-
   @Get()
   async findAll() {
     return this.postsService.findAll();

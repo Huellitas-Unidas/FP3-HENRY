@@ -33,14 +33,10 @@ export class PostsService {
     // Subimos la imagen a Cloudinary
     let photoUrl = '';
     if (file) {
-      try {
-        const uploadResult =
-          await this.filesUploadService.uploadPostImage(file);
-        photoUrl = uploadResult.secure_url;
-      } catch (error) {
-        throw new HttpException('Error al subir la imagen: ', 500);
-      }
+      const uploadResult = await this.filesUploadService.uploadPostImage(file);
+      photoUrl = uploadResult.secure_url;
     }
+
     const post = await this.prisma.post.create({
       data: {
         title,
