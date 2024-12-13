@@ -1,3 +1,4 @@
+import TeamWork from '@/components/TeamWork/TeamWork';
 import Image from 'next/image';
 import React from 'react'
 
@@ -22,6 +23,7 @@ const AboutUs = () => {
           <Image src="/images/aboutus.jpg" alt="imagen" className="rounded-lg object-contain w-full h-full" width={350} height={350}/>
         </div>
       </div>
+      <TeamWork/>
     </div>
   )
 }
