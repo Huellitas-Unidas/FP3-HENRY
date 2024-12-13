@@ -40,6 +40,7 @@ export class PostsService {
         userId,
       },
     });
+    return post
   }
 
   async findAll() {
