@@ -40,21 +40,14 @@ export class PostsController {
     )
     file: Express.Multer.File,
   ) {
-    try {
-      const post = await this.postsService.create(createPostDto, file);
+    const post = await this.postsService.create(createPostDto, file);
 
-      return {
-        message: 'Publicación creada y archivo subido exitosamente',
-        post,
-      };
-    } catch (error) {
-      console.error('Error al crear la publicación:', error);
-      throw new HttpException(
-        `Error al crear la publicación:  'Error desconocido'}`,
-        500,
-      );
-    }
+    return {
+      message: 'Publicación creada y archivo subido exitosamente',
+      post,
+    };
   }
+
   @Get()
   async findAll() {
     return this.postsService.findAll();
