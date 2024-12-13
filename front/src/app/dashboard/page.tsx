@@ -5,6 +5,7 @@ import React from "react";
 import profile from "../../../public/images/profile.jpg";
 import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
+import { RiEmotionSadLine } from "react-icons/ri";
 import Link from "next/link";
 import petsArray from "@/helpers/petsArray";
 
@@ -64,22 +65,23 @@ const Dashboard = () => {
               return (
                 <div
                   key={animal.id}
-                  className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md"
+                  className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
                 >
                   <img
                     src={animal.image}
                     alt="animalImg"
                     className="w-full h-32 object-cover rounded-lg"
                   />
-                  <div className="mt-2 flex flex-col justify-around">
+                  <div className="flex-grow mt-2">
                     <p className="font-semibold">{animal.name}</p>
                     <p>Tipo: {animal.type}</p>
                     <p>{animal.genre}</p>
                     <p>{animal.description}</p>
-                    <button className="mt-2 text-sm text-green500 hover:underline">
-                      Marcar como perdida 😔
-                    </button>
                   </div>
+                  <button className="mt-1 text-sm text-green500 hover:underline flex flex-row gap-1">
+                    <RiEmotionSadLine className="text-lg" />
+                    Marcar como perdida
+                  </button>
                 </div>
               );
             })}

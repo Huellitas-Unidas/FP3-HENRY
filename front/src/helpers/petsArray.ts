@@ -19,42 +19,6 @@ const petsArray: ICardAnimal[] = [
     image:
       "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
   },
-  {
-    id: 3,
-    name: "Claudio",
-    type: "Perro",
-    genre: "Macho",
-    description: "Cachorro, de color beige, y es muy juguetón.",
-    image:
-      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
-  },
-  {
-    id: 4,
-    name: "Claudio",
-    type: "Perro",
-    genre: "Macho",
-    description: "Cachorro, de color beige, y es muy juguetón.",
-    image:
-      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
-  },
-  {
-    id: 5,
-    name: "Claudio",
-    type: "Perro",
-    genre: "Macho",
-    description: "Cachorro, de color beige, y es muy juguetón.",
-    image:
-      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
-  },
-  {
-    id: 6,
-    name: "Claudio",
-    type: "Perro",
-    genre: "Macho",
-    description: "Cachorro, de color beige, y es muy juguetón.",
-    image:
-      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
-  },
 ];
 
 export default petsArray;
