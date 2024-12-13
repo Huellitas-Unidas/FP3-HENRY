@@ -46,16 +46,18 @@ export interface IPost {
   userId: string;
 }
 
-
-
 */}
 
+<<<<<<< HEAD
 {/*}
+=======
+>>>>>>> 87d80fdcbe22f8f951a1629667be4c736baf4649
 export interface IPetValidateErrors {
   name: string;
   type: string;
   genre: string;
   description: string;
+<<<<<<< HEAD
 }
 
 export interface IUserLogin {
@@ -63,3 +65,12 @@ export interface IUserLogin {
   password: string;
 }
 */}
+=======
+} 
+
+export interface IUserLogin {
+  email: string;
+  password: string; 
+}
+
+>>>>>>> 87d80fdcbe22f8f951a1629667be4c736baf4649

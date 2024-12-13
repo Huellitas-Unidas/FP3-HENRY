@@ -18,7 +18,7 @@ const PetRegister: React.FC = () => {
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       resetForm();
-    },
+    }
   });
 
   return (
@@ -109,3 +109,4 @@ const PetRegister: React.FC = () => {
 };
 
 export default PetRegister;
+
