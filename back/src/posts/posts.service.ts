@@ -3,58 +3,31 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { isUUID } from 'class-validator';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, createPostDto: CreatePostDto) {
-    const postsArray = [];
-    let total = 0;
+  async create(post: CreatePostDto, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
 
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('el usuario no existe');
 
-    if(!user) throw new NotFoundException("el usuario no existe")
+    const createPost = await this.prisma.post.create({
+      data: {
+        title: post.title,
+        description: post.description,
+        petType: post.petType,
+        dateLost: post.dateLost,
+        location: post.location,
+        contactInfo: post.contactInfo,
+        photoUrl: post.photoUrl,
+        userId: user.id,
+      },
+    });
 
-        
-
-
-    const newPost = {...createPostDto, userId: user.id} 
-
-//    const createPost = this.prisma.post.create({data:newPost})
-
-    // if (!isUUID(userId)) throw new HttpException('El UUID no es válido', 404);
-
-    // const userFound = await this.prisma.user.findUnique({
-    //   where: { id: userId },
-    // });
-   g // if (!userFound) throw new HttpException('El usuario no existe', 404);
-
-    // const post = await this.prisma.post.create({
-    //   data: {
-    //     title,
-    //     description,
-    //     petType,
-    //     dateLost,
-    //     location,
-    //     contactInfo,
-    //     photoUrl,
-    //     userId,
-    //   },
-    // });
-    // return post;
-
-
-    // { userId: string;
-    //      title: string; 
-    //      description: string; 
-    //      petType: string; 
-    //      dateLost: Date; 
-    //      location: string;
-    //       contactInfo: string
-    //       ; photoUrl?: string; }
-
-
+    return createPost;
   }
 
   async findAll() {
