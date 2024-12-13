@@ -3,10 +3,11 @@ import validate from "@/helpers/validate";
 import { useFormik } from "formik";
 import React from "react";
 import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import GreenButton from "@/components/Buttons/GreenButton";
 
-const LoginCard: React.FC = () => {
+const Login: React.FC = () => {
   const router = useRouter();
 
   const formik = useFormik({
@@ -18,11 +19,7 @@ const LoginCard: React.FC = () => {
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       resetForm();
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("userData", JSON.stringify(values));
-      }
-
+      localStorage.setItem("userData", JSON.stringify(values));
       router.push("/");
     },
   });
@@ -41,8 +38,8 @@ const LoginCard: React.FC = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          />
-          {formik.errors.email && (
+          ></input>
+          {formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -55,25 +52,25 @@ const LoginCard: React.FC = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          />
-          {formik.errors.password && (
+          ></input>
+          {formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
 
-          <div>
-            <label className="text-sm mb-2">No tienes una cuenta?</label>
-            <Link href="/register" className="underline hover:no-underline">
+          <label className="text-sm mb-2">
+            No tienes una cuenta?{" "}
+            <Link href={"/register"} className="underline hover:no-underline">
               Regístrate
             </Link>
-          </div>
+          </label>
 
-          <GreenButton props="Enviar" />
+          <GreenButton props="Loguearme" />
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginCard;
+export default Login;
