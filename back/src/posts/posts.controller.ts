@@ -16,9 +16,9 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post(':id')
-  create(@Body() post: CreatePostDto, @Param('id', ParseUUIDPipe) id: string) {
-    return this.postsService.create(post, id);
+  @Post()
+  create(@Body() post: CreatePostDto) {
+    return this.postsService.create(post);
   }
 
   @Get()
