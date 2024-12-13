@@ -3,31 +3,43 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { isUUID } from 'class-validator';
-import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(post: CreatePostDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: post.userId} });
-
-    if (!user) throw new NotFoundException('el usuario no existe');
-
-    const createPost = await this.prisma.post.create({
+  async create(createPostDto: CreatePostDto) {
+    const {
+      title,
+      description,
+      petType,
+      dateLost,
+      location,
+      contactInfo,
+      photoUrl,
+      userId,
+    } = createPostDto;
+    if (!isUUID(userId)) {
+      throw new HttpException('El userId no es un UUID válido', 400);
+    }
+    const userFound = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userFound) {
+      throw new HttpException('El usuario no existe', 404);
+    }
+    const post = await this.prisma.post.create({
       data: {
-        title: post.title,
-        description: post.description,
-        petType: post.petType,
-        dateLost: post.dateLost,
-        location: post.location,
-        contactInfo: post.contactInfo,
-        photoUrl: post.photoUrl,
-        userId: user.id,
+        title,
+        description,
+        petType,
+        dateLost,
+        location,
+        contactInfo,
+        photoUrl,
+        userId,
       },
     });
-
-    return createPost;
   }
 
   async findAll() {
