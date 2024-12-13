@@ -5,7 +5,7 @@ import Link from "next/link";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
 
-const RegisterCard: React.FC = () => {
+const Register: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -98,18 +98,18 @@ const RegisterCard: React.FC = () => {
             </span>
           )}
 
-          <div>
-            <label className="text-sm mb-2">Ya tienes una cuenta? </label>
+          <label className="text-sm mb-2">
+            Ya tienes una cuenta?{" "}
             <Link href={"/login"} className="underline hover:no-underline">
               Loguéate
             </Link>
-          </div>
+          </label>
 
-          <GreenButton props="Enviar" />
+          <GreenButton props="Registrarme" />
         </form>
       </div>
     </div>
   );
 };
 
-export default RegisterCard;
+export default Register;

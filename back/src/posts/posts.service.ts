@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -21,34 +21,18 @@ export class PostsService {
       dateLost,
       location,
       contactInfo,
+      photoUrl,
       userId,
     } = createPostDto;
-
-    if (!isValidUUID(userId)) {
+    if (!isUUID(userId)) {
       throw new HttpException('El userId no es un UUID válido', 400);
     }
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-
     if (!userFound) {
       throw new HttpException('El usuario no existe', 404);
     }
-
-    let photoUrl = ' ';
-    if (file) {
-      try {
-        const uploadResult =
-          await this.filesUploadService.uploadPostImage(file);
-        photoUrl = uploadResult.secure_url;
-      } catch (error) {
-        throw new HttpException(
-          'Error al subir la imagen. Inténtalo nuevamente.',
-          500,
-        );
-      }
-    }
-
     const post = await this.prisma.post.create({
       data: {
         title,
@@ -61,7 +45,6 @@ export class PostsService {
         userId,
       },
     });
-
     return post;
   }
 

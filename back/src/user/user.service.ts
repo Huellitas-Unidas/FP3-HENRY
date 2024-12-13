@@ -7,12 +7,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuthService } from 'src/auth/auth.service';
-
+import { EmailService } from 'src/email/email.service';
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     private authService: AuthService,
+    private emailService: EmailService,
   ) {}
   async create(createUserDto: CreateUserDto) {
     const { email, password, name } = createUserDto;
@@ -34,10 +35,21 @@ export class UserService {
         name,
       },
     });
+<<<<<<< HEAD
 
     return { user };
   }
 
+=======
+    await this.emailService.sendMail(
+      email,
+      'Bienvenido a nuestra plataforma',
+      `Hola ${name},\n\n¡Gracias por registrarte! Estamos felices de tenerte con nosotros.\n\nSaludos,\nEl equipo de Huellas Perdidas!`,
+    );
+
+    return { user };
+  }
+>>>>>>> e0d829b50eb847f8ef171eb1b833a84b7b60455b
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
