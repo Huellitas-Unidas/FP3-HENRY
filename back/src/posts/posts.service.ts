@@ -9,8 +9,8 @@ import { User } from 'src/user/entities/user.entity';
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(post: CreatePostDto, id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+  async create(post: CreatePostDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: post.userId} });
 
     if (!user) throw new NotFoundException('el usuario no existe');
 
