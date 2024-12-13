@@ -30,3 +30,43 @@ export interface IUserLogin {
   email: string;
   password: string;
 }
+
+/* export interface IPost {
+  title: string;
+  description: string;
+  petType: string;
+  dateLost: Date;
+  location: string;
+  contactInfo: string;
+  photoUrl: string;
+  userId: string
+} */
+
+  {/* export interface IUserData {
+  email?: string;
+  password?: string;
+}
+
+export interface ILoginErrors {
+  email?: string;
+  password?: string;
+}
+
+export interface ISignUpData { 
+  email: string;
+  password: string;
+  name: string;
+  //address: string;  no necesaria
+  phone: string;
+}
+
+export type TSignUpErrors = Partial<ISignUpData>;  -> TSignUpErrors -> es el mismo IValidateErrors?
+
+export interface IPost {
+  id: string;
+  title: string;
+  content: string;
+  userId: string;
+}
+
+*/}
