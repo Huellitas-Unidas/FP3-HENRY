@@ -39,3 +39,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+// BOTON "marcar como perdida" que modifique el status a "lost" para que la mascota 
+// sea posteada y visualizada en lostandfound
