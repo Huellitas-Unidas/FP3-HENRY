@@ -1,5 +1,6 @@
-import CardList from "@/components/CardList/CardList";
-import React from "react";
+// Página que lista publicaciones de Lost & Found
+import CardList from '@/components/CardList/CardList'
+import React from 'react'
 
 const LostAndFound = () => {
   return (
@@ -9,8 +10,8 @@ const LostAndFound = () => {
   );
 };
 
-export default LostAndFound;
+export default LostAndFound; 
 
-//Opcional
-//filtro para que el usuario pueda buscar posts específicos (por ejemplo, por tipo de mascota o ubicación).
+//EL LOSTANDFOUND SOLO LO VEN LAS PERSONAS REGISTRADAS
 //3 Botones Perdidos, Encontrados, Todos
+//AGREGAR BOTON 'QUIERO PUBLICAR MASCOTA'  y lleve a (/post)
