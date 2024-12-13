@@ -24,13 +24,21 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
-      const userData: IUserLogin = JSON.parse(storedUserData);
-      setUserSession(userData);
-    } else {
-      setUserSession(null);
-    }
+    const handleStorageChange = () => {
+      const storedUserData = localStorage.getItem("userData");
+      if (storedUserData) {
+        const userData: IUserLogin = JSON.parse(storedUserData);
+        setUserSession(userData);
+      } else {
+        setUserSession(null);
+      }
+    };
+
+    window.addEventListener("storageChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storageChange", handleStorageChange);
+    };
   }, []);
 
   return (
