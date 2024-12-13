@@ -11,9 +11,33 @@ const Register: React.FC = () => {
       name: "",
       email: "",
       password: "",
-      confirm: "",
+      confirm: "",   // Solo para validación
       phone: "",
     },
+/*
+    validate: (values) => {
+      const errors = validate({ ...values, confirm: values.confirm });
+      return errors;
+    },
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        // Excluye el campo `confirm` antes de enviar los datos
+        const { confirm, ...userData } = values;     //El campo confirm se incluye solo 
+        // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
+
+
+        // Llama a la API para registrar al usuario
+        const response = await registerUser(userData);
+        console.log("Usuario registrado con éxito:", response);
+
+        resetForm();     // Resetea el formulario tras el registro
+        router.push("/auth/login"); // Redirige al login
+      } catch (error) {
+        console.error("Error durante el registro:", error);
+      }
+    },
+  });  */
+
     validate: validate,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
@@ -83,6 +107,14 @@ const Register: React.FC = () => {
               {formik.errors.confirm}
             </span>
           )}
+
+          {/*
+          {formik.errors.confirm && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.confirm}
+            </span>
+          )}
+          */}
 
           <input
             placeholder="Teléfono"

@@ -1,10 +1,12 @@
-import React from "react";
+import React from 'react'
 
 const IdPet = () => {
-  return <div>IdPet</div>;
-};
+  return (
+    <div>Idpet</div>
+  )
+}
 
-export default IdPet;
+export default IdPet; 
 
 // formulario en una página como /posts/register para que el usuario registre una nueva mascota perdida o encontrada.
 //Lost and Found, muestra todos los posts, pero destaca o filtra los que fueron creados por el usuario actual.
