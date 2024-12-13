@@ -1,12 +1,16 @@
-import CardList from '@/components/CardList/CardList'
-import React from 'react'
+import CardList from "@/components/CardList/CardList";
+import React from "react";
 
-const page = () => {
+const LostAndFound = () => {
   return (
     <div>
-        <CardList/>
+      <CardList />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default LostAndFound;
+
+//Opcional
+//filtro para que el usuario pueda buscar posts específicos (por ejemplo, por tipo de mascota o ubicación).
+//3 Botones Perdidos, Encontrados, Todos
