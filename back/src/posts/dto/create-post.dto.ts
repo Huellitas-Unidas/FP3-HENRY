@@ -23,4 +23,6 @@ export class CreatePostDto {
   @IsString()
   photoUrl?: string;
 
+  
+ 
 }
