@@ -58,7 +58,6 @@ const PetRegister: React.FC = () => {
               <option value="Roedor">Roedor</option>
               <option value="Otro">Otro</option>
             </select>
-
             <select
               name="genre"
               value={formik.values.genre}

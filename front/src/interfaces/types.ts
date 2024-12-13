@@ -50,6 +50,7 @@ export interface IPost {
 
 */}
 
+{/*}
 export interface IPetValidateErrors {
   name: string;
   type: string;
@@ -61,3 +62,4 @@ export interface IUserLogin {
   email: string;
   password: string;
 }
+*/}
