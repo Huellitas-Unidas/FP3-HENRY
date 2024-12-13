@@ -2,6 +2,7 @@ export interface ICardAnimal {
   id: number;
   name: string;
   type: string;
+  genre: string;
   image: string;
   description: string;
 }
@@ -45,7 +46,17 @@ export interface IPost {
   userId: string;
 }
 
-
-
 */}
+
+export interface IPetValidateErrors {
+  name: string;
+  type: string;
+  genre: string;
+  description: string;
+} 
+
+export interface IUserLogin {
+  email: string;
+  password: string; 
+}
 
