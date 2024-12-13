@@ -28,7 +28,7 @@ export class PostsService {
     // const userFound = await this.prisma.user.findUnique({
     //   where: { id: userId },
     // });
-    // if (!userFound) throw new HttpException('El usuario no existe', 404);
+   g // if (!userFound) throw new HttpException('El usuario no existe', 404);
 
     // const post = await this.prisma.post.create({
     //   data: {
