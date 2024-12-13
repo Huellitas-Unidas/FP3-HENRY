@@ -15,6 +15,25 @@ const petsArray: ICardAnimal[] = [
     name: "Claudio",
     type: "Perro",
     genre: "Macho",
+    description:
+      "Cachorro, de color beige, y es muy juguetón. aaaaaaa aaaa aaaaaa aaaaaaa aaaa aaa aaaa a",
+    image:
+      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
+  },
+  {
+    id: 3,
+    name: "Claudio",
+    type: "Perro",
+    genre: "Macho",
+    description: "Cachorro, de color beige, y es muy juguetón.",
+    image:
+      "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
+  },
+  {
+    id: 4,
+    name: "Claudio",
+    type: "Perro",
+    genre: "Macho",
     description: "Cachorro, de color beige, y es muy juguetón.",
     image:
       "https://olondriz.com/wp-content/uploads/2020/04/ambar-perrito-1.jpg",
