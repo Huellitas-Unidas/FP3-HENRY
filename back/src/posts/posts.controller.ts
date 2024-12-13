@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -15,9 +16,9 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  @Post(':id')
+  create(@Body() post: CreatePostDto, @Param('id', ParseUUIDPipe) id: string) {
+    return this.postsService.create(post, id);
   }
 
   @Get()
