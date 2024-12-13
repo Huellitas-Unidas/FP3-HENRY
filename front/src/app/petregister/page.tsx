@@ -1,17 +1,20 @@
-import validate from "@/helpers/validate";
+"use client";
+import GreenButton from "@/components/Buttons/GreenButton";
+import petValidate from "@/helpers/petsValidate";
 import { useFormik } from "formik";
 import React from "react";
-import GreenButton from "../Buttons/GreenButton";
+import { MdAddPhotoAlternate } from "react-icons/md";
 
-const PetRegisterCard: React.FC = () => {
+const PetRegister: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
       type: "",
+      genre: "",
       description: "",
       status: "",
     },
-    validate: validate,
+    validate: petValidate,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       resetForm();
@@ -39,17 +42,44 @@ const PetRegisterCard: React.FC = () => {
             </span>
           )}
 
-          <input
-            placeholder="Tipo"
-            type="text"
-            name="type"
-            value={formik.values.type}
-            onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
+          <div className="flex flex-row gap-4 mb-2">
+            <select
+              name="type"
+              value={formik.values.type}
+              onChange={formik.handleChange}
+              className=" bg-transparent text-gray-400 focus:outline-none "
+            >
+              <option value="" disabled>
+                Tipo
+              </option>
+              <option value="Gato">Gato</option>
+              <option value="Perro">Perro</option>
+              <option value="Ave">Ave</option>
+              <option value="Roedor">Roedor</option>
+              <option value="Otro">Otro</option>
+            </select>
+
+            <select
+              name="genre"
+              value={formik.values.genre}
+              onChange={formik.handleChange}
+              className=" bg-transparent text-gray-400 focus:outline-none "
+            >
+              <option value="" disabled>
+                Género
+              </option>
+              <option value="Hembra">Hembra</option>
+              <option value="Macho">Macho</option>
+            </select>
+          </div>
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.type}
+            </span>
+          )}
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.genre}
             </span>
           )}
 
@@ -67,32 +97,16 @@ const PetRegisterCard: React.FC = () => {
             </span>
           )}
 
-          <input
-            placeholder="FOTO !!!"
-            type="text"
-            name="description"
-            value={formik.values.description}
-            onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.description}
-            </span>
-          )}
+          <span className="text-gray-400">*Sube una foto de tu mascota</span>
+          <button>
+            <MdAddPhotoAlternate className="text-2xl text-gray-500 mb-4" />
+          </button>
 
-          {/* <label className="text-sm mb-2">
-            Ya tienes una cuenta?{" "}
-            <Link href={"/login"} className="underline hover:no-underline">
-              Loguéate
-            </Link>
-          </label> */}
-
-          <GreenButton props="Enviar" />
+          <GreenButton props="Añadir" />
         </form>
       </div>
     </div>
   );
 };
 
-export default PetRegisterCard;
+export default PetRegister;
