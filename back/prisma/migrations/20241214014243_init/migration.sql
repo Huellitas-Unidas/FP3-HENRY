@@ -52,9 +52,10 @@ CREATE TABLE "Notifications" (
 CREATE TABLE "Pets" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
     "raza" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "Status" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
     "userId" UUID NOT NULL,
 
     CONSTRAINT "Pets_pkey" PRIMARY KEY ("id")
