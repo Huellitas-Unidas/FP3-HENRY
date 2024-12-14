@@ -16,6 +16,7 @@ model User {
   posts       Post[]
   donations   Donations[]
   notifications Notifications[]
+  pets      Pets[]
 }
 
 model Post {
@@ -49,4 +50,15 @@ model Notifications {
   userId      String       @db.Uuid  
   user        User         @relation(fields: [userId], references: [id])
   createdAt   DateTime     @default(now())
+}
+
+model Pets {
+    id          String         @id @default(uuid()) @db.Uuid
+    name    String
+    type    String
+    raza    String
+    description String
+    status      String
+    userId       String @db.Uuid 
+    user        User         @relation(fields: [userId], references: [id])
 }
