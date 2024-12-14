@@ -55,9 +55,10 @@ model Notifications {
 model Pets {
     id          String         @id @default(uuid()) @db.Uuid
     name    String
+    type    String
     raza    String
     description String
-    Status      String
+    status      String
     userId       String @db.Uuid 
     user        User         @relation(fields: [userId], references: [id])
 }

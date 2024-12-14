@@ -80,7 +80,7 @@ export class UserService {
       where: { id },
       include: {
         posts: true,
-        notifications: true,
+        pets: true,
       },
     });
 
