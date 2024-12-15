@@ -17,8 +17,11 @@ const Navbar = () => {
     Swal.fire({
       title: "Sesión cerrada",
       text: "Hasta la próxima!",
-      icon: "warning",
+      icon: "success",
       confirmButtonText: "Ok",
+      customClass: {
+        confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+    }
     });
     router.push("/");
   };

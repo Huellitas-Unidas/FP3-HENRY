@@ -1,50 +1,55 @@
 //Operaciones relacionadas con usuarios: registro, login, obtener perfil, etc.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-{/*import {Toast} from "@/helpers/index";
+import {Toast} from "@/helpers/index";
 import {ISignUpData, IUserData} from "@/interfaces/types";
+import Swal from "sweetalert2";
 
-const APIURL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const isFormSignUpFull = (data: ISignUpData): boolean => Object.values(data).every(Boolean);
 
 export async function register(userData: ISignUpData) {
     try {
         if (!isFormSignUpFull(userData)) {
-            Toast.fire({
+            Swal.fire({
                 icon: "error",
                 iconColor: "red",
-                title: "All fields must be filled out",
+                title: "Todos los campos deben ser completados",
             });
             return;
         }
 
-        const res = await fetch(`${APIURL}/users/register`, {
+        const res = await fetch(`${API_URL}/user/register`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
             body: JSON.stringify(userData),
         });
+        console.log(userData)
         if (res.ok) {
             return res.json();
+           
         } else {
             Toast.fire({
                 icon: "error",
                 iconColor: "red",
-                title: "Could not complete registration",
+                title: "No se pudo completar el registro",
             });
         }
     } catch (error: any) {
         Toast.fire({
             icon: "error",
             iconColor: "rose",
-            title: "Could not complete registration",
+            title: "No se pudo completar el registro",
         });
+       
         throw new Error(error);
+        
     }
 }
 
-export async function login(userData: IUserData) {
+/* export async function login(userData: IUserData) {
     try {
         const res = await fetch(`${APIURL}/users/login`, {
             method: "POST",
@@ -72,6 +77,6 @@ export async function login(userData: IUserData) {
         console.error("Login error", error);
         throw new Error(error);
     }
-}
+} */
  
-*/}    
+  
