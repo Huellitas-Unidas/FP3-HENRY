@@ -4,46 +4,64 @@ import React from "react";
 import Link from "next/link";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { register } from "../api/authAPI";
 
 const Register: React.FC = () => {
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirm: "",   // Solo para validación
-      phone: "",
+ const router = useRouter();
+ 
+ const formik = useFormik({
+  initialValues: {
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",   // Solo para validación
+    //phone: "",
+  },
+
+ validate: validate,
+    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+      try {
+        await register(userData); 
+        resetForm(); 
+        router.push("/login"); 
+      } catch (error) {
+        console.error("Error durante el registro:", error);
+      }
     },
-/*
-    validate: (values) => {
-      const errors = validate({ ...values, confirm: values.confirm });
+  });
+
+  
+
+    /*validate: (values) => {
+      const errors = validate({ ...values, confirm: values.confirm});
       return errors;
     },
     onSubmit: async (values, { resetForm }) => {
       try {
         // Excluye el campo `confirm` antes de enviar los datos
-        const { confirm, ...userData } = values;     //El campo confirm se incluye solo 
+        const { ...userData } = values;     //El campo confirm se incluye solo 
         // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
 
 
         // Llama a la API para registrar al usuario
-        const response = await registerUser(userData);
+        const response = await register(userData);
         console.log("Usuario registrado con éxito:", response);
 
         resetForm();     // Resetea el formulario tras el registro
-        router.push("/auth/login"); // Redirige al login
+        router.push("/login"); // Redirige al login
       } catch (error) {
         console.error("Error durante el registro:", error);
       }
     },
-  });  */
+  }); */ 
 
-    validate: validate,
+   /*  validate: validate,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       resetForm();
     },
-  });
+  }); */
 
   return (
     <div className="flex flex-col place-items-center my-8">
@@ -60,7 +78,7 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
-          {formik.errors && (
+          {formik.errors.name && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.name}
             </span>
@@ -74,7 +92,7 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
-          {formik.errors && (
+          {formik.errors.email && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -88,13 +106,13 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
-          {formik.errors && (
+          {formik.errors.password && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
 
-          <input
+         <input
             placeholder="Confirma tu contraseña"
             type="password"
             name="confirm"
@@ -102,21 +120,21 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           ></input>
-          {formik.errors && (
+          {formik.errors.confirm && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.confirm}
             </span>
-          )}
+          )} 
 
-          {/*
+      
           {formik.errors.confirm && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.confirm}
             </span>
           )}
-          */}
+        
 
-          <input
+         {/*  <input
             placeholder="Teléfono"
             type="number"
             name="phone"
@@ -128,7 +146,7 @@ const Register: React.FC = () => {
             <span className="text-red-500 text-sm text-center">
               {formik.errors.phone}
             </span>
-          )}
+          )} */}
 
           <label className="text-sm mb-2">
             Ya tienes una cuenta?{" "}
