@@ -6,12 +6,13 @@ import {
   Param,
   Delete,
   Put,
-  ParseUUIDPipe,
+  HttpCode,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -27,6 +28,7 @@ export class PostsController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createPostDto: CreatePostDto,
@@ -40,12 +42,7 @@ export class PostsController {
     )
     file: Express.Multer.File,
   ) {
-    const post = await this.postsService.create(createPostDto, file);
-
-    return {
-      message: 'Publicación creada y archivo subido exitosamente',
-      post,
-    };
+    return this.postsService.create(createPostDto, file);
   }
 
   @Get()

@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 export class CreatePostDto {
@@ -10,7 +11,8 @@ export class CreatePostDto {
   @IsString()
   petType: string;
 
-  @IsDate()
+  @Transform(({ value }) => new Date(value))
+  @IsDate({ message: 'dateLost must be a valid date' })
   dateLost: Date;
 
   @IsString()
