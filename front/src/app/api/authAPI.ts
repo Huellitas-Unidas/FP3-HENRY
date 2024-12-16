@@ -1,53 +1,83 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+//Operaciones relacionadas con usuarios: registro, login, obtener perfil, etc.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Toast } from "@/helpers/index";
-import { ISignUpData } from "@/interfaces/types";
+import {Toast} from "@/helpers/index";
+import {ISignUpData, IUserData} from "@/interfaces/types";
+import Swal from "sweetalert2";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-console.log("API_URL:", API_URL); // Esto debería mostrar "http://localhost:4000"
 
+export const isFormSignUpFull = (data: ISignUpData): boolean => Object.values(data).every(Boolean);
 
 export async function register(userData: ISignUpData) {
-  try {
-    console.log("API_URL:", API_URL);
-    console.log("Datos enviados:", userData);
+    try {
+        if (!isFormSignUpFull(userData)) {
+            Swal.fire({
+                icon: "error",
+                iconColor: "red",
+                title: "Todos los campos deben ser completados",
+            });
+            return;
+        }
 
-    if (!API_URL) {
-      throw new Error("API_URL no está definida. Verifica tu archivo .env.local");
+        const res = await fetch(`${API_URL}/user/register`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+        console.log(userData)
+        if (res.ok) {
+            return res.json();
+           
+        } else {
+            Toast.fire({
+                icon: "error",
+                iconColor: "red",
+                title: "No se pudo completar el registro",
+            });
+        }
+    } catch (error: any) {
+        Toast.fire({
+            icon: "error",
+            iconColor: "rose",
+            title: "No se pudo completar el registro",
+        });
+       
+        throw new Error(error);
+        
     }
-
-    const res = await fetch(`${API_URL}/user/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      Toast.fire({
-        icon: "error",
-        iconColor: "red",
-        title: errorData.message || "Error al registrar el usuario.",
-      });
-      return;
-    }
-
-    const data = await res.json();
-    Toast.fire({
-      icon: "success",
-      iconColor: "green",
-      title: "Registro completado con éxito.",
-    });
-
-    return data;
-  } catch (error: any) {
-    console.error("Error en el registro:", error);
-    Toast.fire({
-      icon: "error",
-      iconColor: "red",
-      title: error.message || "No se pudo completar el registro.",
-    });
-    throw error;
-  }
 }
+
+/* export async function login(userData: IUserData) {
+    try {
+        const res = await fetch(`${APIURL}/users/login`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        if (res.ok) {
+            return await res.json();
+        } else {
+            Toast.fire({
+                icon: "error",
+                iconColor: "red",
+                title: "Could not log in",
+            });
+        }
+    } catch (error: any) {
+        Toast.fire({
+            icon: "error",
+            iconColor: "rose",
+            title: "Unable to sign in",
+        });
+        console.error("Login error", error);
+        throw new Error(error);
+    }
+} */
+ 
+  

@@ -5,20 +5,22 @@ import React from "react";
 import Link from "next/link";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
-import { register } from "@/app/api/authAPI";
 import { useRouter } from "next/navigation";
+import { register } from "../api/authAPI";
 
 const Register: React.FC = () => {
-  const router = useRouter();
+ const router = useRouter();
+ 
+ const formik = useFormik({
+  initialValues: {
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",   // Solo para validación
+    //phone: "",
+  },
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirm: "", // Campo solo para validación
-    },
-    validate: validate,
+ validate: validate,
     onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
         await register(userData); 
@@ -29,6 +31,38 @@ const Register: React.FC = () => {
       }
     },
   });
+
+  
+
+    /*validate: (values) => {
+      const errors = validate({ ...values, confirm: values.confirm});
+      return errors;
+    },
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        // Excluye el campo `confirm` antes de enviar los datos
+        const { ...userData } = values;     //El campo confirm se incluye solo 
+        // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
+
+
+        // Llama a la API para registrar al usuario
+        const response = await register(userData);
+        console.log("Usuario registrado con éxito:", response);
+
+        resetForm();     // Resetea el formulario tras el registro
+        router.push("/login"); // Redirige al login
+      } catch (error) {
+        console.error("Error durante el registro:", error);
+      }
+    },
+  }); */ 
+
+   /*  validate: validate,
+    onSubmit: (values, { resetForm }) => {
+      console.log(values);
+      resetForm();
+    },
+  }); */
 
   return (
     <div className="flex flex-col place-items-center my-8">
@@ -43,12 +77,9 @@ const Register: React.FC = () => {
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
-              formik.errors.name && formik.touched.name ? "border-red-500" : ""
-            }`}
-          />
-          {formik.errors.name && formik.touched.name && (
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors.name && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.name}
             </span>
@@ -60,12 +91,9 @@ const Register: React.FC = () => {
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
-              formik.errors.email && formik.touched.email ? "border-red-500" : ""
-            }`}
-          />
-          {formik.errors.email && formik.touched.email && (
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors.email && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -77,37 +105,49 @@ const Register: React.FC = () => {
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
-              formik.errors.password && formik.touched.password
-                ? "border-red-500"
-                : ""
-            }`}
-          />
-          {formik.errors.password && formik.touched.password && (
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors.password && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
 
-          <input
+         <input
             placeholder="Confirma tu contraseña"
             type="password"
             name="confirm"
             value={formik.values.confirm}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
-              formik.errors.confirm && formik.touched.confirm
-                ? "border-red-500"
-                : ""
-            }`}
-          />
-          {formik.errors.confirm && formik.touched.confirm && (
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors.confirm && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.confirm}
+            </span>
+          )} 
+
+      
+          {formik.errors.confirm && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.confirm}
             </span>
           )}
+        
+
+         {/*  <input
+            placeholder="Teléfono"
+            type="number"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.phone}
+            </span>
+          )} */}
 
           <label className="text-sm mb-2">
             ¿Ya tienes una cuenta?{" "}
