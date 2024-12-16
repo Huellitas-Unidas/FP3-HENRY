@@ -24,9 +24,9 @@ model Post {
   title       String
   description String
   petType     String
+  contactInfo String
   dateLost    DateTime
   location    String
-  contactInfo String
   photoUrl    String
   userId      String    @db.Uuid
   user        User       @relation(fields: [userId], references: [id])
