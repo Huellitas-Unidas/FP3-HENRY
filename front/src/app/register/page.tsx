@@ -1,66 +1,54 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import validate from "@/helpers/validate";
 import React from "react";
 import Link from "next/link";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
+import { register } from "@/app/api/authAPI";
+import { useRouter } from "next/navigation";
 
 const Register: React.FC = () => {
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       password: "",
-      confirm: "",   // Solo para validación
-      phone: "",
+      confirm: "", // Campo solo para validación
     },
-/*
-    validate: (values) => {
-      const errors = validate({ ...values, confirm: values.confirm });
-      return errors;
-    },
-    onSubmit: async (values, { resetForm }) => {
+    validate: validate,
+    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
-        // Excluye el campo `confirm` antes de enviar los datos
-        const { confirm, ...userData } = values;     //El campo confirm se incluye solo 
-        // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
-
-
-        // Llama a la API para registrar al usuario
-        const response = await registerUser(userData);
-        console.log("Usuario registrado con éxito:", response);
-
-        resetForm();     // Resetea el formulario tras el registro
-        router.push("/auth/login"); // Redirige al login
+        await register(userData); 
+        resetForm(); 
+        router.push("/login"); 
       } catch (error) {
         console.error("Error durante el registro:", error);
       }
-    },
-  });  */
-
-    validate: validate,
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
     },
   });
 
   return (
     <div className="flex flex-col place-items-center my-8">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+      <div className="rounded-xl border border-green-500 shadow-2xl p-8 w-1/4">
         <form
-          onSubmit={formik.handleSubmit}
+          onSubmit={formik.handleSubmit} 
           className="flex flex-col gap-2 items-center text-xl"
         >
           <input
             placeholder="Nombre completo"
-            type="name"
+            type="text"
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
+            onBlur={formik.handleBlur}
+            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
+              formik.errors.name && formik.touched.name ? "border-red-500" : ""
+            }`}
+          />
+          {formik.errors.name && formik.touched.name && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.name}
             </span>
@@ -72,9 +60,12 @@ const Register: React.FC = () => {
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
+            onBlur={formik.handleBlur}
+            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
+              formik.errors.email && formik.touched.email ? "border-red-500" : ""
+            }`}
+          />
+          {formik.errors.email && formik.touched.email && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -86,9 +77,14 @@ const Register: React.FC = () => {
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
+            onBlur={formik.handleBlur}
+            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
+              formik.errors.password && formik.touched.password
+                ? "border-red-500"
+                : ""
+            }`}
+          />
+          {formik.errors.password && formik.touched.password && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
@@ -100,44 +96,27 @@ const Register: React.FC = () => {
             name="confirm"
             value={formik.values.confirm}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
+            onBlur={formik.handleBlur}
+            className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none ${
+              formik.errors.confirm && formik.touched.confirm
+                ? "border-red-500"
+                : ""
+            }`}
+          />
+          {formik.errors.confirm && formik.touched.confirm && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.confirm}
-            </span>
-          )}
-
-          {/*
-          {formik.errors.confirm && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.confirm}
-            </span>
-          )}
-          */}
-
-          <input
-            placeholder="Teléfono"
-            type="number"
-            name="phone"
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.phone}
             </span>
           )}
 
           <label className="text-sm mb-2">
-            Ya tienes una cuenta?{" "}
-            <Link href={"/login"} className="underline hover:no-underline">
-              Loguéate
+            ¿Ya tienes una cuenta?{" "}
+            <Link href="/login" className="underline hover:no-underline">
+              Inicia sesión
             </Link>
           </label>
 
-          <GreenButton props="Registrarme" />
+          <GreenButton label="Registrarme" />
         </form>
       </div>
     </div>
@@ -145,3 +124,8 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+
+
+
+
+
