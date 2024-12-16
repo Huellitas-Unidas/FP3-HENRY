@@ -20,6 +20,7 @@ const Login: React.FC = () => {
       console.log(values);
       resetForm();
       localStorage.setItem("userData", JSON.stringify(values));
+      window.dispatchEvent(new Event("storageChange"));
       router.push("/");
     },
   });

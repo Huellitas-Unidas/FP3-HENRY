@@ -7,6 +7,9 @@ import { MapModule } from './map/map.module';
 import { AdministrationModule } from './administration/administration.module';
 import { DonationModule } from './donation/donation.module';
 import { PostsModule } from './posts/posts.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
+import { PetsModule } from './pets/pets.module';
+
 
 @Module({
   imports: [
@@ -16,6 +19,8 @@ import { PostsModule } from './posts/posts.module';
     AdministrationModule,
     DonationModule,
     PostsModule,
+    ChatbotModule,
+    PetsModule
   ],
   controllers: [AppController],
   providers: [AppService],
