@@ -4,7 +4,6 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { isUUID } from 'class-validator';
 import { FilesUploadService } from '../files-upload/files-upload.service';
-import { validate as isValidUUID } from 'uuid';
 
 @Injectable()
 export class PostsService {
