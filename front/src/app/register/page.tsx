@@ -7,6 +7,8 @@ import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { register } from "../api/authAPI";
+import { Toast } from "@/helpers";
+
 
 const Register: React.FC = () => {
  const router = useRouter();
@@ -20,49 +22,29 @@ const Register: React.FC = () => {
     //phone: "",
   },
 
- validate: validate,
-    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
-      try {
-        await register(userData); 
+  onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+    try {
+      const registrationResult = await register(userData);
+      if (registrationResult) {
+          Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          title: "Usuario registrado con éxito",
+        });
         resetForm(); 
         router.push("/login"); 
-      } catch (error) {
-        console.error("Error durante el registro:", error);
       }
-    },
-  });
-
-  
-
-    /*validate: (values) => {
-      const errors = validate({ ...values, confirm: values.confirm});
-      return errors;
-    },
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        // Excluye el campo `confirm` antes de enviar los datos
-        const { ...userData } = values;     //El campo confirm se incluye solo 
-        // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
-
-
-        // Llama a la API para registrar al usuario
-        const response = await register(userData);
-        console.log("Usuario registrado con éxito:", response);
-
-        resetForm();     // Resetea el formulario tras el registro
-        router.push("/login"); // Redirige al login
-      } catch (error) {
-        console.error("Error durante el registro:", error);
-      }
-    },
-  }); */ 
-
-   /*  validate: validate,
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
-    },
-  }); */
+    } catch (error) {
+      console.error("Error durante el registro:", error);
+      Toast.fire({
+        icon: "error",
+        iconColor: "red",
+        title: "No se pudo completar el registro",
+      });
+    }
+  },
+});
+   
 
   return (
     <div className="flex flex-col place-items-center my-8">
@@ -156,7 +138,7 @@ const Register: React.FC = () => {
             </Link>
           </label>
 
-          <GreenButton label="Registrarme" />
+          <GreenButton props="Registrarme" />
         </form>
       </div>
     </div>
