@@ -15,11 +15,7 @@ model User {
   createdAt   DateTime     @default(now())  
   donations   Donations[]
   notifications Notifications[]
-<<<<<<< HEAD
-  posts         Post[]
-=======
   pets      Pets[]
->>>>>>> e627198a4b53225de4ef5adae864e89fb271ac9b
 }
 
 model Post {
