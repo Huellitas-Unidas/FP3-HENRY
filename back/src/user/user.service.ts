@@ -35,12 +35,6 @@ export class UserService {
         name,
       },
     });
-<<<<<<< HEAD
-
-    return { user };
-  }
-
-=======
     await this.emailService.sendMail(
       email,
       'Bienvenido a nuestra plataforma',
@@ -49,7 +43,6 @@ export class UserService {
 
     return { user };
   }
->>>>>>> e0d829b50eb847f8ef171eb1b833a84b7b60455b
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
