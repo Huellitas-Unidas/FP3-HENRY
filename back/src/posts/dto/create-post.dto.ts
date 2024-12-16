@@ -1,4 +1,3 @@
-import { Transform } from 'class-transformer';
 import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 export class CreatePostDto {

@@ -21,9 +21,9 @@ export class PostsService {
       dateLost,
       location,
       contactInfo,
-      photoUrl,
       userId,
     } = createPostDto;
+
     if (!isUUID(userId)) {
       throw new HttpException('El userId no es un UUID válido', 400);
     }
@@ -33,6 +33,13 @@ export class PostsService {
     if (!userFound) {
       throw new HttpException('El usuario no existe', 404);
     }
+
+    let photoUrl = '';
+    if (file) {
+      const uploadResult = await this.filesUploadService.uploadPostImage(file);
+      photoUrl = uploadResult.secure_url;
+    }
+
     const post = await this.prisma.post.create({
       data: {
         title,
