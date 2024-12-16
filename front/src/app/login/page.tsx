@@ -6,56 +6,24 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import GreenButton from "@/components/Buttons/GreenButton";
-import { Toast } from "@/helpers";
-import router from "next/router";
 
+const Login: React.FC = () => {
+  const router = useRouter();
 
-const formik = useFormik({
-  initialValues: {
-    email: "",
-    password: "",
-  },
-  validate: (values) => {
-    const errors = validate(values);
-    return errors;
-  },
-  onSubmit: (values, { resetForm }) => {
-    try {
-     
-      const isAuthenticated = values.email === "prueba@gmail.com" && values.password === "P123";
-
-      if (isAuthenticated) {
-        
-        Toast.fire({
-          icon: "success",
-          iconColor: "green",
-          title: "Inicio de sesión exitoso",
-        });
-
-       localStorage.setItem("userData", JSON.stringify(values));
-        window.dispatchEvent(new Event("storageChange"));
-        resetForm();
-        router.push("/");
-      } else {
-      
-        Toast.fire({
-          icon: "error",
-          iconColor: "red",
-          title: "Correo o contraseña incorrectos",
-        });
-      }
-    } catch (error) {
-      console.error("Error durante el inicio de sesión:", error);
-
-      
-      Toast.fire({
-        icon: "error",
-        iconColor: "red",
-        title: "No se pudo completar el inicio de sesión",
-      });
-    }
-  },
-});
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: validate,
+    onSubmit: (values, { resetForm }) => {
+      console.log(values);
+      resetForm();
+      localStorage.setItem("userData", JSON.stringify(values));
+      window.dispatchEvent(new Event("storageChange"));
+      router.push("/");
+    },
+  });
 
   return (
     <div className="flex flex-col place-items-center mt-28">
