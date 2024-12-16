@@ -11,7 +11,7 @@ export class FilesUploadService {
       return new Promise((resolve, reject) => {
         const upload = cloudinary.uploader.upload_stream(
           {
-            folder: this.folder,
+            folder: 'HuellitasUnidas',
             resource_type: 'image',
           },
           (error, result) => {
