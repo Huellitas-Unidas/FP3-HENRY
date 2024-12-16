@@ -38,7 +38,7 @@ export class UserService {
     await this.emailService.sendMail(
       email,
       'Bienvenido a nuestra plataforma',
-      `Hola ${name},\n\n¡Gracias por registrarte! Estamos felices de tenerte con nosotros.\n\nSaludos,\nEl equipo de Huellas Perdidas!`,
+      `Hola ${name},\n\n¡Gracias por registrarte! Estamos felices de tenerte con nosotros.\n\nSaludos,\nEl equipo de Huellas Unidas!`,
     );
 
     return { user };
@@ -80,7 +80,7 @@ export class UserService {
       where: { id },
       include: {
         posts: true,
-        notifications: true,
+        pets: true,
       },
     });
 

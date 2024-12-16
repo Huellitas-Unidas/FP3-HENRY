@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import React, { useState } from "react";
 
 const Maps = () => {
@@ -47,7 +48,15 @@ const Maps = () => {
 
         {/* Mapa estático */}
         <div className="relative w-full max-w-4xl mx-auto my-6">
-          <img src='/images/mapa.png' alt="Mapa de mascotas perdidas y encontradas" className="w-full h-auto rounded shadow-md" />
+          <Image 
+          src='/images/mapa.png' 
+          alt="Mapa de mascotas perdidas y encontradas" 
+          width={500} 
+          height={300} 
+          style={{ objectFit: "contain", width: "100%", height: "100%" }}
+            className="rounded-lg"
+            priority
+         />
 
           {/* Puntos en el mapa */}
           {filter !== "found" && (

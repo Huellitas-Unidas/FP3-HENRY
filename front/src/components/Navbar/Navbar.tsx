@@ -17,20 +17,31 @@ const Navbar = () => {
     Swal.fire({
       title: "Sesión cerrada",
       text: "Hasta la próxima!",
-      icon: "warning",
+      icon: "success",
       confirmButtonText: "Ok",
+      customClass: {
+        confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+    }
     });
     router.push("/");
   };
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
-      const userData: IUserLogin = JSON.parse(storedUserData);
-      setUserSession(userData);
-    } else {
-      setUserSession(null);
-    }
+    const handleStorageChange = () => {
+      const storedUserData = localStorage.getItem("userData");
+      if (storedUserData) {
+        const userData: IUserLogin = JSON.parse(storedUserData);
+        setUserSession(userData);
+      } else {
+        setUserSession(null);
+      }
+    };
+
+    window.addEventListener("storageChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storageChange", handleStorageChange);
+    };
   }, []);
 
   return (
@@ -48,7 +59,7 @@ const Navbar = () => {
         <div className="hidden w-3/5 items-center justify-evenly font-semibold md:flex">
           <Link href="/lostandfound">Buscados / Encontrados</Link>
           <Link href="not-found">Ayudanos donando</Link>
-          <Link href="/aboutus">Sobre Huellas Unidas</Link>
+          <Link href="/aboutUs">Sobre Huellas Unidas</Link>
           <Link href="not-found">🐾Recomendaciones</Link>
         </div>
 

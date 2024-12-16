@@ -2,16 +2,11 @@
 
 import { IButton } from "@/interfaces/types";
 
-const GreenButton: React.FC<IButton> = ({ label, type = "submit", disabled }) => {
+const GreenButton: React.FC<IButton> = ({ props }) => {
+  
   return (
-    <button
-      type={type}
-      disabled={disabled}
-      className={`bg-green-500 text-white p-2 rounded-lg hover:bg-white hover:text-green-500 transition-all duration-300 ${
-        disabled ? "opacity-50 cursor-not-allowed" : ""
-      }`}
-    >
-      {label}
+    <button type="submit" className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300">
+      {props}
     </button>
   );
 };
