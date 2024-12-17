@@ -50,8 +50,9 @@ export class PostsService {
         location,
         contactInfo,
         photoUrl,
+        status,
         userId,
-      },
+      } 
     });
     return post;
   }

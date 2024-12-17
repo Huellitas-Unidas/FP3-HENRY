@@ -28,6 +28,7 @@ model Post {
   dateLost    DateTime
   location    String
   photoUrl    String
+  status      String
   userId      String    @db.Uuid
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())  
@@ -59,6 +60,7 @@ model Pets {
     raza    String
     description String
     status      String
+    imgUrl      String
     userId       String @db.Uuid 
     user        User         @relation(fields: [userId], references: [id])
 }
