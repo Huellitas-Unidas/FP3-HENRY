@@ -6,6 +6,7 @@ import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { register } from "../api/authAPI";
+import Swal from "sweetalert2";
 
 const Register: React.FC = () => {
  const router = useRouter();
@@ -20,16 +21,44 @@ const Register: React.FC = () => {
   },
 
  validate: validate,
-    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+ onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+  try {
+    const registrationResult = await register(userData);
+    if (registrationResult) {
+        Swal.fire({
+        icon: "success",
+        iconColor: "green",
+        title: "Usuario registrado con éxito",
+        customClass: {
+          confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
+      });
+      resetForm(); 
+      router.push("/login"); 
+    }
+  } catch (error) {
+    console.error("Error durante el registro:", error);
+    Swal.fire({
+      icon: "error",
+      iconColor: "red",
+        title: "No se pudo completar el registro",
+        customClass: {
+          confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
+      });
+    }
+  },
+});
+    /* onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
         await register(userData); 
-        resetForm(); 
+        resetForm();
         router.push("/login"); 
       } catch (error) {
         console.error("Error durante el registro:", error);
       }
-    },
-  });
+    }, */
+  //});
 
   
 
