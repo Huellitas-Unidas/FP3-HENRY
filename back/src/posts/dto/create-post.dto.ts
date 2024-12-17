@@ -1,4 +1,5 @@
-import { IsString, IsDate, IsOptional, IsInt, isUUID, IsUUID } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -9,20 +10,26 @@ export class CreatePostDto {
 
   @IsString()
   petType: string;
+  
+  @IsString()
+  contactInfo: string;
 
-  @IsDate()
+  @Transform(({ value }) => new Date(value))
+  @IsDate({ message: 'dateLost must be a valid date' })
   dateLost: Date;
 
   @IsString()
   location: string;
 
-  @IsString()
-  contactInfo: string;
+  
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   photoUrl?: string;
+  
+  @IsString()
+  status: string
 
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
- userId: string
+  userId: string;
 }
