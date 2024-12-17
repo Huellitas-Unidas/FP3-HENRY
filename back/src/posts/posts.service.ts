@@ -36,7 +36,7 @@ export class PostsService {
         dateLost,
         location,
         contactInfo,
-        pho toUrl,
+        photoUrl,
         userId,
       },
     });
