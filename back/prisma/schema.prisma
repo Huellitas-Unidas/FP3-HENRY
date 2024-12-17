@@ -24,10 +24,11 @@ model Post {
   title       String
   description String
   petType     String
+  contactInfo String
   dateLost    DateTime
   location    String
-  contactInfo String
   photoUrl    String
+  status      String
   userId      String    @db.Uuid
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())  
@@ -59,6 +60,7 @@ model Pets {
     raza    String
     description String
     status      String
+    imgUrl      String
     userId       String @db.Uuid 
     user        User         @relation(fields: [userId], references: [id])
 }

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GreenButton from "@/components/Buttons/GreenButton";
 
+
 const Login: React.FC = () => {
   const router = useRouter();
 
@@ -15,15 +16,16 @@ const Login: React.FC = () => {
       email: "",
       password: "",
     },
-    validate: validate,
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
-      localStorage.setItem("userData", JSON.stringify(values));
-      window.dispatchEvent(new Event("storageChange"));
-      router.push("/");
-    },
-  });
+
+  validate: validate,
+  onSubmit: (values, { resetForm }) => {
+    console.log(values);
+    resetForm();
+    localStorage.setItem("userData", JSON.stringify(values));
+    window.dispatchEvent(new Event("storageChange"));
+    router.push("/");
+  },
+}); 
 
   return (
     <div className="flex flex-col place-items-center mt-28">
