@@ -27,8 +27,7 @@ model Post {
   contactInfo String
   dateLost    DateTime
   location    String
-  photoUrl    String
-  status      String
+  photoUrl    String 
   userId      String    @db.Uuid
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())  
