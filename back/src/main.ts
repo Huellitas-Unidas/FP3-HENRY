@@ -9,7 +9,9 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
   .setTitle('Huellas Unidas')
   .setDescription('API DEL PROYECTO FINAL')
-  .setVersion('1.0').build()
+  .setVersion('1.0')
+  .addBearerAuth()
+  .build()
 
   const document = SwaggerModule.createDocument(app, swaggerConfig)
 
