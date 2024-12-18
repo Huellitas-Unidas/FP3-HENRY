@@ -4,12 +4,14 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { isUUID } from 'class-validator';
 import { FilesUploadService } from '../files-upload/files-upload.service';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly filesUploadService: FilesUploadService,
+    private emailService: EmailService,
   ) {}
 
   async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
@@ -54,6 +56,21 @@ export class PostsService {
         userId,
       } 
     });
+
+    await this.emailService.sendMail(
+      userFound.email,
+      'Mascota registrada exitosamente',
+      `Hola ${userFound.name},\n\n¡Gracias por registrar a tu mascota! Aquí están los detalles de la publicación:\n\n` +
+        `Título: ${title}\n` +
+        `Descripción: ${description}\n` +
+        `Tipo de mascota: ${petType}\n` +
+        `Fecha de pérdida: ${dateLost}\n` +
+        `Ubicación: ${location}\n` +
+        `Información de contacto: ${contactInfo}\n\n` +
+        `¡Gracias por ser parte de nuestra comunidad! Estamos aquí para ayudarte a encontrar a tu mascota.\n\n` +
+        `Saludos,\nEl equipo de Huellas Unidas!`,
+    );
+
     return post;
   }
 
