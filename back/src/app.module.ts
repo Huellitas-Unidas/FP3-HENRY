@@ -9,6 +9,7 @@ import { DonationModule } from './donation/donation.module';
 import { PostsModule } from './posts/posts.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 import { PetsModule } from './pets/pets.module';
+import { PqrModule } from './pqr/pqr.module';
 
 
 @Module({
@@ -20,7 +21,8 @@ import { PetsModule } from './pets/pets.module';
     DonationModule,
     PostsModule,
     ChatbotModule,
-    PetsModule
+    PetsModule,
+    PqrModule
   ],
   controllers: [AppController],
   providers: [AppService],
