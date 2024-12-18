@@ -10,6 +10,9 @@ export class CreatePostDto {
 
   @IsString()
   petType: string;
+  
+  @IsString()
+  contactInfo: string;
 
   @Transform(({ value }) => new Date(value))
   @IsDate({ message: 'dateLost must be a valid date' })
@@ -18,12 +21,14 @@ export class CreatePostDto {
   @IsString()
   location: string;
 
-  @IsString()
-  contactInfo: string;
+  
 
   @IsString()
   @IsOptional()
   photoUrl?: string;
+  
+  @IsString()
+  status: string
 
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
   userId: string;

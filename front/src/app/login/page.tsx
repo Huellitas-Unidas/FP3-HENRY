@@ -10,6 +10,7 @@ import validate from "@/helpers/validate"; // Validación
 import GreenButton from "@/components/Buttons/GreenButton";
 import Cookies from "js-cookie"
 
+
 const Login: React.FC = () => {
   const router = useRouter();
 
@@ -18,38 +19,16 @@ const Login: React.FC = () => {
       email: "",
       password: "",
     },
-    validate, // Validación personalizada
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        const response = await login(values); // Llamada al endpoint
-        if (!response || !response.token || !response.user) {
-          throw new Error("Respuesta inválida del servidor.");
-        }
 
-        const { token, user } = response;
-
-        // Guarda los datos del usuario en Cookies
-        Cookies.set("userData", JSON.stringify({ token, user }), { expires: 1 });
-
-        Toast.fire({
-          icon: "success",
-          iconColor: "green",
-          title: "Inicio de sesión exitoso",
-        });
-
-        // Redirige al home
-        router.push("/");
-        resetForm();
-      } catch (error) {
-        console.error("Error de login:", error);
-        Toast.fire({
-          icon: "error",
-          iconColor: "red",
-          title: "Credenciales incorrectas",
-        });
-      }
-    },
-  });
+  validate: validate,
+  onSubmit: (values, { resetForm }) => {
+    console.log(values);
+    resetForm();
+    localStorage.setItem("userData", JSON.stringify(values));
+    window.dispatchEvent(new Event("storageChange"));
+    router.push("/");
+  },
+}); 
 
   return (
     <div className="flex flex-col place-items-center mt-28">

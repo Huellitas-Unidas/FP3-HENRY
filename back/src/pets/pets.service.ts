@@ -1,13 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { Pet } from './entities/pet.entity';
 
 @Injectable()
 export class PetsService {
    constructor(private readonly prisma: PrismaService){} 
   async create(createPetDto: CreatePetDto) {
-    const {userId} = createPetDto
+    const {userId, name} = createPetDto
     if(!userId) throw new NotFoundException("el usuario no existe")
     const userFound = await this.prisma.user.findUnique({
         where:{
@@ -15,9 +16,17 @@ export class PetsService {
         }
     })
     if(!userFound) throw new NotFoundException("El usuario no existe")
+        const petFound = await this.prisma.pets.findFirst({
+    where:{
+        name,
+        userId,
+        
+    },
+        })
+        if(petFound) throw new ConflictException("Ya existe creada esa mascota")
         const createPet = await this.prisma.pets.create({
-    data: { ...createPetDto,      
-        userId: userFound.id
+    data: { ...createPetDto,    
+        
     }
         })
         return createPet
