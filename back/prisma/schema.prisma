@@ -17,6 +17,7 @@ model User {
   donations   Donations[]
   notifications Notifications[]
   pets      Pets[]
+  pqr       Pqr[] 
 }
 
 model Post {
@@ -55,12 +56,22 @@ model Notifications {
 
 model Pets {
     id          String         @id @default(uuid()) @db.Uuid
-    name    String
-    type    String
-    raza    String
+    name        String
+    type        String
+    raza        String
     description String
     status      String
     imgUrl      String
     userId       String @db.Uuid 
     user        User         @relation(fields: [userId], references: [id])
+}
+
+model Pqr {
+  id          String   @id @default(uuid()) @db.Uuid
+  type        String  
+  description String
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

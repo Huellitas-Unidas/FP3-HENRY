@@ -6,29 +6,22 @@ import {
   Param,
   Delete,
   Put,
-  HttpCode,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
-  HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FilesUploadService } from 'src/files-upload/files-upload.service';
 
 @Controller('posts')
 export class PostsController {
-  constructor(
-    private readonly postsService: PostsService,
-    private readonly filesUploadService: FilesUploadService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createPostDto: CreatePostDto,
