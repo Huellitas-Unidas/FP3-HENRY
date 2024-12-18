@@ -52,8 +52,9 @@ export class PostsService {
         location,
         contactInfo,
         photoUrl,
+        status,
         userId,
-      },
+      } 
     });
 
     await this.emailService.sendMail(
