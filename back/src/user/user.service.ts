@@ -43,6 +43,7 @@ export class UserService {
 
     return { user };
   }
+
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -81,6 +82,8 @@ export class UserService {
       include: {
         posts: true,
         pets: true,
+        donations: true,
+        pqr: true,
       },
     });
 

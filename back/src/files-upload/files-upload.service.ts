@@ -11,11 +11,14 @@ export class FilesUploadService {
       return new Promise((resolve, reject) => {
         const upload = cloudinary.uploader.upload_stream(
           {
-            folder: 'HuellitasUnidas',
+            folder: this.folder,
             resource_type: 'image',
           },
           (error, result) => {
-            if (error) return reject(error);
+            if (error) {
+              return reject(error);
+            }
+
             resolve(result);
           },
         );
