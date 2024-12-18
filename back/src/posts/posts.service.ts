@@ -52,7 +52,7 @@ export class PostsService {
         location,
         contactInfo,
         photoUrl,
-        status,
+        // status,
         userId,
       } 
     });
