@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  ParseIntPipe,
   Put,
   ParseUUIDPipe,
 } from '@nestjs/common';
