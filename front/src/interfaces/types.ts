@@ -7,37 +7,42 @@ export interface ICardAnimal {
   description: string;
 }
 
-/* export interface IValidateErrors {
+export interface IValidateErrors {
   name?: string;
   email?: string;
   password?: string;
   confirm?: string;
   phone?: string;
-} */
-
+} 
 export interface IButton {
   props: string;
 }
 
  export interface IUserData {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
-/* export interface ILoginErrors {
+export interface ILoginErrors {
   email?: string;
   password?: string;
-} */
+} 
 
 export interface ISignUpData { 
   email: string;
   password: string;
   name: string;
+  confirm?: string;
   //address: string;  no necesaria
   //phone: string;
 }
 
 export type TSignUpErrors = Partial<ISignUpData>;  
+
+export interface IUserLogin {
+  email: string;
+  password: string; 
+}
 
 //TSignUpErrors -> es el mismo IValidateErrors?
 
@@ -57,7 +62,4 @@ export type TSignUpErrors = Partial<ISignUpData>;
 //   description: string;
 // }
 
-export interface IUserLogin {
-  email: string;
-  password: string; 
-}
+
