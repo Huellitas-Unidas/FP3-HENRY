@@ -1,4 +1,4 @@
-import { isString, IsString, IsUUID, IsOptional } from 'class-validator';
+import { isString, IsString, IsUUID } from 'class-validator';
 
 export class CreatePetDto {
   @IsString()
@@ -19,10 +19,6 @@ export class CreatePetDto {
   imgUrl: string;
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
   userId: string;
-
-  @IsOptional()
-  @IsString()
-  photoUrl?: string;
 }
 
 export enum status {
