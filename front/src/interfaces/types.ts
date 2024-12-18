@@ -1,3 +1,5 @@
+import { LargeNumberLike } from "crypto";
+
 export interface ICardAnimal {
   id: number;
   name: string;
@@ -62,3 +64,34 @@ export interface IUserLogin {
   password: string; 
 }
 
+export interface IPostAnimal { //LOSTANDFOUND
+  id?: number;
+  userId?: string;
+  status?: string;
+  title?: string;
+  photoUrl?: string;
+  description?: string;
+  petType?: string;
+  dateLost? : Date;
+  location?: string;
+  contactInfo?: string
+}
+
+export interface IPost { //POST DEL ANIMAL
+  id: number;
+  userId: string;
+  status: string;
+  title: string;
+  photoUrl: string;
+  description: string;
+  petType: string;
+  dateLost: Date;
+  location: string;
+  contactInfo: string
+}
+
+export interface IPostDetailProps {
+  params: {
+    id: string; // Parámetro dinámico "id" de la URL
+  };
+}
