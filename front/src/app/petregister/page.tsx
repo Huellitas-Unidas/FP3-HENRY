@@ -12,7 +12,7 @@ const PetRegister: React.FC = () => {
       type: "",
       genre: "",
       description: "",
-      status: "",
+      //status: "",
     },
     validate: petValidate,
     onSubmit: (values, { resetForm }) => {

@@ -1,9 +1,10 @@
+
 import React from 'react'
 
-const ChatBot = () => {
+const Chatbot = () => {
   return (
-    <div>chatBot</div>
+    <div>Chatbot</div>
   )
 }
 
-export default ChatBot;
+export default Chatbot; 
