@@ -7,13 +7,18 @@ import {
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { FilesUploadService } from 'src/files-upload/files-upload.service';
 import { isUUID } from 'class-validator';
 
 @Injectable()
 export class PetsService {
-  constructor(private readonly prisma: PrismaService) {}
-  async create(createPetDto: CreatePetDto) {
-    const { userId, name } = createPetDto;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly filesUploadService: FilesUploadService,
+  ) {}
+  async create(createPetDto: CreatePetDto, file: Express.Multer.File) {
+    const { userId } = createPetDto;
+
     if (!userId) throw new NotFoundException('el usuario no existe');
     const userFound = await this.prisma.user.findUnique({
       where: {
@@ -21,21 +26,21 @@ export class PetsService {
       },
     });
     if (!userFound) throw new NotFoundException('El usuario no existe');
-    const petFound = await this.prisma.pets.findFirst({
-      where: {
-        name,
-        userId,
-      },
-    });
-    if (petFound) throw new ConflictException('Ya existe creada esa mascota');
+
+    let photoUrl = ' ';
+    if (file) {
+      const uploadResult = await this.filesUploadService.uploadPostImage(file);
+      photoUrl = uploadResult.secure_url;
+    }
+
     const createPet = await this.prisma.pets.create({
-      data: { ...createPetDto },
+      data: { ...createPetDto, userId: userFound.id },
     });
     return createPet;
   }
 
-  async findAll() {
-    return await this.prisma.pets.findMany();
+  findAll() {
+    return `This action returns all pets`;
   }
 
   findOne(id: string) {
