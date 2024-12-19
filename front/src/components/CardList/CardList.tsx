@@ -12,7 +12,7 @@ const CardList = () => {
             { animalCard&&
                 animalCard?.map((animal) => {
                     return (
-                        <Link key={animal.id} href='' >
+                        <Link key={animal.id} href={`/post/${animal.id}`} >
                             <Card  {...animal} />
                         </Link>
                     )
