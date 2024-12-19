@@ -12,17 +12,12 @@ export class StripeService {
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('STRIPE_API_KEY');
     if (!apiKey) {
-        throw new Error('STRIPE_SECRET_KEY no está definida');
-      }
+      throw new Error('STRIPE_SECRET_KEY no está definida');
+    }
     this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' });
   }
 
-  async createCheckoutSession(
-    amount: number,
-    currency: string,
-    successUrl: string,
-    cancelUrl: string,
-  ) {
+  async createCheckoutSession(amount: number, currency: string) {
     try {
       const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -31,7 +26,7 @@ export class StripeService {
             price_data: {
               currency,
               product_data: {
-                name: 'Sample Product', 
+                name: 'Sample Product',
               },
               unit_amount: amount,
             },
@@ -39,8 +34,8 @@ export class StripeService {
           },
         ],
         mode: 'payment',
-        success_url: successUrl,
-        cancel_url: cancelUrl,
+        success_url: 'http://localhost:4000/stripe/success',
+        cancel_url: 'http://localhost:4000/stripe/cancel',
       });
 
       return session;
