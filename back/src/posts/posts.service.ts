@@ -32,21 +32,22 @@ export class PostsService {
     if (!isUUID(userId)) {
       throw new HttpException('El userId no es un UUID válido', 400);
     }
-  
+
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-  
+
     if (!userFound) {
       throw new HttpException('El usuario no existe', 404);
     }
-  
-    let photoUrl = '';
-    if (file) {
-      const uploadResult = await this.filesUploadService.uploadPostImage(file);
-      photoUrl = uploadResult.secure_url;
+
+    if (!file) {
+      throw new HttpException('Se debe proporcionar una foto para el post', 400);
     }
-  
+
+    const uploadResult = await this.filesUploadService.uploadPostImage(file);
+    const photoUrl = uploadResult.secure_url;
+
     let locationId: string | null = null;
     if (location) {
       const { latitude, longitude, address } = location;
@@ -58,10 +59,10 @@ export class PostsService {
           address,
         },
       });
-  
+
       locationId = newLocation.id; 
     }
-  
+
     const post = await this.prisma.post.create({
       data: {
         title,
@@ -75,10 +76,9 @@ export class PostsService {
         location: locationId ? { connect: { id: locationId } } : undefined,
       },
     });
-  
+
     return post;
   }
-  
 
   async findAll() {
     return await this.prisma.post.findMany();
