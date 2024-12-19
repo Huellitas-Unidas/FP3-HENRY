@@ -116,8 +116,32 @@ const Register: React.FC = () => {
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />
           {formik.errors.confirm && (
-            <span className="text-red-500 text-sm">{formik.errors.confirm}</span>
-          )}
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.confirm}
+            </span>
+          )} 
+
+      
+          {/* {formik.errors.confirm && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.confirm}
+            </span>
+          )} */}
+        
+
+         {/*  <input
+            placeholder="Teléfono"
+            type="number"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          ></input>
+          {formik.errors && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.phone}
+            </span>
+          )} */}
 
           <label className="text-sm mb-2">
             ¿Ya tienes una cuenta?{" "}

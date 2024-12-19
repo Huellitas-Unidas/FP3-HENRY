@@ -11,6 +11,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  BadRequestException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -23,6 +24,7 @@ export class PostsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
+<<<<<<< HEAD
    async create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFile(
@@ -36,6 +38,13 @@ export class PostsController {
     file: Express.Multer.File,
   ) {
     return this.postsService.create(createPostDto, file);
+=======
+  async create(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+    if (body.location) {
+      body.location = JSON.parse(body.location);
+    }
+    return this.postsService.create(body as CreatePostDto, file);
+>>>>>>> c87ef5bc57676d0f2ae4e451530c3c700600ce9d
   }
 
   @Get()
