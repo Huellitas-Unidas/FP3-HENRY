@@ -53,7 +53,7 @@ export class PostsService {
         contactInfo,
         photoUrl,
         userId,
-      } 
+      },
     });
 
     await this.emailService.sendMail(
