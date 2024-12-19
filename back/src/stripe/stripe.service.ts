@@ -14,15 +14,10 @@ export class StripeService {
     if (!apiKey) {
       throw new Error('STRIPE_SECRET_KEY no está definida');
     }
-    this.stripe = new Stripe(apiKey, { apiVersion: '2024-11-20.acacia' });
+    this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' });
   }
 
-  async createCheckoutSession(
-    amount: number,
-    currency: string,
-    successUrl: string,
-    cancelUrl: string,
-  ) {
+  async createCheckoutSession(amount: number, currency: string) {
     try {
       const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -39,8 +34,8 @@ export class StripeService {
           },
         ],
         mode: 'payment',
-        success_url: successUrl,
-        cancel_url: cancelUrl,
+        success_url: 'http://localhost:4000/stripe/success',
+        cancel_url: 'http://localhost:4000/stripe/cancel',
       });
 
       return session;
