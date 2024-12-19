@@ -68,9 +68,7 @@ export class PostsService {
         dateLost,
         contactInfo,
         photoUrl,
-        status,
         userId,
-        location: locationId ? { connect: { id: locationId } } : undefined,
       },
     });
 

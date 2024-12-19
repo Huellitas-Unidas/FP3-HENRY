@@ -12,7 +12,7 @@ export class CreatePostDto {
 
   @IsString()
   petType: string;
-  
+
   @IsString()
   contactInfo: string;
 
@@ -23,6 +23,8 @@ export class CreatePostDto {
   @ValidateNested()
   @Type(() => CreateLocationDto) 
   location: CreateLocationDto;
+  @IsString()
+  location: string;
 
   @IsString()
   @IsOptional()
@@ -31,6 +33,16 @@ export class CreatePostDto {
   @IsString()
   status: string;
 
+//   @IsString()
+//   status: string
+
+
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
   userId: string;
+}
+
+export enum status {
+  FOUND = 'encontrado',
+  LOST = 'perdido',
+  NONE = 'ninguno',
 }
