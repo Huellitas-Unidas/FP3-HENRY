@@ -13,11 +13,12 @@ const Navbar = () => {
   const router = useRouter();
   const session = useSession();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("userData");
     setUserSession(null);
-    signOut();
-    Swal.fire({
+    await signOut(); //!
+    await Swal.fire({
+      //!
       title: "Sesión cerrada",
       text: "Hasta la próxima!",
       icon: "success",
