@@ -18,11 +18,11 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
-@UseInterceptors(FileInterceptor('file'))
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
    async create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFile(
