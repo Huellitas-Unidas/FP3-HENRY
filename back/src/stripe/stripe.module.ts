@@ -1,26 +1,11 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import {Module } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { StripeController } from './stripe.controller';
-import Stripe from 'stripe';
-@Global()
+import { ConfigModule } from '@nestjs/config';
 @Module({
+  imports: [ConfigModule],
   providers: [StripeService],
-  controllers: [StripeController]
+  controllers: [StripeController],
+  exports: [StripeService]
 })
-export class StripeModule {
-    static forRoot(apiKey: string): DynamicModule {
-        const stripe = new Stripe(apiKey, {
-            apiVersion: '2024-11-20.acacia',
-        })
-        return {
-            module: StripeModule,
-            providers: [
-                {
-                    provide: 'STRIPE_CLIENT',
-                    useValue: stripe,
-                }
-            ],
-            exports: ['STRIPE_CLIENT']
-        }
-    }
-}
+export class StripeModule {}
