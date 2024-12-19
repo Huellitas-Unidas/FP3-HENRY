@@ -12,7 +12,7 @@ export class PqrService {
   ) {}
 
   async create(createPqrDto: CreatePqrDto) {
-    const { type, description, userId } = createPqrDto;
+    const { name, email, type, description, userId } = createPqrDto;
 
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -20,7 +20,7 @@ export class PqrService {
     if (!userFound) throw new HttpException('usuario no encontrado', 404);
 
     const pqr = await this.prisma.pqr.create({
-      data: { type, description, userId },
+      data: { name, email, type, description, userId },
     });
 
     await this.emailService.sendMail(
