@@ -6,11 +6,7 @@ import { UploadApiResponse } from 'cloudinary';
 export class FilesUploadService {
   private readonly folder = 'HuellitasUnidas';
 
-  async uploadPostImage(file: Express.Multer.File | undefined): Promise<UploadApiResponse> {
-    if (!file) {
-      return { secure_url: '' } as UploadApiResponse;
-    }
-
+  async uploadPostImage(file: Express.Multer.File): Promise<UploadApiResponse> {
     try {
       return new Promise((resolve, reject) => {
         const upload = cloudinary.uploader.upload_stream(

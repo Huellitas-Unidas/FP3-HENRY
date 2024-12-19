@@ -31,12 +31,6 @@ export class PostsController {
     return this.postsService.create(createPostDto, file);
   }
   
-  
-  
-  
-  
-  
-
   @Get()
   async findAll() {
     return this.postsService.findAll();
