@@ -59,27 +59,26 @@ export default Card;
 {/*
   import { ICardAnimal } from "@/interfaces/types";
 import React from "react";
+import ButtonCard from "../Buttons/ButtonCard";
 
-const Card : React.FC <ICardAnimal> = ({name, type, image, description}) => {
+const Card : React.FC <IPostAnimal> = ({title, status, photoUrl, description}) => {
+
+  const animalPost = { status }; // Construimos el objeto 
+
   return (
     <div className="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full py-2 max-w-sm rounded-lg font-[sans-serif] overflow-hidden mx-auto mt-2">
       <div className="flex items-center gap-2 px-6">
-        <h3 className="text-xl text-gray-800 font-bold flex-1">{name}</h3>
+        <h3 className="text-xl text-gray-800 font-bold flex-1">{title}</h3>
 
-        <button
-          type="button"
-          className="px-4 py-2 rounded-lg text-gray-800 text-sm tracking-wider bg-red-500 hover:bg-red-300 outline-none"
-        >
-          {type}
-        </button>
+        <ButtonCard animalPost={animalPost}/>
       </div>
 
       <div className="min-h-[300px] py-2">
-        <img src={image} alt="perro" className="w-full my-4"/>
+        <img src={photoUrl} alt="perro" className="w-full my-4"/>
       </div>
 
       <div className="px-6">
-        <p className="text-sm text-gray-700 leading-relaxed">{description}</p>
+        <p className="text-base text-gray-700 leading-relaxed">{description}</p>
 
         <div className="my-5 flex justify-end py-3">
           <svg
