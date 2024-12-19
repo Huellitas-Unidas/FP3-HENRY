@@ -30,8 +30,6 @@ model Post {
   location    Location? @relation
   photoUrl    String
   status      String
-  location    String
-  photoUrl    String   
   userId      String    @db.Uuid
   user        User      @relation(fields: [userId], references: [id])
   createdAt   DateTime  @default(now())
