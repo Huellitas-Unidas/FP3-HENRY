@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())  
+  posts       Post[]
+  donations   Donations[]
+  notifications Notifications[]
+  pets      Pets[]
+  pqr       Pqr[] 
+}
+
+model Post {
+  id          String     @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  petType     String
+  contactInfo String
+  dateLost    DateTime
+  location    String
+  photoUrl    String   
+  userId      String    @db.Uuid
+  user        User       @relation(fields: [userId], references: [id])
+  createdAt   DateTime   @default(now())  
+  updatedAt   DateTime   @updatedAt
+}
+
+model Donations {
+  id          String        @id @default(uuid()) @db.Uuid
+  amount      Float
+  userId      String         @db.Uuid
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+
+model Notifications {
+  id          String         @id @default(uuid()) @db.Uuid
+  content     String
+  type        String
+  isRead      Boolean      @default(false)
+  userId      String       @db.Uuid  
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+
+model Pets {
+    id          String         @id @default(uuid()) @db.Uuid
+    name        String
+    type        String
+    raza        String
+    description String
+    status      String
+    imgUrl      String
+    userId       String @db.Uuid 
+    user        User         @relation(fields: [userId], references: [id])
+}
+
+model Pqr {
+  id          String   @id @default(uuid()) @db.Uuid
+  type        String  
+  description String
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
