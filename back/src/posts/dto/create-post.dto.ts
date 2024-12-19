@@ -34,9 +34,3 @@ export class CreatePostDto {
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
   userId: string;
 }
-
-export enum status {
-  FOUND = 'encontrado',
-  LOST = 'perdido',
-  NONE = 'ninguno',
-}
