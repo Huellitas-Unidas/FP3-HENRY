@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { FilesUploadService } from 'src/files-upload/files-upload.service';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class PetsService {
@@ -40,15 +42,51 @@ export class PetsService {
     return `This action returns all pets`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pet`;
+  findOne(id: string) {
+    if (!isUUID(id)) throw new HttpException('No se encontró la mascota', 404);
+    const findPet = this.prisma.pets.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!findPet) throw new NotFoundException('no se encontró a la mascota');
+    return findPet;
   }
 
-  update(id: number, updatePetDto: UpdatePetDto) {
-    return `This action updates a #${id} pet`;
+  update(id: string, updatePetDto: UpdatePetDto) {
+    if (!isUUID(id)) throw new HttpException('No se encontró la mascota', 404);
+    this.prisma.pets.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    const updatePet = this.prisma.pets.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updatePetDto,
+      },
+    });
+    return updatePet;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pet`;
+  async remove(id: string) {
+    if (!isUUID(id)) throw new HttpException('No se encontró la mascota', 404);
+    const pet = await this.prisma.pets.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!pet) throw new HttpException('No se encontró la mascota', 404);
+    await this.prisma.pets.delete({
+      where: {
+        id,
+      },
+    });
+    const petName = pet.name;
+
+    return `Tu mascota con nombre ${petName} se eliminó correctamente`;
   }
 }
