@@ -1,4 +1,11 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 import { StripeService } from './stripe.service';
 
 @Controller('stripe')
@@ -7,19 +14,36 @@ export class StripeController {
 
   @Post('create')
   async createCheckoutSession(
-    @Body() body: { amount: number; currency: string; successUrl: string; cancelUrl: string },
+    @Body()
+    body: {
+      amount: number;
+      currency: string;
+      
+    },
   ) {
     try {
-      const { amount, currency, successUrl, cancelUrl } = body;
+      const { amount, currency, } = body;
       const session = await this.stripeService.createCheckoutSession(
         amount,
         currency,
-        successUrl,
-        cancelUrl,
+       
       );
-      return { checkoutUrl: session.url }; 
+      return { checkoutUrl: session.url };
     } catch (error) {
       throw new HttpException('Error al crear la session', 400);
     }
+  }
+  @Get('success')
+  success() {
+    return {
+      message: 'Pago realizado exitosamente. Gracias por tu donación.',
+    };
+  }
+
+  @Get('cancel')
+  cancel() {
+    return {
+      message: 'El pago fue cancelado. Vuelve a intentarlo.',
+    };
   }
 }
