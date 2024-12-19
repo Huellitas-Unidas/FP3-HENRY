@@ -1,5 +1,3 @@
-
-
 //Obtener lista de posts, filtrados opcionalmente por estado.
 
 import { NextResponse } from 'next/server';

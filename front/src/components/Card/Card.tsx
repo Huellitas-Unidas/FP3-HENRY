@@ -28,7 +28,7 @@ const Card: React.FC<CardProps> = ({ title, type, image, content, onDelete, onUp
       <div className="min-h-[300px] py-2">
         {image && <img src={image} 
         alt="Post"
-         className="w-full my-4" />}
+        className="w-full my-4" />}
       </div>
       <div className="px-6">
         <p className="text-sm text-gray-700 leading-relaxed">{content}</p>
