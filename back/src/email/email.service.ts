@@ -14,13 +14,12 @@ export class EmailService {
     const msg = {
       to,
       from: process.env.SENDGRID_FROM_EMAIL,
-      subject, 
-      text, 
+      subject,
+      text,
     };
 
     try {
       await sendgrid.send(msg);
-      console.log('Correo enviado exitosamente');
     } catch (error) {
       console.error('Error al enviar el correo:', error);
     }

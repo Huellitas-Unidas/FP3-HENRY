@@ -17,7 +17,6 @@ export class PetsService {
   async create(createPetDto: CreatePetDto, file: Express.Multer.File) {
     const { userId } = createPetDto;
 
-    if (!userId) throw new NotFoundException('el usuario no existe');
     const userFound = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -25,14 +24,14 @@ export class PetsService {
     });
     if (!userFound) throw new NotFoundException('El usuario no existe');
 
-    let photoUrl = ' ';
+    let imgUrl = '';
     if (file) {
       const uploadResult = await this.filesUploadService.uploadPostImage(file);
-      photoUrl = uploadResult.secure_url;
+      imgUrl = uploadResult.secure_url;
     }
 
     const createPet = await this.prisma.pets.create({
-      data: { ...createPetDto, userId: userFound.id },
+      data: { ...createPetDto, imgUrl, userId: userFound.id },
     });
     return createPet;
   }
