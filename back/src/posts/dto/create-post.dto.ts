@@ -1,5 +1,7 @@
 import { Transform } from 'class-transformer';
-import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsDate, IsObject, ValidateNested, IsUUID, IsOptional } from 'class-validator';
+import { CreateLocationDto } from 'src/map/dto/create-location.dto';
+import { Type } from 'class-transformer';
 
 export class CreatePostDto {
   @IsString()
@@ -15,20 +17,19 @@ export class CreatePostDto {
   contactInfo: string;
 
   @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'dateLost must be a valid date' })
+  @IsDate({ message: 'dateLost debe ser una fecha valida' })
   dateLost: Date;
 
-  @IsString()
-  location: string;
-
-  
+  @ValidateNested()
+  @Type(() => CreateLocationDto) 
+  location: CreateLocationDto;
 
   @IsString()
   @IsOptional()
   photoUrl?: string;
   
   @IsString()
-  status: string
+  status: string;
 
   @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
   userId: string;
