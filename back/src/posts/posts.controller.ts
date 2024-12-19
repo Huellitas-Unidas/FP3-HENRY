@@ -24,13 +24,13 @@ export class PostsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @Body() createPostDto: CreatePostDto,
-    @UploadedFile() file: Express.Multer.File | undefined,
-  ) {
-    return this.postsService.create(createPostDto, file);
+  async create(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
+    if (body.location) {
+      body.location = JSON.parse(body.location);
+    }
+    return this.postsService.create(body as CreatePostDto, file);
   }
-  
+
   @Get()
   async findAll() {
     return this.postsService.findAll();

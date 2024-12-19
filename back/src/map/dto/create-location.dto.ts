@@ -11,7 +11,4 @@ export class CreateLocationDto {
   @IsString()
   address?: string;
 
-  @IsOptional()
-  @IsString()
-  postId?: string;
 }
