@@ -13,26 +13,21 @@ import { StripeModule } from './stripe/stripe.module';
 import { ConfigModule } from '@nestjs/config';
 import { PqrModule } from './pqr/pqr.module';
 
-
 @Module({
   imports: [
-      UserModule,
-      PostsModule,
-      PetsModule,
-      ChatbotModule,
-      ConfigModule.forRoot({
-        isGlobal:true,
-      }),
-      StripeModule.forRoot(process.env.STRIPE_API_KEY),
+    UserModule,
+    PostsModule,
+    PetsModule,
+    ChatbotModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    StripeModule,
     NotificationsModule,
     MapModule,
     AdministrationModule,
     DonationModule,
-    StripeModule,
-    PostsModule,
-    ChatbotModule,
-    PetsModule,
-    PqrModule
+    PqrModule,
   ],
   controllers: [AppController],
   providers: [AppService],
