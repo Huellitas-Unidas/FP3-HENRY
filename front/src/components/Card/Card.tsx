@@ -1,4 +1,63 @@
-import { ICardAnimal } from "@/interfaces/types";
+import React from 'react';
+import { IPost } from '@/interfaces/types';
+
+interface CardProps extends IPost {
+  onDelete: () => void;
+  onUpdate: (updatedData: Partial<IPost>) => void;
+}
+
+const Card: React.FC<CardProps> = ({ title, type, image, content, onDelete, onUpdate }) => {
+  const handleUpdateClick = () => {
+    const newTitle = prompt('Nuevo título:', title); // promt para actualizar el title
+    if (newTitle) {
+      onUpdate({ title: newTitle });
+    }
+  };
+
+  return (
+    <div className="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full py-2 max-w-sm rounded-lg font-[sans-serif] overflow-hidden mx-auto mt-2">
+      <div className="flex items-center gap-2 px-6">
+        <h3 className="text-xl text-gray-800 font-bold flex-1">{title}</h3>
+        <button
+          type="button"
+          className="px-4 py-2 rounded-lg text-gray-800 text-sm tracking-wider bg-red-500 hover:bg-red-300 outline-none"
+        >
+          {type}
+        </button>
+      </div>
+      <div className="min-h-[300px] py-2">
+        {image && <img src={image} 
+        alt="Post"
+         className="w-full my-4" />}
+      </div>
+      <div className="px-6">
+        <p className="text-sm text-gray-700 leading-relaxed">{content}</p>
+        <div className="my-5 flex justify-between py-3">
+          <button
+            onClick={handleUpdateClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Actualizar
+          </button>
+          <button
+            onClick={onDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Card;
+
+
+
+
+{/*
+  import { ICardAnimal } from "@/interfaces/types";
 import React from "react";
 
 const Card : React.FC <ICardAnimal> = ({name, type, image, description}) => {
@@ -41,3 +100,10 @@ const Card : React.FC <ICardAnimal> = ({name, type, image, description}) => {
 };
 
 export default Card;
+  
+  
+  
+  
+  
+  
+  */}

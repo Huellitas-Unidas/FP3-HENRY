@@ -7,6 +7,16 @@ export interface ICardAnimal {
   description: string;
 }
 
+export interface IPost {
+  id: string;
+  title: string;
+  type: string;
+  content: string;
+  image?: string;
+  description: string;
+  userId?: string;
+}
+
 export interface IValidateErrors {
   name?: string;
   email?: string;
@@ -45,13 +55,6 @@ export interface IUserLogin {
 }
 
 //TSignUpErrors -> es el mismo IValidateErrors?
-
-/* export interface IPost {
-  id: string;
-  title: string;
-  content: string;
-  userId: string;
-}  */
 
 
 
