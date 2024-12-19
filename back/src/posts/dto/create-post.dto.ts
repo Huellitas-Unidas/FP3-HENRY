@@ -1,36 +1,38 @@
-import { Transform } from 'class-transformer';
-import { IsString, IsDate, IsObject, ValidateNested, IsUUID, IsOptional } from 'class-validator';
-import { CreateLocationDto } from 'src/map/dto/create-location.dto';
+import { IsString, IsNotEmpty, IsOptional, ValidateNested, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateLocationDto } from 'src/map/dto/create-location.dto';
 
 export class CreatePostDto {
+  @IsNotEmpty()
   @IsString()
   title: string;
 
+  @IsNotEmpty()
   @IsString()
   description: string;
 
+  @IsNotEmpty()
   @IsString()
   petType: string;
 
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @IsNotEmpty()
   @IsString()
   contactInfo: string;
 
-  @Transform(({ value }) => new Date(value))
-  @IsDate({ message: 'dateLost debe ser una fecha valida' })
+  @IsNotEmpty()
+  @IsDate()
   dateLost: Date;
 
-  @ValidateNested()
-  @Type(() => CreateLocationDto) 
-  location: CreateLocationDto;
-
-  @IsString()
   @IsOptional()
-  photoUrl?: string;
-  
-  @IsString()
-  status: string;
+  @ValidateNested()
+  @Type(() => CreateLocationDto)
+  location?: CreateLocationDto;
 
-  @IsUUID('4', { message: 'El userId debe ser un UUID válido de versión 4' })
+  @IsNotEmpty()
+  @IsString()
   userId: string;
 }

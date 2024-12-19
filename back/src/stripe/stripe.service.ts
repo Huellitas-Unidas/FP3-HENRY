@@ -12,9 +12,9 @@ export class StripeService {
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('STRIPE_API_KEY');
     if (!apiKey) {
-        throw new Error('STRIPE_SECRET_KEY no está definida');
-      }
-    this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' });
+      throw new Error('STRIPE_SECRET_KEY no está definida');
+    }
+    this.stripe = new Stripe(apiKey, { apiVersion: '2024-11-20.acacia' });
   }
 
   async createCheckoutSession(
@@ -31,7 +31,7 @@ export class StripeService {
             price_data: {
               currency,
               product_data: {
-                name: 'Sample Product', 
+                name: 'Sample Product',
               },
               unit_amount: amount,
             },
