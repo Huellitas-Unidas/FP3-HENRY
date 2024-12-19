@@ -52,7 +52,6 @@ export class PostsService {
         location,
         contactInfo,
         photoUrl,
-      
         userId,
       } 
     });
