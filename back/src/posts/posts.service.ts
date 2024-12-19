@@ -58,7 +58,7 @@ export class PostsService {
 
     await this.emailService.sendMail(
       userFound.email,
-      'Mascota registrada exitosamente',
+      'Publicacion registrada exitosamente',
       `Hola ${userFound.name},\n\n¡Gracias por registrar a tu mascota! Aquí están los detalles de la publicación:\n\n` +
         `Título: ${title}\n` +
         `Descripción: ${description}\n` +
