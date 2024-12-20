@@ -95,9 +95,19 @@ export interface IPostDetailProps {
 }
 
 export interface IpqrProps {
-  name: string;
+  fullName: string;
   email: string;
   type: string;
   description: string;
   userId?: string; //!
+}
+
+export interface IpetForm {
+  name: string;
+  type: string;
+  raza?: string; //!
+  description: string;
+  status: string;
+  imgUrl: string;
+  userId: string;
 }
