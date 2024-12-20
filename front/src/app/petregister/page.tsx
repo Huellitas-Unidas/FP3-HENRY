@@ -13,12 +13,12 @@ const PetRegister: React.FC = () => {
       genre: "",
       description: "",
       status: "",
-    },
+      imgUrl: "",
+    }, //!
     validate: petValidate,
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       resetForm();
-    }
+    },
   });
 
   return (
@@ -109,4 +109,3 @@ const PetRegister: React.FC = () => {
 };
 
 export default PetRegister;
-
