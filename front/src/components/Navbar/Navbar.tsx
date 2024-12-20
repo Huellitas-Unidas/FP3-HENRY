@@ -6,22 +6,27 @@ import Image from "next/image";
 import { IUserLogin } from "@/interfaces/types";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const [userSession, setUserSession] = useState<IUserLogin | null>(null);
   const router = useRouter();
+  const session = useSession();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("userData");
     setUserSession(null);
-    Swal.fire({
+    await signOut(); //!
+    await Swal.fire({
+      //!
       title: "Sesión cerrada",
       text: "Hasta la próxima!",
       icon: "success",
       confirmButtonText: "Ok",
       customClass: {
-        confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-    }
+        confirmButton:
+          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
     });
     router.push("/");
   };
@@ -63,9 +68,20 @@ const Navbar = () => {
           <Link href="not-found">🐾Recomendaciones</Link>
         </div>
 
-        {userSession !== null ? (
+        {userSession !== null || session?.data?.user ? (
           <div className="hidden w-1/5 items-center justify-evenly font-semibold md:flex">
             <div>
+              {/* <Image
+                src={
+                  session.data?.user?.image
+                    ? session.data?.user?.image
+                    : "/images/GoogleLogo.png"
+                }
+                alt="ProfilePic"
+                className="rounded-lg object-contain w-6 h-6 mr-3"
+                width={24}
+                height={24}
+              ></Image> */}
               <Link href={"/dashboard"}>Mi perfil</Link>
             </div>
             <div>

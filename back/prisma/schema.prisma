@@ -13,34 +13,36 @@ model User {
   email         String          @unique
   password      String
   createdAt     DateTime        @default(now())
+  posts         Post[]
   donations     Donations[]
   notifications Notifications[]
   pets          Pets[]
-  posts         Post[]
   pqr           Pqr[]
 }
 
 model Post {
-  id          String   @id @default(uuid()) @db.Uuid
+  id          String    @id @default(uuid()) @db.Uuid
   title       String
   description String
   petType     String
   contactInfo String
   dateLost    DateTime
-  location    String
+  location    Location? @relation
   photoUrl    String
-  userId      String   @db.Uuid
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
+  status      String
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
+
 
 model Donations {
   id        String   @id @default(uuid()) @db.Uuid
   amount    Float
   userId    String   @db.Uuid
-  createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model Notifications {
@@ -49,8 +51,8 @@ model Notifications {
   type      String
   isRead    Boolean  @default(false)
   userId    String   @db.Uuid
-  createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model Pets {
@@ -70,9 +72,18 @@ model Pqr {
   name        String
   email       String
   type        String
+  type        String
   description String
   userId      String   @db.Uuid
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Location {
+  id        String  @id @default(uuid()) @db.Uuid
+  latitude  Float
+  longitude Float
+  address   String?
+  postId    String? @unique @db.Uuid
+  post      Post?   @relation(fields: [postId], references: [id])
 }
