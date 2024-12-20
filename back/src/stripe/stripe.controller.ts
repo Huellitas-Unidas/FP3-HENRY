@@ -1,34 +1,49 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 import { StripeService } from './stripe.service';
-import { CreateCheckoutSessionDto } from './dto/create.checkoutSession.dto';
 
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
-  @Post('checkout-session')
+  @Post('create')
   async createCheckoutSession(
-    @Body() createCheckoutSessionDto: CreateCheckoutSessionDto,
+    @Body()
+    body: {
+      amount: number;
+      currency: string;
+      
+    },
   ) {
-    const { amount, currency, successUrl, cancelUrl } =
-      createCheckoutSessionDto;
     try {
+      const { amount, currency, } = body;
       const session = await this.stripeService.createCheckoutSession(
         amount,
         currency,
-        successUrl,
-        cancelUrl,
+       
       );
-      return {
-        message: 'Checkout session created successfully',
-        sessionId: session.id,
-        url: session.url,
-      };
+      return { checkoutUrl: session.url };
     } catch (error) {
-      return {
-        message: 'Failed to create checkout session',
-        error: error,
-      };
+      throw new HttpException('Error al crear la session', 400);
     }
+  }
+  @Get('success')
+  success() {
+    return {
+      message: 'Pago realizado exitosamente. Gracias por tu donación.',
+    };
+  }
+
+  @Get('cancel')
+  cancel() {
+    return {
+      message: 'El pago fue cancelado. Vuelve a intentarlo.',
+    };
   }
 }
