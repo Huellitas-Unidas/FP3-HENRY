@@ -1,24 +1,55 @@
-//Envía datos para crear un nuevo post al backend.
+import { NextApiRequest, NextApiResponse } from 'next';
+import { IPost } from '@/interfaces/types'; // Asegúrate de importar tu interfaz IPost
+import { v4 as uuidv4 } from 'uuid';
 
-import { NextResponse } from 'next/server';
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST') {
+    try {
+      const {
+        title,
+        description,
+        petType,
+        dateLost,
+        contactInfo,
+        photoUrl,
+        userId,
+        status,
+        location,
+      }: Omit<IPost, 'id'> = req.body;
 
-//const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      if (!title || !description || !petType || !dateLost || !contactInfo || !photoUrl || !userId || !status) {
+        return res.status(400).json({ message: 'Todos los campos son requeridos.' });
+      }
 
+      const normalizedDateLost = new Date(dateLost).toISOString();
 
-export async function POST(req: Request) {
-  const formData = await req.formData();
+      const newPost: IPost = {
+        id: uuidv4(),
+        title,
+        description,
+        petType,
+        dateLost: normalizedDateLost,
+        contactInfo,
+        photoUrl,
+        userId,
+        status,
+        location: location || '',
+      };
 
-  const response = await fetch('${API_URL}/posts', {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Failed to create post' }, { status: response.status });
+      // Aquí iría tu lógica para guardar en la base de datos
+      console.log('Nuevo post creado:', newPost);
+      return res.status(201).json(newPost);
+    } catch (error: unknown) {
+      let errorMessage = 'Ocurrió un error desconocido.';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error('Error al crear el post:', errorMessage);
+      return res.status(500).json({ message: 'Ocurrió un error al crear el post.', error: errorMessage });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Método ${req.method} no permitido`);
   }
-
-  const post = await response.json();
-  return NextResponse.json(post);
 }
-
 
