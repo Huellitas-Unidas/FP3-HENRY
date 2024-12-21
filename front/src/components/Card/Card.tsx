@@ -1,4 +1,42 @@
-import { IPostAnimal } from "@/interfaces/types";
+'use client';
+
+import React from 'react';
+import { IPost } from '@/interfaces/types';
+
+const Card: React.FC<IPost> = ({ title, photoUrl, description, petType, dateLost, location }) => {
+  return (
+    <div className="bg-white shadow-md rounded-lg p-4 max-w-xs w-full">
+      <div className="relative">
+        <img
+          src={photoUrl}
+          alt={title}
+          className="w-full h-48 object-cover rounded-md"
+        />
+        <div className="absolute top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded">
+          {petType}
+        </div>
+      </div>
+      <div className="mt-4">
+        <h3 className="text-lg font-bold text-gray-800">{title}</h3>
+        <p className="text-sm text-gray-600 mt-2">{description}</p>
+      </div>
+      <div className="mt-4">
+        <p className="text-xs text-gray-500">
+          Fecha: {new Date(dateLost).toLocaleDateString()}
+        </p>
+        <p className="text-xs text-gray-500">Ubicación: {location?.address || 'No especificada'}</p>
+      </div>
+    </div>
+  );
+};
+
+export default Card;
+
+
+
+{/*
+  
+  import { IPostAnimal } from "@/interfaces/types";
 import React from "react";
 import ButtonCard from "../Buttons/ButtonCard";
 
@@ -39,4 +77,4 @@ const Card : React.FC <IPostAnimal> = ({title, status, photoUrl, description}) =
   );
 };
 
-export default Card;
+export default Card; */}

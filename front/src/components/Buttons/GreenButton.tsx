@@ -1,4 +1,5 @@
-"use client";
+'use client'
+
 import { IButton } from "@/interfaces/types";
 
 const GreenButton: React.FC<IButton> = ({ props }) => {
@@ -13,3 +14,5 @@ const GreenButton: React.FC<IButton> = ({ props }) => {
 };
 
 export default GreenButton;
+
+
