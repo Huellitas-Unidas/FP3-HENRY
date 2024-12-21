@@ -24,27 +24,11 @@ export class PostsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-<<<<<<< HEAD
-   async create(
-    @Body() createPostDto: CreatePostDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 2000000 }),
-          new FileTypeValidator({ fileType: /(jpg|jpeg|png|webp)$/ }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-  ) {
-    return this.postsService.create(createPostDto, file);
-=======
   async create(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
     if (body.location) {
       body.location = JSON.parse(body.location);
     }
     return this.postsService.create(body as CreatePostDto, file);
->>>>>>> c87ef5bc57676d0f2ae4e451530c3c700600ce9d
   }
 
   @Get()
