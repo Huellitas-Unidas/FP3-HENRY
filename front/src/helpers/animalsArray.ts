@@ -1,4 +1,4 @@
-import { IPost } from "@/interfaces/types";
+{/*import { IPost } from "@/interfaces/types";
 
 const animalsArray: IPost[] = [
   {
@@ -39,4 +39,4 @@ const animalsArray: IPost[] = [
   }
 ];
 
-export default animalsArray;
+export default animalsArray;*/}

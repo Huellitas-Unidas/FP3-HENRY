@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import validate from "@/helpers/validate";
+
 import { useFormik } from "formik";
 import React from "react";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Toast } from "@/helpers/index";
+import Cookies from "js-cookie";
 import GreenButton from "@/components/Buttons/GreenButton";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import Cookies from "js-cookie";
 import { IUserData } from "@/interfaces/types";
+import validate from "@/helpers/validate";
 import { login } from "../api/authAPI";
+import { signIn } from "next-auth/react";
+
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -58,8 +62,8 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center mt-28">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+    <div className="flex flex-col place-items-center my-8">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4">
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-2 items-center text-xl"
@@ -93,7 +97,7 @@ const Login: React.FC = () => {
           )}
 
           <label className="text-sm mb-2">
-            No tienes una cuenta?{" "}
+            ¿No tienes una cuenta?{" "}
             <Link href={"/register"} className="underline hover:no-underline">
               Regístrate
             </Link>
@@ -121,3 +125,6 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+
+
