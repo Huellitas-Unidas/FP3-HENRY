@@ -4,17 +4,17 @@
 import { useFormik } from "formik";
 import React from "react";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { login } from "@/app/api/authAPI";
 import { Toast } from "@/helpers/index";
 import Cookies from "js-cookie";
 import GreenButton from "@/components/Buttons/GreenButton";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import Cookies from "js-cookie";
 import { IUserData } from "@/interfaces/types";
+import validate from "@/helpers/validate";
 import { login } from "../api/authAPI";
+import { signIn } from "next-auth/react";
+
 
 const Login: React.FC = () => {
   const router = useRouter();

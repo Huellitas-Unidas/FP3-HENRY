@@ -122,12 +122,7 @@ const Register: React.FC = () => {
           )} 
 
       
-          {/* {formik.errors.confirm && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.confirm}
-            </span>
-          )} */}
-        
+              
 
          {/*  <input
             placeholder="Teléfono"
