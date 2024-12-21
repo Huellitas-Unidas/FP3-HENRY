@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         location: location || '',
       };
 
-      // Aquí iría tu lógica para guardar en la base de datos
+     
       console.log('Nuevo post creado:', newPost);
       return res.status(201).json(newPost);
     } catch (error: unknown) {
