@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -40,6 +39,7 @@ async function bootstrap() {
   });
 
   const PORT = process.env.PORT || 4000;
+
   await app.listen(PORT);
   console.log(`🚀 Backend corriendo en http://localhost:${PORT}/`);
 }
