@@ -1,7 +1,7 @@
 "use client";
 import { Toast } from "@/helpers";
 import React, { useState } from "react";
-import { sendPqr } from "../api/pqrAPI";
+import { postPqr } from "../api/pqrAPI";
 
 const Pqr = () => {
   const [pqrData, setPqrData] = useState({
@@ -30,7 +30,7 @@ const Pqr = () => {
       });
       return;
     }
-    sendPqr(pqrData);
+    postPqr(pqrData);
   };
 
   const handleChange = (
