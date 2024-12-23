@@ -3,7 +3,8 @@ import Swal from "sweetalert2";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function sendPqr(values: IpqrProps) {
+// post - enviar el formulario de PQR
+export async function postPqr(values: IpqrProps) {
   try {
     const response = await fetch(`${API_URL}/pqr`, {
       method: "POST",
