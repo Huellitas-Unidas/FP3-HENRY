@@ -1,15 +1,47 @@
 "use client";
 import GreenButton from "@/components/Buttons/GreenButton";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../../../public/images/profile.jpg";
+import Link from "next/link";
 import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
-import Link from "next/link";
-import petsArray from "@/helpers/petsArray";
+import { TiDeleteOutline } from "react-icons/ti";
+import { IpetBack } from "@/interfaces/types";
+import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
 
 const Dashboard = () => {
+  const [pets, setPets] = useState<IpetBack[] | null>([]);
+
+  const handleUpdateStatus = async (value: number | null) => {
+    if (value) {
+      await updatePetStatus(value);
+    } else {
+      return;
+    }
+  };
+
+  const handleDeletePet = async (value: number | null) => {
+    if (value) {
+      await deletePet(value);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const userPets = await getPetsByUser();
+        setPets(userPets);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetch();
+  }, []);
+
   return (
     <div className="flex flex-row my-6">
       <div className="flex flex-row gap-4 w-1/2 h-1/2 justify-between">
@@ -33,9 +65,9 @@ const Dashboard = () => {
           <p className="font-semibold">Nombre:</p>
           <p className="inline-flex gap-2">
             Pepito Rodriguez
-            <button className="text-lg">
+            {/* <button className="text-lg">
               <CiEdit />
-            </button>
+            </button> */}
           </p>
           <br />
           <p className="font-semibold">Email:</p>
@@ -61,33 +93,48 @@ const Dashboard = () => {
       <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
         <p className="text-lg text-green500">Mis mascotas:</p>
 
-        <div className="grid grid-cols-3 gap-4">
-          {petsArray &&
-            petsArray.map((animal) => {
-              return (
-                <div
-                  key={animal.id}
-                  className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
-                >
-                  <img
-                    src={animal.image}
-                    alt="animalImg"
-                    className="w-full h-32 object-cover rounded-lg"
-                  />
-                  <div className="flex-grow mt-2">
-                    <p className="font-semibold">{animal.name}</p>
-                    <p>Tipo: {animal.type}</p>
-                    <p>{animal.genre}</p>
-                    <p>{animal.description}</p>
+        {pets !== null ? (
+          <div className="grid grid-cols-3 gap-4">
+            {pets &&
+              pets.map((animal) => {
+                return (
+                  <div
+                    key={animal.name}
+                    className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
+                  >
+                    <Image
+                      src={animal.name}
+                      alt="animalImg"
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <div className="flex-grow mt-2">
+                      <p className="font-semibold">{animal.name}</p>
+                      <p>Tipo: {animal.type}</p>
+                      <p>{animal.genre}</p>
+                      <p>{animal.description}</p>
+                      <p>{animal.status}</p>
+                    </div>
+                    <button
+                      onClick={() => handleUpdateStatus(animal.id)}
+                      className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
+                    >
+                      <RiEmotionSadLine className="text-lg" />
+                      Marcar como perdida
+                    </button>
+                    <button
+                      onClick={() => handleDeletePet(animal.id)}
+                      className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
+                    >
+                      <TiDeleteOutline className="text-lg" />
+                      Eliminar mascota
+                    </button>
                   </div>
-                  <button className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1">
-                    <RiEmotionSadLine className="text-lg" />
-                    Marcar como perdida
-                  </button>
-                </div>
-              );
-            })}
-        </div>
+                );
+              })}
+          </div>
+        ) : (
+          <p>No has registrado ninguna mascota...</p> //!
+        )}
       </div>
     </div>
   );

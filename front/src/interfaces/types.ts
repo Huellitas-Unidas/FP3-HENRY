@@ -10,13 +10,14 @@ export interface IPost {
   location?: {
     address: string;
     latitude: string;
-    longitude: string; } | null; // Permitir que sea null si no hay ubicación
+    longitude: string;
+  } | null; // Permitir que sea null si no hay ubicación
   userId?: string;
-    
- }
+}
 
-export interface IPostAnimal { // Esta interfaz ahora es redundante, usa IPost
-  id?: string;        // Haz que id sea opcional aquí también para las solicitudes POST
+export interface IPostAnimal {
+  // Esta interfaz ahora es redundante, usa IPost
+  id?: string; // Haz que id sea opcional aquí también para las solicitudes POST
   userId?: string;
   status?: string;
   title?: string;
@@ -29,7 +30,7 @@ export interface IPostAnimal { // Esta interfaz ahora es redundante, usa IPost
 
 export interface IPostDetailProps {
   params: {
-      id: string;
+    id: string;
   };
 }
 
@@ -50,7 +51,7 @@ export interface IButton {
 export interface IUserData {
   email?: string;
   password?: string;
-}
+} //! es igual a IUserLogin
 
 export interface ISignUpData {
   email: string;
@@ -60,17 +61,10 @@ export interface ISignUpData {
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
-export interface IPetValidateErrors {
-  name: string;
-  type: string;
-  genre: string;
-  description: string;
-}
-
 export interface IUserLogin {
   email: string;
   password: string;
-}
+} //! es igual a IUserData
 
 export interface IpqrProps {
   fullName: string;
@@ -80,12 +74,29 @@ export interface IpqrProps {
   userId?: string;
 }
 
+export interface IPetValidateErrors {
+  name: string;
+  type: string;
+  genre: string;
+  description: string;
+} //!
+
 export interface IpetForm {
   name: string;
   type: string;
-  raza?: string; //!
+  genre: string;
   description: string;
   status: string;
   imgUrl: string;
-  userId: string;
+}
+
+export interface IpetBack {
+  name: string;
+  type: string;
+  genre: string;
+  description: string;
+  status: string;
+  imgUrl: string;
+  userId?: number;
+  id: number;
 }
