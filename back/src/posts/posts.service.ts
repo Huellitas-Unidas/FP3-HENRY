@@ -91,7 +91,7 @@ export class PostsService {
       where: { id },
       include: { location: true },
     });
-
+4
     if (!post) {
       throw new HttpException(`Post con ID ${id} no encontrado`, 404);
     }
