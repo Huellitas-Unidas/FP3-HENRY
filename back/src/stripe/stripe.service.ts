@@ -14,7 +14,7 @@ export class StripeService {
     if (!apiKey) {
       throw new Error('STRIPE_SECRET_KEY no está definida');
     }
-    this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' });
+    this.stripe = new Stripe(apiKey, { apiVersion: '2024-11-20.acacia' });
   }
 
   async createCheckoutSession(amount: number, currency: string) {
