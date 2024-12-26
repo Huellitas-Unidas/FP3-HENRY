@@ -61,10 +61,10 @@ export interface ISignUpData {
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
-export interface IUserLogin {
-  email: string;
-  password: string;
-} //! es igual a IUserData
+// export interface IUserLogin {
+//   email: string;
+//   password: string;
+// } //! es igual a IUserData
 
 export interface IpqrProps {
   fullName: string;
@@ -77,8 +77,12 @@ export interface IpqrProps {
 export interface IPetValidateErrors {
   name: string;
   type: string;
-  genre: string;
+  raza: string;
+  genre?: string;
   description: string;
+  status: string;
+  imgUrl: "https://res.cloudinary.com/ddtvocrfz/image/upload/v1735052139/HuellitasUnidas/anmmdyik1h4f8nen4xmg.webp";
+  userId: "0cc5aafa-2784-47cd-a0fc-23ce469ff9ae";
 } //!
 
 export interface IpetForm {
