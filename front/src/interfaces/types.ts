@@ -9,9 +9,8 @@ export interface IPost {
   status: string;
   location?: {
     address: string;
-    latitude: string;
-    longitude: string;
-  } | null; // Permitir que sea null si no hay ubicación
+    latitude: number;
+    longitude: number; } | null; // Permitir que sea null si no hay ubicación
   userId?: string;
 }
 

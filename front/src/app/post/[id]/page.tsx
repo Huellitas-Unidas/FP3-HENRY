@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { IPost } from '@/interfaces/types';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { IPost } from "@/interfaces/types";
+import { useParams } from "next/navigation";
+import { Toast } from "@/helpers";
+import { updatePostStatus } from "@/app/api/postAPI";
 
 const EditPost: React.FC = () => {
   const params = useParams();
@@ -14,46 +16,62 @@ const EditPost: React.FC = () => {
     if (!post) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${post.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
+      const updatedPost = await updatePostStatus(post.id, newStatus); // Usa la función API
+      setPost((prev) => {
+        if (!prev) return null;         
+  
+        return {
+          ...prev, status: updatedPost.status, 
+        } as IPost;
+        });                 
+        Toast.fire({
+        icon: "success",
+        iconColor: "green",
+        title: `Estado actualizado a: ${newStatus}`,
+        customClass: {
+          confirmButton:
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded"
+        }
       });
-
-      if (!response.ok) {
-        throw new Error('No se pudo actualizar el estado del post.');
-      }
-
-      const updatedPost = await response.json();
-      setPost((prev) => ({ ...prev, ...updatedPost }));
-      alert(`Estado actualizado a: ${newStatus}`);
+      
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
-      alert(`Error: ${(error as Error).message}`);
+      Toast.fire({
+        icon: "error",
+        iconColor: "red",
+        title: `Error: ${(error as Error).message}`,
+        customClass: {
+          confirmButton:
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded"
+        }
+      });
+      
     }
   };
-
+      
   useEffect(() => {
     if (!params?.id) {
-      setError('ID del post no proporcionado.');
+      setError("ID del post no proporcionado.");
       setIsLoading(false);
       return;
     }
 
     const fetchPost = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${params.id}`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/posts/${params.id}`
+        );
         if (!response.ok) {
-          throw new Error('No se pudo obtener el post.');
+          throw new Error("No se pudo obtener el post.");
         }
         const data: IPost = await response.json();
+        console.log('Posts recibidos:', data);
         setPost(data);
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
+        const errorMessage =
+          err instanceof Error ? err.message : "Error desconocido";
         setError(errorMessage);
-        console.error('Error al obtener el post:', errorMessage);
+        console.error("Error al obtener el post:", errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -91,7 +109,6 @@ const EditPost: React.FC = () => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-96 mx-auto my-6 mt-24">
       <div className="flex flex-col gap-4">
-        {/* Contenedor de la imagen centrado */}
         <div className="flex justify-center">
           <img
             src={post.photoUrl}
@@ -99,7 +116,7 @@ const EditPost: React.FC = () => {
             className="w-full h-full  object-contain rounded-md shadow-md"
           />
         </div>
-        {/* Detalles del post */}
+
         <div className="px-4">
           <h1 className="text-xl font-bold text-gray-800 mb-2">{post.title}</h1>
           <p className="text-base text-gray-700 mb-2">
@@ -109,27 +126,33 @@ const EditPost: React.FC = () => {
             <strong>Tipo:</strong> {post.petType}
           </p>
           <p className="text-base text-gray-700 mb-2">
-            <strong>Fecha:</strong> {new Date(post.dateLost).toLocaleDateString()}
+            <strong>Fecha:</strong>{" "}
+            {new Date(post.dateLost).toLocaleDateString()}
           </p>
           <p className="text-base text-gray-700 mb-2">
-            <strong>Ubicación:</strong> {post.location?.address || 'No especificada'}
+            <strong>Ubicación:</strong>{" "}
+            {post.location?.address || "No especificada"}
           </p>
           <p className="text-base text-gray-700 mb-2">
             <strong>Contacto:</strong> {post.contactInfo}
           </p>
+          
+          <p className="text-base text-gray-700 mb-2">
+            <strong>Estado:</strong>{" "}
+            {post.status === "encontrado" ? "Encontrado" : "Perdido"}
+          </p>
         </div>
 
-        {/* Botones de Estado alineados a la derecha */}
         <div className="flex justify-end px-4">
           <button
             className="px-6 py-3 text-sm font-semibold text-white bg-green-500 rounded-md hover:bg-green-600 mr-4"
-            onClick={() => handleStatusChange('encontrado')}
+            onClick={() => handleStatusChange("encontrado")}
           >
             Marcar como Encontrado
           </button>
           <button
             className="px-6 py-3 text-sm font-semibold text-white bg-red-500 rounded-md hover:bg-red-600"
-            onClick={() => handleStatusChange('perdido')}
+            onClick={() => handleStatusChange("perdido")}
           >
             Marcar como Perdido
           </button>
@@ -141,20 +164,8 @@ const EditPost: React.FC = () => {
 
 export default EditPost;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/*'use client'
+{
+  /*'use client'
 
 import CardDetail from '@/components/Card/CardDetail';
 import animalsArray from '@/helpers/animalsArray';
@@ -186,14 +197,5 @@ const EditPost: React.FC = () => {
 };
 
 export default EditPost;
-*/}
-
-
-
-
-
-
-
-
-
-
+*/
+}

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { IPost } from '@/interfaces/types';
 
 interface CardListProps {
-  posts: IPost[]; // Recibe los posts como prop
+  posts: IPost[]; // Recibe los posts como props
 }
 
 const CardList: React.FC<CardListProps> = ({ posts }) => {
