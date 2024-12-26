@@ -37,7 +37,7 @@ if (!API_URL) {
 export async function updatePostStatus(id: string, status: string) {
   try {
     const response = await fetch(`${API_URL}/posts/${id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });

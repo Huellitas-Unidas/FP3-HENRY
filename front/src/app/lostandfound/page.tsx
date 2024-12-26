@@ -1,18 +1,21 @@
 'use client';
-import ModalPage from '@/components/ModalPage/ModalPage';
+
 import ButtonLostAndFound from '@/components/Buttons/ButtonLostAndFound';
 import CardList from '@/components/CardList/CardList';
 import React, { useState, useEffect } from 'react';
 import { IPost } from '@/interfaces/types';
+import ModalPage from '@/components/ModalPage/ModalPAge';
 
 const LostAndFound: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Control del estado del modal
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [posts, setPosts] = useState<IPost[]>([]); 
+  const [filter, setFilter] = useState<string>('todos'); // Estado para el filtro
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]); // Lista filtrada
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // Función para actualizar la lista de tarjetas
+  // Función para obtener los post de la API
   const fetchPosts = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
@@ -20,11 +23,21 @@ const LostAndFound: React.FC = () => {
         throw new Error('Error al obtener los posts');
       }
       const data = await response.json();
+      console.log('Todos los posts:', data);
       setPosts(data);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
+
+    // Filtrar los posts según el estado seleccionado
+    useEffect(() => {
+      if (filter === 'todos') {
+        setFilteredPosts(posts);
+      } else {
+        setFilteredPosts(posts.filter((post) => post.status?.toLowerCase().trim() === filter));
+      }
+    }, [filter, posts]);
 
   // Llamar a fetchPosts cuando el componente se monta
   useEffect(() => {
@@ -44,10 +57,10 @@ const LostAndFound: React.FC = () => {
   </div>
 
       {/* Otro botón adicional */}
-      <ButtonLostAndFound />
+      <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
       {/* Lista de Tarjetas */}
-      <CardList posts={posts} />
+      <CardList posts={filteredPosts} />
 
       {/* Modal (Renderizado condicional) */}
       {isModalOpen && <ModalPage onClose={handleCloseModal} onRefreshList={fetchPosts}
