@@ -8,6 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 interface ModalPageProps {                         // Definición de la interfaz para las props
   onClose: () => void;
   onRefreshList: () => void; 
+  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     dateLostISO: '',
     location: { address: '', latitude: '', longitude: '' }, // <- CAMBIO: Inicializar como strings
     file: null as File | null,
-    status: '',
+    status: 'perdido',
     userId: '06e3b51d-e39b-44ba-ae68-079607ffb0db',
   });
 
@@ -61,18 +62,14 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       data.append('petType', formData.petType);
       data.append('contactInfo', formData.contactInfo);
       data.append('dateLost', formData.dateLostISO);
-
-      // Conversión a números acá, justo antes de enviar
-      const locationData = {
+      const locationData = { // Conversión a números acá, justo antes de enviar
         address: formData.location.address,
         latitude: parseFloat(formData.location.latitude),
         longitude: parseFloat(formData.location.longitude),
       };
-
       if (isNaN(locationData.latitude) || isNaN(locationData.longitude)) {
         throw new Error("Latitud y Longitud deben ser números válidos");
       }
-
       data.append('location', JSON.stringify(locationData));
       data.append('file', formData.file as File);
       data.append('status', formData.status);
@@ -88,10 +85,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         const errorMessage = errorData?.message || 'Error al crear el post en el backend';
         throw new Error(errorMessage);
       }
-
       const result = await response.json();
       console.log('Post creado:', result);
-
       Swal.fire({
         icon: "success",
         title: "El post se creó exitosamente",
@@ -100,6 +95,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
             "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
         },
       });
+
       onRefreshList();
 
       setFormData({
@@ -109,7 +105,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         contactInfo: '',
         dateLost: '',
         dateLostISO: '',
-        location: { address: '', latitude: '', longitude: '' }, // <- CAMBIO: Resetear a strings vacíos
+        location: { address: '', latitude: '', longitude: '' }, // <- Resetear campos
         file: null,
         status: '',
         userId: '06e3b51d-e39b-44ba-ae68-079607ffb0db',
@@ -212,7 +208,10 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
               name="location.latitude"
               value={formData.location.latitude}
               onChange={handleChange}
-              placeholder="Ej: 0"
+              placeholder="Ej: 30.71"
+              min="-90"
+              max="90"
+              step="0.0001"
               className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
             />
           </div>
@@ -223,7 +222,10 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
               name="location.longitude"
               value={formData.location.longitude}
               onChange={handleChange}
-              placeholder="Ej: 0"
+              placeholder="Ej: -34.060"
+              min="-180"
+              max="180"
+              step="0.0001"
               className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
             />
           </div>

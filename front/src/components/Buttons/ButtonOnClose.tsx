@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import ModalPage from '../ModalPage/ModalPage';
+'use client'
+import React, { useEffect, useState } from 'react';
+import ModalPage from '../ModalPage/ModalPAge';
 import CardList from '../CardList/CardList';
+import { IPost } from '@/interfaces/types';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const ButtonOnClose = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [posts, setPosts] = useState<IPost[]>([]); // Estado para almacenar los posts
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -17,6 +23,22 @@ const ButtonOnClose = () => {
   const handleRefreshList = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
+
+ // Cargar posts cuando cambie refreshKey
+ useEffect(() => {
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch(`${API_URL}/posts`);
+      const data = await response.json();
+      setPosts(data); // Actualizar posts en el estado
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
+  fetchPosts();
+}, [refreshKey]);
+
 
   return (
     <div className="p-4">
@@ -38,7 +60,7 @@ const ButtonOnClose = () => {
       )}
 
       {/* Lista de tarjetas */}
-      <CardList key={refreshKey} />
+      <CardList key={refreshKey} posts={posts} />
     </div>
   );
 };

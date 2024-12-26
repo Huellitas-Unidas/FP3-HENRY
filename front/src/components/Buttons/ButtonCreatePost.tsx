@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import ModalPage from '../ModalPage/ModalPage';
+import ModalPage from '../ModalPage/ModalPAge';
 
 
 const ButtonCreatePost: React.FC = () => {
@@ -15,7 +15,7 @@ const ButtonCreatePost: React.FC = () => {
       >
         Publicar un animal perdido o encontrado
       </button>
-      {isModalOpen && <ModalPage setIsModalOpen={setIsModalOpen} />}
+      {isModalOpen && <ModalPage setIsModalOpen={setIsModalOpen}  onClose={() => setIsModalOpen(false)} onRefreshList={() => {}} />}
     </div>
   );
 };
