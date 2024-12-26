@@ -4,6 +4,8 @@ import petValidate from "@/helpers/petsValidate";
 import { useFormik } from "formik";
 import React from "react";
 import { MdAddPhotoAlternate } from "react-icons/md";
+import { postPet } from "../api/petAPI";
+import Swal from "sweetalert2";
 
 const PetRegister: React.FC = () => {
   const formik = useFormik({
@@ -14,10 +16,25 @@ const PetRegister: React.FC = () => {
       description: "",
       status: "",
       imgUrl: "",
-    }, //!
+    }, //! imgUrl
     validate: petValidate,
-    onSubmit: (values, { resetForm }) => {
-      resetForm();
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const response = postPet(values);
+        console.log(response);
+        resetForm();
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          iconColor: "red",
+          title: "Error al enviar el formulario...",
+          customClass: {
+            confirmButton:
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
+        });
+        console.error("Error en el login:", error);
+      }
     },
   });
 
