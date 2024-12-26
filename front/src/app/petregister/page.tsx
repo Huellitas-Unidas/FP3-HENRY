@@ -14,7 +14,7 @@ const PetRegister: React.FC = () => {
       type: "",
       genre: "",
       description: "",
-      status: "",
+      // status: "",
       imgUrl: "",
     }, //! imgUrl
     validate: petValidate,
