@@ -10,13 +10,13 @@ interface ButtonCardProps {
 const ButtonCard: React.FC<ButtonCardProps> = ({ post }) => {
   const handleStatusChange = async (newStatus: string) => {
     try {
-      // Verifica que la URL de la API esté configurada
-      if (!process.env.NEXT_PUBLIC_API_URL) {
+     
+      if (!process.env.NEXT_PUBLIC_API_URL) { // Verifica que la URL de la API esté configurada
         throw new Error('La URL de la API no está configurada.');
       }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${post.id}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -24,8 +24,7 @@ const ButtonCard: React.FC<ButtonCardProps> = ({ post }) => {
       });
 
       if (!response.ok) {
-        // Si la respuesta no es válida, lanza un error con el mensaje del servidor
-        const errorData = await response.json();
+       const errorData = await response.json();
         throw new Error(errorData.message || 'Error al actualizar el estado');
       }
 

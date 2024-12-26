@@ -26,30 +26,23 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function updatePostStatus(id: string, status: string) {
   try {
-    if (!API_URL) {
-      console.error('API_URL is not defined');
-      return NextResponse.json({ error: 'Internal server error: API_URL is not defined' }, { status: 500 });
-    }
-
-    const data = await req.json();
-
-    const response = await fetch(`${API_URL}/posts/${params.id}`, {
+    const response = await fetch(`${API_URL}/posts/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ status }),
     });
 
     if (!response.ok) {
-      return NextResponse.json({ error: 'Failed to update post' }, { status: response.status });
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to update post with ID ${id}`);
     }
 
-    const updatedPost = await response.json();
-    return NextResponse.json(updatedPost);
+    return await response.json(); 
   } catch (error) {
-    console.error('Error updating post:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Error updating post status:', error);
+    throw error;
   }
 }
 

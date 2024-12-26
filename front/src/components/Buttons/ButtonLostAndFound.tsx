@@ -1,38 +1,41 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-const ButtonLostAndFound = () => {
-  const [filter, setFilter] = useState('all'); // Estado para manejar el filtro
+
+interface ButtonLostAndFoundProps {
+  filter: string; // Filtro actual
+  setFilter: (filter: string) => void; // Función para actualizar el filtro
+}
+
+const ButtonLostAndFound: React.FC<ButtonLostAndFoundProps> = ({ filter, setFilter }) => {
+ 
 
   return (
-    <div className="flex justify-center gap-4 mb-6 mt-8"> {/* Contenedor con ubicación central */}
-      {/* Botón de Filtro "Perdidos" */}
-      <button
+    <div className="flex justify-center gap-4 mb-6 mt-8"> 
+       <button
         className={`px-4 py-2 rounded ${
-          filter === 'lost' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
+          filter === 'perdido' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
         }`}
-        onClick={() => setFilter('lost')}
+        onClick={() => setFilter('perdido')}
       >
         Perdidos
       </button>
 
-      {/* Botón de Filtro "Encontrados" */}
       <button
         className={`px-4 py-2 rounded ${
-          filter === 'found' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-800'
+          filter === 'encontrado' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-800'
         }`}
-        onClick={() => setFilter('found')}
+        onClick={() => setFilter('encontrado')}
       >
         Encontrados
       </button>
 
-      {/* Botón de Filtro "Todos" */}
       <button
         className={`px-4 py-2 rounded ${
-          filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+          filter === 'todos' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
         }`}
-        onClick={() => setFilter('all')}
+        onClick={() => setFilter('todos')}
       >
         Todos
       </button>
