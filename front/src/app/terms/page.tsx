@@ -20,8 +20,8 @@ const Terms = () => {
         icon: "question",
         customClass: {
           confirmButton:
-            "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
-        }
+            "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300",
+        },
       });
       return;
     }
@@ -34,11 +34,11 @@ const Terms = () => {
       confirmButtonText: `Continuar <i class="fa fa-arrow-right"></i>`,
       customClass: {
         confirmButton:
-          "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
+          "bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300",
       },
       inputValidator: (result) => {
         return !result && "Debes aceptar los términos y condiciones.";
-      }
+      },
     });
 
     if (accept) {
@@ -49,19 +49,18 @@ const Terms = () => {
         confirmButtonText: "OK",
         customClass: {
           confirmButton:
-            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
-        }
+            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300",
+        },
       });
       router.push("/register");
-    }
-    else {
+    } else {
       Swal.fire({
         title: "Por favor, acepta los términos y condiciones para continuar.",
         icon: "warning",
         customClass: {
           confirmButton:
-            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
-        }
+            "bg-green500 text-white p-4 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300",
+        },
       });
     }
   };
@@ -290,7 +289,7 @@ const Terms = () => {
             : "bg-green500 shadow-[#F3FAF8] shadow-md cursor-not-allowed"
         }`}
       >
-        seguir
+        Seguir
       </button>
     </form>
   );

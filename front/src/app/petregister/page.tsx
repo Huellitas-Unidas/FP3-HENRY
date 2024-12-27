@@ -14,7 +14,6 @@ const PetRegister: React.FC = () => {
       type: "",
       genre: "",
       description: "",
-      // status: "",
       imgUrl: "",
     }, //! imgUrl
     validate: petValidate,
@@ -39,11 +38,11 @@ const PetRegister: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center my-8">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+    <div className="flex flex-col place-items-center my-8 px-4">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 items-center text-xl"
+          className="flex flex-col gap-4 items-center text-lg"
         >
           <input
             placeholder="Nombre de tu mascota"
@@ -51,20 +50,20 @@ const PetRegister: React.FC = () => {
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.name}
             </span>
           )}
 
-          <div className="flex flex-row gap-4 mb-2">
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
             <select
               name="type"
               value={formik.values.type}
               onChange={formik.handleChange}
-              className=" bg-transparent text-gray-400 focus:outline-none "
+              className="w-full sm:w-1/2 py-2 pl-4 border-2 rounded-xl bg-transparent text-gray-400 focus:outline-none"
             >
               <option value="" disabled>
                 Tipo
@@ -79,7 +78,7 @@ const PetRegister: React.FC = () => {
               name="genre"
               value={formik.values.genre}
               onChange={formik.handleChange}
-              className=" bg-transparent text-gray-400 focus:outline-none "
+              className="w-full sm:w-1/2 py-2 pl-4 border-2 rounded-xl bg-transparent text-gray-400 focus:outline-none"
             >
               <option value="" disabled>
                 Género
@@ -105,16 +104,18 @@ const PetRegister: React.FC = () => {
             name="description"
             value={formik.values.description}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.description}
             </span>
           )}
 
-          <span className="text-gray-400">*Sube una foto de tu mascota</span>
-          <button>
+          <span className="text-gray-400 text-base text-center">
+            *Sube una foto de tu mascota
+          </span>
+          <button type="button" className="flex justify-center items-center">
             <MdAddPhotoAlternate className="text-2xl text-gray-500 mb-4" />
           </button>
 
