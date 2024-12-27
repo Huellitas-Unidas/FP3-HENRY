@@ -1,26 +1,66 @@
 "use client";
 import GreenButton from "@/components/Buttons/GreenButton";
-import petValidate from "@/helpers/petsValidate";
 import { useFormik } from "formik";
 import React from "react";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { postPet } from "../api/petAPI";
 import Swal from "sweetalert2";
+import { v4 as uuidv4 } from "uuid";
+import { useAuth } from "../AuthContext";
+
+//! Raza --> Genero
 
 const PetRegister: React.FC = () => {
+  const { userId } = useAuth();
+
   const formik = useFormik({
     initialValues: {
+      id: uuidv4(),
       name: "",
       type: "",
-      genre: "",
+      raza: "",
       description: "",
-      imgUrl: "",
-    }, //! imgUrl
-    validate: petValidate,
+      file: null,
+      userId: userId || "",
+      status: "none",
+    },
+    validate: (values) => {
+      const errors: Record<string, string> = {};
+      if (!values.name) {
+        errors.name = "El nombre es obligatorio.";
+      }
+      if (!values.type) {
+        errors.type = "El tipo es obligatorio.";
+      }
+      if (!values.raza) {
+        errors.raza = "La raza es obligatoria.";
+      }
+      if (!values.description) {
+        errors.description = "La descripción es obligatoria.";
+      }
+      if (!values.file) {
+        errors.file = "Es necesario subir una foto de tu mascota.";
+      }
+      return errors;
+    },
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = postPet(values);
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("type", values.type);
+        formData.append("raza", values.raza);
+        formData.append("description", values.description);
+        formData.append("status", values.status);
+        formData.append("userId", values.userId);
+        if (values.file) {
+          formData.append("file", values.file);
+        } else {
+          throw new Error("El archivo no puede ser nulo");
+        }
+
+        const response = await postPet(formData); // Servicio para enviar FormData
         console.log(response);
+
         resetForm();
       } catch (error) {
         Swal.fire({
@@ -74,14 +114,15 @@ const PetRegister: React.FC = () => {
               <option value="Roedor">Roedor</option>
               <option value="Otro">Otro</option>
             </select>
+
             <select
-              name="genre"
-              value={formik.values.genre}
+              name="raza"
+              value={formik.values.raza}
               onChange={formik.handleChange}
               className="w-full sm:w-1/2 py-2 pl-4 border-2 rounded-xl bg-transparent text-gray-400 focus:outline-none"
             >
               <option value="" disabled>
-                Género
+                Raza
               </option>
               <option value="Hembra">Hembra</option>
               <option value="Macho">Macho</option>
@@ -94,7 +135,7 @@ const PetRegister: React.FC = () => {
           )}
           {formik.errors && (
             <span className="text-red-500 text-sm text-center">
-              {formik.errors.genre}
+              {formik.errors.raza}
             </span>
           )}
 
@@ -113,11 +154,23 @@ const PetRegister: React.FC = () => {
           )}
 
           <span className="text-gray-400 text-base text-center">
-            *Sube una foto de tu mascota
-          </span>
-          <button type="button" className="flex justify-center items-center">
             <MdAddPhotoAlternate className="text-2xl text-gray-500 mb-4" />
-          </button>
+            Sube una foto de tu mascota
+            <input
+              type="file"
+              name="file"
+              onChange={(event) => {
+                const files = event.currentTarget.files;
+                if (files && files[0]) {
+                  formik.setFieldValue("file", files[0]);
+                }
+              }}
+              className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+            />
+          </span>
+          {formik.errors.file && (
+            <span className="text-red-500 text-sm">{formik.errors.file}</span>
+          )}
 
           <GreenButton props="Añadir" />
         </form>
