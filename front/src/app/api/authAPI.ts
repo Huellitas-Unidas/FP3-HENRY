@@ -45,7 +45,9 @@ export async function register(userData: ISignUpData) {
     }
   } catch (error: unknown) {
     const errorMessage =
-      error instanceof Error ? error.message : "Error desconocido en el registro";
+      error instanceof Error
+        ? error.message
+        : "Error desconocido en el registro";
 
     Swal.fire({
       icon: "error",
@@ -55,7 +57,7 @@ export async function register(userData: ISignUpData) {
     });
 
     console.error("Error en el registro:", errorMessage);
-    throw error; 
+    throw error;
   }
 }
 
@@ -67,30 +69,30 @@ export async function login(userData: IUserData) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
-      credentials: "include",          
+      credentials: "include",
     });
 
     if (res.ok) {
       const data = await res.json();
       if (data && data.token) {
-      Cookies.set("token", data.token, { expires: 1 }); 
-          Swal.fire({
+        Cookies.set("token", data.token, { expires: 1 });
+        Swal.fire({
           icon: "success",
           iconColor: "green",
           text: "Bienvenido de nuevo.",
           title: "¡Inicio de sesión exitoso!",
           customClass: {
-              confirmButton:
-                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-            },
+            confirmButton:
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
         });
 
-        return data; 
+        return data;
       } else {
         throw new Error("La respuesta del servidor no contiene un token.");
       }
     } else {
-        Swal.fire({
+      Swal.fire({
         icon: "error",
         iconColor: "red",
         title: "No se logró el inicio de sesión",
@@ -102,18 +104,18 @@ export async function login(userData: IUserData) {
       throw new Error("Credenciales incorrectas.");
     }
   } catch (error: unknown) {
-      const errorMessage =
+    const errorMessage =
       error instanceof Error ? error.message : "Error desconocido en el login";
 
-      Swal.fire({
+    Swal.fire({
       icon: "error",
       iconColor: "rose",
       text: errorMessage,
       title: "No se logró loguear",
       customClass: {
-          confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
+        confirmButton:
+          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
     });
 
     console.error("Error en el login:", errorMessage);
