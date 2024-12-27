@@ -1,13 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as bodyParser from 'body-parser';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
+  app.use(
+    '/stripe/webhook', 
+    bodyParser.raw({ type: 'application/json' })
+);
+
+  app.useGlobalPipes( new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
@@ -37,6 +42,7 @@ async function bootstrap() {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
   });
+
 
   const PORT = process.env.PORT || 4000;
 
