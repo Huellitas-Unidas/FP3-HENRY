@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Toast } from "@/helpers/index";
 import Cookies from "js-cookie";
 import GreenButton from "@/components/Buttons/GreenButton";
 import Image from "next/image";
@@ -15,9 +12,9 @@ import validate from "@/helpers/validate";
 import { login } from "../api/authAPI";
 import { signIn } from "next-auth/react";
 
-
 const Login: React.FC = () => {
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik<IUserData>({
     initialValues: {
@@ -25,10 +22,10 @@ const Login: React.FC = () => {
       password: "",
     },
     validate,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       try {
         const response = await login(values);
-        Cookies.set("token", response.token, { expires: 1 });
+        Cookies.set("token", response.token, { expires: 1 }); //!
         localStorage.setItem(
           "userData",
           JSON.stringify({ token: response.token })
@@ -43,9 +40,7 @@ const Login: React.FC = () => {
               "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
           },
         });
-
         router.push("/");
-        resetForm();
       } catch (error) {
         Swal.fire({
           icon: "error",
@@ -62,11 +57,14 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center my-8">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4">
+    <div className="flex flex-col place-items-center my-8 px-4">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 items-center text-xl"
+          onSubmit={(e) => {
+            formik.handleSubmit(e);
+            setIsSubmitted(true);
+          }}
+          className="flex flex-col gap-4 items-center text-lg"
         >
           <input
             placeholder="Email"
@@ -74,9 +72,9 @@ const Login: React.FC = () => {
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.email && (
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
+          {isSubmitted && formik.errors.email && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -88,24 +86,23 @@ const Login: React.FC = () => {
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.password && (
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
+          {isSubmitted && formik.errors.password && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>
           )}
 
-          <label className="text-sm mb-2">
+          <label className="text-sm mb-2 text-center">
             ¿No tienes una cuenta?{" "}
             <Link href={"/register"} className="underline hover:no-underline">
               Regístrate
             </Link>
           </label>
 
-          <GreenButton props="Loguearme" />
           <button
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
             type="button"
             className="flex items-center py-2 px-3 text-sm border border-green500 rounded-lg shadow-md bg-white font-semibold text-gray-900 transition-all duration-300 hover:bg-gray-100 hover:shadow-lg"
           >
@@ -118,6 +115,7 @@ const Login: React.FC = () => {
             />
             Ingresar con Google
           </button>
+          <GreenButton props="Loguearme" />
         </form>
       </div>
     </div>
@@ -125,6 +123,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
-
-
