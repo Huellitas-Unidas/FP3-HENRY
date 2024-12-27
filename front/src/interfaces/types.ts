@@ -10,7 +10,8 @@ export interface IPost {
   location?: {
     address: string;
     latitude: number;
-    longitude: number; } | null; // Permitir que sea null si no hay ubicación
+    longitude: number;
+  } | null; // Permitir que sea null si no hay ubicación
   userId?: string;
 }
 
@@ -53,10 +54,12 @@ export interface IUserData {
 } //! es igual a IUserLogin
 
 export interface ISignUpData {
+  name: string;
   email: string;
   password: string;
-  name: string;
-}
+  confirm?: string;
+  phone?: number;
+} //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
@@ -73,16 +76,13 @@ export interface IpqrProps {
   userId?: string;
 }
 
-export interface IPetValidateErrors {
+export interface IPetRegister {
   name: string;
   type: string;
-  raza: string;
-  genre?: string;
+  genre: string;
   description: string;
-  status: string;
-  imgUrl: "https://res.cloudinary.com/ddtvocrfz/image/upload/v1735052139/HuellitasUnidas/anmmdyik1h4f8nen4xmg.webp";
-  userId: "0cc5aafa-2784-47cd-a0fc-23ce469ff9ae";
-} //!
+  imgUrl: string;
+}
 
 export interface IpetForm {
   name: string;
@@ -94,12 +94,20 @@ export interface IpetForm {
 }
 
 export interface IpetBack {
+  id: number;
   name: string;
   type: string;
-  genre: string;
+  raza: string;
   description: string;
   status: string;
   imgUrl: string;
   userId?: number;
-  id: number;
+} //! sacar raza y agregar genre al back
+
+export interface IUserBack {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string; //number?
+  createdAt: string;
 }
