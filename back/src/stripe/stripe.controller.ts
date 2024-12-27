@@ -5,6 +5,8 @@ import {
   HttpException,
   HttpStatus,
   Get,
+  Headers,
+  Req,
 } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 
@@ -18,15 +20,15 @@ export class StripeController {
     body: {
       amount: number;
       currency: string;
-      
     },
   ) {
+    console.log('ESTOY PROBANDO', body);
+
     try {
-      const { amount, currency, } = body;
+      const { amount, currency } = body;
       const session = await this.stripeService.createCheckoutSession(
         amount,
         currency,
-       
       );
       return { checkoutUrl: session.url };
     } catch (error) {
@@ -45,5 +47,28 @@ export class StripeController {
     return {
       message: 'El pago fue cancelado. Vuelve a intentarlo.',
     };
+  }
+
+
+
+  
+  @Post('webhook')
+  async handleWebhoook(
+    @Headers('stripe-signature') signature: string,
+    @Req() req: Request,
+
+  ) {
+    console.log('ESTO ES SIGNATURE', signature);
+    
+    const payload = Buffer.from(req.body as any);
+
+
+    try {
+      const event = await this.stripeService.verifyWebhoock(payload, signature);
+      await this.stripeService.processEvent(event);
+      return { received: true };
+    } catch (err) {
+      throw new HttpException(`Error ${err}`, HttpStatus.BAD_REQUEST);
+    }
   }
 }
