@@ -45,7 +45,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083]">
+    <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083] bg-[#d7f0e9]">
       <div className="flex w-full justify-between">
         <Link href="/">
           <Image
