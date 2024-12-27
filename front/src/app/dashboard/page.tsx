@@ -8,13 +8,13 @@ import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
-import { IpetBack } from "@/interfaces/types";
+import { IpetForm } from "@/interfaces/types";
 import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 // import { IUserBack } from "@/interfaces/types";
 
 const Dashboard = () => {
-  const [pets, setPets] = useState<IpetBack[] | null>([]);
+  const [pets, setPets] = useState<IpetForm[] | null>([]);
   const session = useSession();
   // const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto = session.data?.user?.image || emptyProfile;
@@ -127,14 +127,18 @@ const Dashboard = () => {
                       <p>{animal.status}</p>
                     </div>
                     <button
-                      onClick={() => handleUpdateStatus(animal.id)}
+                      onClick={() =>
+                        handleUpdateStatus(animal.id ? Number(animal.id) : null)
+                      }
                       className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                     >
                       <RiEmotionSadLine className="text-lg" />
                       Marcar como perdida
                     </button>
                     <button
-                      onClick={() => handleDeletePet(animal.id)}
+                      onClick={() =>
+                        handleDeletePet(animal.id ? Number(animal.id) : null)
+                      }
                       className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                     >
                       <TiDeleteOutline className="text-lg" />
@@ -153,6 +157,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-// BOTON "marcar como perdida" que modifique el status a "lost" para que la mascota
-// sea posteada y visualizada en lostandfound
