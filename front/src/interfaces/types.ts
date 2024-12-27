@@ -76,25 +76,8 @@ export interface IpqrProps {
   userId?: string;
 }
 
-export interface IPetRegister {
-  name: string;
-  type: string;
-  genre: string;
-  description: string;
-  imgUrl: string;
-}
-
 export interface IpetForm {
-  name: string;
-  type: string;
-  genre: string;
-  description: string;
-  status: string;
-  imgUrl: string;
-}
-
-export interface IpetBack {
-  id: number;
+  id?: string;
   name: string;
   type: string;
   raza: string;
@@ -102,7 +85,7 @@ export interface IpetBack {
   status: string;
   imgUrl: string;
   userId?: number;
-} //! sacar raza y agregar genre al back
+}
 
 export interface IUserBack {
   id: string;
