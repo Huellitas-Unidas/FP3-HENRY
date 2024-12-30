@@ -19,12 +19,18 @@ const Register: React.FC = () => {
       email: "",
       password: "",
       confirm: "",
+      phone: "",
     },
-    validate,
+    validate: validate,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+    onSubmit: async ({ confirm, phone, ...userData }, { resetForm }) => {
       try {
-        const registrationResult = await register(userData);
+        const formattedUserData = {
+          ...userData,
+          phone: Number(phone), // Convertir phone a número
+        };
+
+        const registrationResult = await register(formattedUserData);
 
         if (registrationResult) {
           Swal.fire({
@@ -123,7 +129,7 @@ const Register: React.FC = () => {
             </span>
           )}
 
-          {/* <input
+          <input
             placeholder="Teléfono"
             type="number"
             name="phone"
@@ -133,7 +139,7 @@ const Register: React.FC = () => {
           />
           {isSubmitted && formik.errors.phone && (
             <span className="text-red-500 text-sm">{formik.errors.phone}</span>
-          )} */}
+          )}
 
           <label className="text-sm mb-2 text-center">
             ¿Ya tienes una cuenta?{" "}
