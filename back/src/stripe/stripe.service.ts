@@ -24,8 +24,8 @@ export class StripeService {
           },
         ],
         mode: 'payment',
-        success_url: 'http://localhost:4000/stripe/success',
-        cancel_url: 'http://localhost:4000/stripe/cancel',
+        success_url: process.env.STRIPE_SUCCESS_URL,
+        cancel_url: process.env.STRIPE_CANCEL_URL,
       });
 
       return session;
