@@ -14,7 +14,7 @@ export class PetsService {
     private emailService: EmailService,
   ) {}
   async create(createPetDto: CreatePetDto, file: Express.Multer.File) {
-    const { name, type, raza, status, description, userId } = createPetDto;
+    const { name, type, genero, status, description, userId } = createPetDto;
 
     const userFound = await this.prisma.user.findUnique({
       where: {
@@ -39,7 +39,7 @@ export class PetsService {
       `Hola ${userFound.name},\n\n¡Gracias por registrar a tu mascota en nuestra plataforma! Aquí están los detalles del registro:\n\n` +
         `Nombre: ${name}\n` +
         `Tipo: ${type}\n` +
-        `Raza: ${raza}\n` +
+        `Genero: ${genero}\n` +
         `Descripción: ${description}\n` +
         `Estado: ${status}\n\n` +
         (imgUrl ? `Imagen: ${imgUrl}\n\n` : '') +
