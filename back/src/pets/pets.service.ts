@@ -28,6 +28,8 @@ export class PetsService {
       const uploadResult = await this.filesUploadService.uploadPostImage(file);
       imgUrl = uploadResult.secure_url;
     }
+    const findPet = await this.prisma.pets.findFirst({ where: { name: name.toLowerCase() } });
+    if (findPet) throw new HttpException('La mascota ya existe  ', 409);
 
     const createPet = await this.prisma.pets.create({
       data: { ...createPetDto, imgUrl, userId: userFound.id },
