@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
@@ -13,6 +11,7 @@ import validate from "@/helpers/validate"; // Validación importada
 
 const Register: React.FC = () => {
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik<ISignUpData>({
     initialValues: {
@@ -21,10 +20,10 @@ const Register: React.FC = () => {
       password: "",
       confirm: "",
     },
-    validate, 
+    validate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
-        
         const registrationResult = await register(userData);
 
         if (registrationResult) {
@@ -63,11 +62,14 @@ const Register: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col place-items-center my-8">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+    <div className="flex flex-col place-items-center my-8 px-4">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 items-center text-xl"
+          onSubmit={(e) => {
+            formik.handleSubmit(e);
+            setIsSubmitted(true);
+          }}
+          className="flex flex-col gap-4 items-center text-lg"
         >
           <input
             placeholder="Nombre completo"
@@ -77,7 +79,7 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />
-          {formik.errors.name && (
+          {isSubmitted && formik.errors.name && (
             <span className="text-red-500 text-sm">{formik.errors.name}</span>
           )}
 
@@ -89,7 +91,7 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />
-          {formik.errors.email && (
+          {isSubmitted && formik.errors.email && (
             <span className="text-red-500 text-sm">{formik.errors.email}</span>
           )}
 
@@ -101,7 +103,7 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />
-          {formik.errors.password && (
+          {isSubmitted && formik.errors.password && (
             <span className="text-red-500 text-sm">
               {formik.errors.password}
             </span>
@@ -115,37 +117,34 @@ const Register: React.FC = () => {
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />
-          {formik.errors.confirm && (
-            <span className="text-red-500 text-sm text-center">
+          {isSubmitted && formik.errors.confirm && (
+            <span className="text-red-500 text-sm">
               {formik.errors.confirm}
             </span>
-          )} 
+          )}
 
-      
-              
-
-         {/*  <input
+          {/* <input
             placeholder="Teléfono"
             type="number"
             name="phone"
             value={formik.values.phone}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.phone}
-            </span>
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.phone && (
+            <span className="text-red-500 text-sm">{formik.errors.phone}</span>
           )} */}
 
-          <label className="text-sm mb-2">
+          <label className="text-sm mb-2 text-center">
             ¿Ya tienes una cuenta?{" "}
             <Link href="/login" className="underline hover:no-underline">
               Loguéate
             </Link>
           </label>
 
-          <GreenButton props={formik.isSubmitting ? "Registrando..." : "Registrarme"} />
+          <GreenButton
+            props={formik.isSubmitting ? "Registrando..." : "Registrarme"}
+          />
         </form>
       </div>
     </div>
@@ -153,10 +152,3 @@ const Register: React.FC = () => {
 };
 
 export default Register;
-
-
-
-
-
-
-
