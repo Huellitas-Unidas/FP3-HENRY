@@ -1,7 +1,7 @@
 //Operaciones relacionadas con usuarios: registro, login, obtener perfil, etc.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Toast } from "@/helpers/index";
-import { IpqrProps, ISignUpData, IUserData } from "@/interfaces/types";
+//import { Toast } from "@/helpers/index";
+import { ISignUpData, IUserData } from "@/interfaces/types";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
@@ -17,6 +17,10 @@ export async function register(userData: ISignUpData) {
         icon: "error",
         iconColor: "red",
         title: "Todos los campos deben ser completados",
+        customClass: {
+          confirmButton:
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
+        },
       });
       return;
     }
@@ -28,24 +32,32 @@ export async function register(userData: ISignUpData) {
       },
       body: JSON.stringify(userData),
     });
-    console.log(userData);
     if (res.ok) {
-      return res.json();
+      const data = await res.json();
+      return data;
     } else {
-      Toast.fire({
+      Swal.fire({
         icon: "error",
         iconColor: "red",
         title: "No se pudo completar el registro",
       });
+      return;
     }
-  } catch (error: any) {
-    Toast.fire({
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Error desconocido en el registro";
+
+    Swal.fire({
       icon: "error",
       iconColor: "rose",
+      text: errorMessage,
       title: "No se pudo completar el registro",
     });
 
-    throw new Error(error);
+    console.error("Error en el registro:", errorMessage);
+    throw error;
   }
 }
 
@@ -107,45 +119,6 @@ export async function login(userData: IUserData) {
     });
 
     console.error("Error en el login:", errorMessage);
-    throw error;
-  }
-}
-
-export async function sendPqr(values: IpqrProps) {
-  try {
-    await fetch(`${API_URL}/pqr`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-    Swal.fire({
-      icon: "success",
-      iconColor: "green",
-      text: "Bienvenido de nuevo.",
-      title: "¡Inicio de sesión exitoso!",
-      customClass: {
-        confirmButton:
-          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error al enviar el formulario";
-
-    Swal.fire({
-      icon: "error",
-      iconColor: "rose",
-      text: errorMessage,
-      title: "No se logró enviar el formulario",
-      customClass: {
-        confirmButton:
-          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-    });
-
-    console.error("Error al enviar el formulario:", errorMessage);
     throw error;
   }
 }
