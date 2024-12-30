@@ -1,23 +1,20 @@
-import {
-  ConflictException,
-  HttpException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { FilesUploadService } from 'src/files-upload/files-upload.service';
 import { isUUID } from 'class-validator';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class PetsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly filesUploadService: FilesUploadService,
+    private emailService: EmailService,
   ) {}
   async create(createPetDto: CreatePetDto, file: Express.Multer.File) {
-    const { userId } = createPetDto;
+    const { name, type, genero, status, description, userId } = createPetDto;
 
     const userFound = await this.prisma.user.findUnique({
       where: {
@@ -35,6 +32,21 @@ export class PetsService {
     const createPet = await this.prisma.pets.create({
       data: { ...createPetDto, imgUrl, userId: userFound.id },
     });
+
+    await this.emailService.sendMail(
+      userFound.email,
+      'Registro de mascota exitoso',
+      `Hola ${userFound.name},\n\n¡Gracias por registrar a tu mascota en nuestra plataforma! Aquí están los detalles del registro:\n\n` +
+        `Nombre: ${name}\n` +
+        `Tipo: ${type}\n` +
+        `Genero: ${genero}\n` +
+        `Descripción: ${description}\n` +
+        `Estado: ${status}\n\n` +
+        (imgUrl ? `Imagen: ${imgUrl}\n\n` : '') +
+        `¡Gracias por ser parte de nuestra comunidad! Si tienes alguna pregunta, no dudes en contactarnos.\n\n` +
+        `Saludos,\nEl equipo de Huellas Unidas.`,
+    );
+
     return createPet;
   }
 

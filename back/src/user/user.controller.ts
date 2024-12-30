@@ -54,4 +54,13 @@ export class UserController {
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     return await this.userService.remove(id);
   }
+
+  @Get(':id/pets')
+  async userPets(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.userService.userPets(id);
+  }
+  @Get(':id/posts')
+  async userPosts(@Param('id', ParseUUIDPipe) id: string) { 
+    return await this.userService.userPosts(id);
+  }
 }

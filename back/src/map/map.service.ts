@@ -16,4 +16,15 @@ export class MapService {
 
     return location;
   }
+  async getAllLocations() {
+    const locations = await this.prisma.location.findMany({
+      include: { post: true },
+    });
+
+    if (locations.length === 0) {
+      throw new NotFoundException('No se encontraron ubicaciones registradas');
+    }
+
+    return locations;
+  }
 }

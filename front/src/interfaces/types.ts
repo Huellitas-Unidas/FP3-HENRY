@@ -10,7 +10,8 @@ export interface IPost {
   location?: {
     address: string;
     latitude: number;
-    longitude: number; } | null; // Permitir que sea null si no hay ubicación
+    longitude: number;
+  } | null; // Permitir que sea null si no hay ubicación
   userId?: string;
 }
 
@@ -53,18 +54,19 @@ export interface IUserData {
 } //! es igual a IUserLogin
 
 export interface ISignUpData {
+  name: string;
   email: string;
   password: string;
-  name: string;
-  confirm?: string; //xara que no llore verificar flujo
-}
+  confirm?: string;
+  phone?: number;
+} //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
-export interface IUserLogin {
-  email: string;
-  password: string;
-} //! es igual a IUserData
+// export interface IUserLogin {
+//   email: string;
+//   password: string;
+// } //! es igual a IUserData
 
 export interface IpqrProps {
   fullName: string;
@@ -74,36 +76,21 @@ export interface IpqrProps {
   userId?: string;
 }
 
-export interface IPetValidateErrors {
-  name: string;
-  type: string;
-  genre: string;
-  description: string;
-} //!
-
 export interface IpetForm {
+  id?: string;
   name: string;
   type: string;
-  genre: string;
-  description: string;
-  status: string;
-  imgUrl: string;
-}
-
-export interface IpetBack {
-  name: string;
-  type: string;
-  genre: string;
+  raza: string;
   description: string;
   status: string;
   imgUrl: string;
   userId?: number;
-  id: number;
 }
 
-
-export interface IUserSession {
-  id: number;
+export interface IUserBack {
+  id: string;
   name: string;
   email: string;
+  phone?: string; //number?
+  createdAt: string;
 }

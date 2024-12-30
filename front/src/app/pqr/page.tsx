@@ -48,7 +48,7 @@ const Pqr = () => {
   return (
     <section className="flex flex-col place-items-center mt-8 mb-8">
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
-        <h1 className="text-xl text-center font-bold mt-2 mb-8 w-9/1212">
+        <h1 className="text-xl text-center font-bold mt-2 mb-6 w-9/1212">
           Ayúdanos a Mejorar: Sugerencias y Opiniones
         </h1>
         <p className="mb-6 text-center">
@@ -56,7 +56,7 @@ const Pqr = () => {
           solicitud. ¡Gracias! 😊{" "}
         </p>
         <form
-          className="space-y-6 flex flex-col gap-2 items-center text-lg w-full"
+          className="space-y-3 flex flex-col gap-2 items-center text-lg w-full"
           onSubmit={handleSubmit}
         >
           <input
