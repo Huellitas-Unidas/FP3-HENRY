@@ -1,17 +1,16 @@
 "use client";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { useFormik } from "formik";
-import React from "react";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { postPet } from "../api/petAPI";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
-import { useAuth } from "../AuthContext";
+import { useState } from "react";
 
 //! Raza --> Genero
 
 const PetRegister: React.FC = () => {
-  const { userId } = useAuth();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +20,7 @@ const PetRegister: React.FC = () => {
       raza: "",
       description: "",
       file: null,
-      userId: userId || "",
+      userId: "7d8b2042-4caa-4b53-aa98-a1aac8fa0f94", //!
       status: "none",
     },
     validate: (values) => {
@@ -51,6 +50,7 @@ const PetRegister: React.FC = () => {
         formData.append("raza", values.raza);
         formData.append("description", values.description);
         formData.append("status", values.status);
+
         formData.append("userId", values.userId);
         if (values.file) {
           formData.append("file", values.file);
@@ -58,7 +58,7 @@ const PetRegister: React.FC = () => {
           throw new Error("El archivo no puede ser nulo");
         }
 
-        const response = await postPet(formData); // Servicio para enviar FormData
+        const response = await postPet(formData);
         console.log(response);
 
         resetForm();
@@ -81,7 +81,10 @@ const PetRegister: React.FC = () => {
     <div className="flex flex-col place-items-center my-8 px-4">
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
-          onSubmit={formik.handleSubmit}
+          onSubmit={(e) => {
+            setIsSubmitted(true);
+            formik.handleSubmit(e);
+          }}
           className="flex flex-col gap-4 items-center text-lg"
         >
           <input
@@ -92,7 +95,7 @@ const PetRegister: React.FC = () => {
             onChange={formik.handleChange}
             className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           />
-          {formik.errors && (
+          {isSubmitted && formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.name}
             </span>
@@ -128,12 +131,12 @@ const PetRegister: React.FC = () => {
               <option value="Macho">Macho</option>
             </select>
           </div>
-          {formik.errors && (
+          {isSubmitted && formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.type}
             </span>
           )}
-          {formik.errors && (
+          {isSubmitted && formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.raza}
             </span>
@@ -147,15 +150,15 @@ const PetRegister: React.FC = () => {
             onChange={formik.handleChange}
             className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           />
-          {formik.errors && (
+          {isSubmitted && formik.errors && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.description}
             </span>
           )}
 
-          <span className="text-gray-400 text-base text-center">
+          <div className="flex flex-row gap-2">
             <MdAddPhotoAlternate className="text-2xl text-gray-500 mb-4" />
-            Sube una foto de tu mascota
+
             <input
               type="file"
               name="file"
@@ -167,8 +170,9 @@ const PetRegister: React.FC = () => {
               }}
               className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
             />
-          </span>
-          {formik.errors.file && (
+          </div>
+
+          {isSubmitted && formik.errors.file && (
             <span className="text-red-500 text-sm">{formik.errors.file}</span>
           )}
 
