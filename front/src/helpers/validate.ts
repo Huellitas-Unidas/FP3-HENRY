@@ -1,6 +1,6 @@
-import { IValidateErrors } from "@/interfaces/types";
+import { ISignUpData, IValidateErrors } from "@/interfaces/types";
 
-const validate = (values: IValidateErrors): IValidateErrors => {
+const validate = (values: ISignUpData): IValidateErrors => {
   const errors: IValidateErrors = {};
 
   (Object.keys(values) as (keyof IValidateErrors)[]).forEach((field) => {
@@ -26,12 +26,12 @@ const validate = (values: IValidateErrors): IValidateErrors => {
   if (values.confirm && values.confirm !== values.password) {
     errors.confirm = "Las contraseñas no coinciden.";
   }
-{/*}
-  if (values.phone && !/^\+?\d{7,15}$/.test(values.phone)) {
+
+  if (values.phone && !/^\+?\d{7,15}$/.test(`${values.phone}`)) {
     errors.phone =
       "El teléfono debe ser válido (entre 7 y 15 dígitos, con opcional +).";
   }
-*/}
+
   return errors;
 };
 
