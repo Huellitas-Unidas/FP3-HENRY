@@ -56,6 +56,7 @@ export interface ISignUpData {
   email: string;
   password: string;
   name: string;
+  confirm?: string; //xara que no llore verificar flujo
 }
 
 export type TSignUpErrors = Partial<ISignUpData>;
@@ -98,4 +99,11 @@ export interface IpetBack {
   imgUrl: string;
   userId?: number;
   id: number;
+}
+
+
+export interface IUserSession {
+  id: number;
+  name: string;
+  email: string;
 }

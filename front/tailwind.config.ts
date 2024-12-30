@@ -14,6 +14,21 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         green500: "#3c9083",
+        customGreen: {
+          50: "#F3FAF8",
+          100: "#D7F0E9",
+          200: "#B0DFD4",
+          300: "#74C3B3",
+          400: "#55AC9D",
+          500: "#3C9083",
+          600: "#2E736A",
+          700: "#285D57",
+          800: "#244B47",
+          900: "#21403D",
+          950: "#0E2523",
+        },
+        snowWhite: '#FFFAFA',
+        pearl: '#F5F3F2',
       },
 
       keyframes: {

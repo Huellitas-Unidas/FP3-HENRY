@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.1.1",
+    "@stripe/stripe-js": "^5.4.0",
     "@sweetalert2/themes": "^5.0.18",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",

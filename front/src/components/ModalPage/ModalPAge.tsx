@@ -18,7 +18,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     contactInfo: '',
     dateLost: '',
     dateLostISO: '',
-    location: { address: '', latitude: '', longitude: '' }, // <- CAMBIO: Inicializar como strings
+    location: { address: '', latitude: '', longitude: '' }, 
     file: null as File | null,
     status: 'perdido',
     userId: '06e3b51d-e39b-44ba-ae68-079607ffb0db',
