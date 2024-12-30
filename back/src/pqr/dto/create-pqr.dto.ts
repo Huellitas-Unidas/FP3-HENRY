@@ -2,7 +2,7 @@ import { IsEmail, IsIn, IsString, IsUUID } from 'class-validator';
 
 export class CreatePqrDto {
   @IsString()
-  name: string;
+  fullname: string;
 
   @IsEmail()
   email: string;
