@@ -42,7 +42,10 @@ export class PostsService {
     }
 
     if (!file) {
-      throw new HttpException('Se debe proporcionar una foto para el post', 400);
+      throw new HttpException(
+        'Se debe proporcionar una foto para el post',
+        400,
+      );
     }
 
     const uploadResult = await this.filesUploadService.uploadPostImage(file);
@@ -60,7 +63,7 @@ export class PostsService {
         },
       });
 
-      locationId = newLocation.id; 
+      locationId = newLocation.id;
     }
 
     const post = await this.prisma.post.create({
@@ -91,7 +94,7 @@ export class PostsService {
       where: { id },
       include: { location: true },
     });
-
+4
     if (!post) {
       throw new HttpException(`Post con ID ${id} no encontrado`, 404);
     }
