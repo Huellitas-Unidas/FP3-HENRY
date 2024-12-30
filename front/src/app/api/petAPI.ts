@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 if (!API_URL) {
-  throw new Error("API_URL is not defined"); // Validación única para evitar repetirla
+  throw new Error("API_URL is not defined");
 }
 
 // post - registrar una mascota
@@ -49,8 +49,10 @@ export const postPet = async (formData: FormData): Promise<IpetForm> => {
 
 // read - obtener las mascotas relacionadas al usuario
 export async function getPetsByUser(): Promise<IpetForm[] | null> {
+  const userId = "042138bf-1613-4e96-8be0-e3467ab81fca"; //! Hardcodeado por ahora
+
   try {
-    const response = await fetch(`${API_URL}/user/pets`, {
+    const response = await fetch(`${API_URL}/user/${userId}/pets`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -60,7 +62,6 @@ export async function getPetsByUser(): Promise<IpetForm[] | null> {
     }
 
     const data = await response.json();
-    console.log(data); //!
     return data || null;
   } catch (error) {
     const errorMessage =
