@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { IPost } from '@/interfaces/types'; // Asegúrate de importar tu interfaz IPost
+import { IPost } from '@/interfaces/types'; 
 import { v4 as uuidv4 } from 'uuid';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         photoUrl,
         userId,
         status,
-        location: location || '',
+        location: location || null,
       };
 
      
