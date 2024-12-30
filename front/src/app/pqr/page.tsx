@@ -5,16 +5,17 @@ import { postPqr } from "../api/pqrAPI";
 
 const Pqr = () => {
   const [pqrData, setPqrData] = useState({
-    fullName: "",
+    fullname: "",
     email: "",
     type: "",
     description: "",
+    userId: "042138bf-1613-4e96-8be0-e3467ab81fca", //! Hardcodeado por ahora
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
-      !pqrData.fullName ||
+      !pqrData.fullname ||
       !pqrData.email ||
       !pqrData.type ||
       !pqrData.description
@@ -31,6 +32,13 @@ const Pqr = () => {
       return;
     }
     postPqr(pqrData);
+    setPqrData({
+      fullname: "",
+      email: "",
+      type: "",
+      description: "",
+      userId: "042138bf-1613-4e96-8be0-e3467ab81fca",
+    }); // para vaciar los campos
   };
 
   const handleChange = (
@@ -63,8 +71,8 @@ const Pqr = () => {
             type="text"
             placeholder="Lulu Alvarado"
             className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-            name="fullName"
-            value={pqrData.fullName}
+            name="fullname"
+            value={pqrData.fullname}
             onChange={handleChange}
           />
           <input
@@ -84,7 +92,7 @@ const Pqr = () => {
             <option value="" disabled>
               Tipo
             </option>
-            <option value="peticion">Peticiónes</option>
+            <option value="peticion">Peticiones</option>
             <option value="queja">Quejas</option>
             <option value="reclamo">Reclamos</option>
           </select>
