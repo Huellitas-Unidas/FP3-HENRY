@@ -1,6 +1,12 @@
-import { IsIn, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsIn, IsString, IsUUID } from 'class-validator';
 
 export class CreatePqrDto {
+  @IsString()
+  fullname: string;
+
+  @IsEmail()
+  email: string;
+
   @IsString()
   type: string;
 
