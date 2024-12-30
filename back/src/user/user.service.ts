@@ -130,7 +130,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    return  user
+    return  user.pets
   }
   async userPosts(id: string) {     
     const user = await this.prisma.user.findUnique({
@@ -142,6 +142,6 @@ export class UserService {
     if (!user) {
       throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    return  user
+    return  user.posts
   }
 }
