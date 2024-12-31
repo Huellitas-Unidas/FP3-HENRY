@@ -58,21 +58,8 @@ export interface ISignUpData {
   email: string;
   password: string;
   confirm?: string;
-<<<<<<< HEAD
   phone: string;
 } //! register
-=======
-  phone: string | number;
-}
-
-export interface IValidateErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  confirm?: string;
-  phone?: string | number;
-}
->>>>>>> 73daf11742903d8a45abb60fd7daf2049bb3ba6e
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
@@ -113,3 +100,4 @@ export interface IUserSessionDt {
   email: string;   
   name?: string;   
 }
+
