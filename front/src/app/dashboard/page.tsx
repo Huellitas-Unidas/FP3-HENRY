@@ -15,6 +15,8 @@ import { useSession } from "next-auth/react";
 
 const Dashboard = () => {
   const [pets, setPets] = useState<IpetForm[] | null>([]);
+  console.log(pets);
+
   const session = useSession();
   // const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto = session.data?.user?.image || emptyProfile;
@@ -39,7 +41,10 @@ const Dashboard = () => {
     const fetch = async () => {
       try {
         const userPets = await getPetsByUser();
+        // console.log(userPets);
+
         setPets(userPets);
+        // console.log(pets);
       } catch (error) {
         console.error(error);
       }
@@ -107,46 +112,46 @@ const Dashboard = () => {
 
         {pets !== null ? (
           <div className="grid grid-cols-3 gap-4">
-            {pets &&
-              pets.map((animal) => {
-                return (
-                  <div
-                    key={animal.name}
-                    className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
-                  >
-                    <Image
-                      src={animal.name}
-                      alt="animalImg"
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
-                    <div className="flex-grow mt-2">
-                      <p className="font-semibold">{animal.name}</p>
-                      <p>Tipo: {animal.type}</p>
-                      {/* <p>{animal.genre}</p> Property 'genre' does not exist on type 'IpetBack'. */}
-                      <p>{animal.description}</p>
-                      <p>{animal.status}</p>
-                    </div>
-                    <button
-                      onClick={() =>
-                        handleUpdateStatus(animal.id ? Number(animal.id) : null)
-                      }
-                      className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
-                    >
-                      <RiEmotionSadLine className="text-lg" />
-                      Marcar como perdida
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleDeletePet(animal.id ? Number(animal.id) : null)
-                      }
-                      className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
-                    >
-                      <TiDeleteOutline className="text-lg" />
-                      Eliminar mascota
-                    </button>
+            {pets.map((animal) => {
+              return (
+                <div
+                  key={animal.name}
+                  className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
+                >
+                  <Image
+                    src={animal.imgUrl}
+                    alt="animalImg"
+                    className="w-full h-32 object-cover rounded-lg"
+                    width={500}
+                    height={500}
+                  />
+                  <div className="flex-grow mt-2">
+                    <p className="font-semibold">{animal.name}</p>
+                    <p>Tipo: {animal.type}</p>
+                    <p>{animal.genero}</p>
+                    <p>{animal.description}</p>
                   </div>
-                );
-              })}
+                  <button
+                    onClick={() =>
+                      handleUpdateStatus(animal.id ? Number(animal.id) : null)
+                    }
+                    className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
+                  >
+                    <RiEmotionSadLine className="text-lg" />
+                    Marcar como perdida
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleDeletePet(animal.id ? Number(animal.id) : null)
+                    }
+                    className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
+                  >
+                    <TiDeleteOutline className="text-lg" />
+                    Eliminar mascota
+                  </button>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p>No has registrado ninguna mascota...</p> //!

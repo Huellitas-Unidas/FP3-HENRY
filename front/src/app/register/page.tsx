@@ -23,12 +23,16 @@ const Register: React.FC = () => {
       confirm: "",
       phone: "",
     },
-    validate,
-    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+    validate: validate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSubmit: async ({ confirm, phone, ...userData }, { resetForm }) => {
       try {
-        console.log("Datos enviados al backend:", userData);
+        const formattedUserData = {
+          ...userData,
+          phone: Number(phone), // Convertir phone a número
+        };
 
-        const registrationResult = await register(userData);
+        const registrationResult = await register(formattedUserData);
 
         if (registrationResult) {
           Swal.fire({

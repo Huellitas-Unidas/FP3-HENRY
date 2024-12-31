@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 export class StripeService {
   constructor(@Inject('STRIPE') private readonly stripe: Stripe) {}
 
-  async createCheckoutSession(amount: number, currency: string) {
+  async createCheckoutSession(amount: number, currency: string, email: string) {
 
     try {
       const session = await this.stripe.checkout.sessions.create({
@@ -15,6 +15,7 @@ export class StripeService {
           {
             price_data: {
               currency,
+              
               product_data: {
                 name: 'Sample Product',
               },
@@ -23,7 +24,8 @@ export class StripeService {
             quantity: 1,
           },
         ],
-        mode: 'payment',
+        mode: 'payment',  
+        customer_email: email,
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
       });
