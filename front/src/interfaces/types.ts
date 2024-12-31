@@ -12,7 +12,7 @@ export interface IPost {
     latitude: number;
     longitude: number;
   } | null; // Permitir que sea null si no hay ubicación
-  userId?: string;
+  userId: string;
 }
 
 export interface IPostAnimal {
@@ -58,7 +58,7 @@ export interface ISignUpData {
   email: string;
   password: string;
   confirm?: string;
-  phone?: number;
+  phone: string;
 } //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;
@@ -93,4 +93,10 @@ export interface IUserBack {
   email: string;
   phone?: string; //number?
   createdAt: string;
+}
+
+export interface IUserSessionDt {
+  id: number;      
+  email: string;   
+  name?: string;   
 }

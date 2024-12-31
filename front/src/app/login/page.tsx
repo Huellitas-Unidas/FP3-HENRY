@@ -8,8 +8,8 @@ import GreenButton from "@/components/Buttons/GreenButton";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { IUserData } from "@/interfaces/types";
-import validate from "@/helpers/validate";
-import { login } from "../api/authAPI";
+import validate from "@/helpers/validateLogin";
+import { login } from "@/app/api/authAPI";
 import { signIn } from "next-auth/react";
 
 const Login: React.FC = () => {
@@ -22,6 +22,8 @@ const Login: React.FC = () => {
       password: "",
     },
     validate,
+    validateOnChange: true,
+    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
         const response = await login(values);
@@ -72,9 +74,10 @@ const Login: React.FC = () => {
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           />
-          {isSubmitted && formik.errors.email && (
+          {isSubmitted && formik.touched.email && formik.errors.email && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.email}
             </span>
@@ -86,9 +89,10 @@ const Login: React.FC = () => {
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
           />
-          {isSubmitted && formik.errors.password && (
+          {isSubmitted && formik.touched.password && formik.errors.password && (
             <span className="text-red-500 text-sm text-center">
               {formik.errors.password}
             </span>

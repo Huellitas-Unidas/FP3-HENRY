@@ -4,13 +4,13 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { createCheckoutSession } from "@/app/api/donationsAPI";
-import { IUserSession } from "@/interfaces/types";
+import { IUserSessionDt } from "@/interfaces/types";
 import DonationsCarousel from "./DonationsCarousel";
 
 const SUCCESS_URL = "API_URL/stripe/success";
 const CANCEL_URL = "API_URL/stripe/cancel";
 
-const Donations = ({ userSession }: { userSession?: IUserSession | null }) => {
+const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => {
   const [amount, setAmount] = useState<number>(25); 
   const [email, setEmail] = useState<string>("");
   const [emailError, setEmailError] = useState<string | null>(null);
