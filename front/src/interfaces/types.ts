@@ -58,8 +58,21 @@ export interface ISignUpData {
   email: string;
   password: string;
   confirm?: string;
+<<<<<<< HEAD
   phone: string;
 } //! register
+=======
+  phone: string | number;
+}
+
+export interface IValidateErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirm?: string;
+  phone?: string | number;
+}
+>>>>>>> 73daf11742903d8a45abb60fd7daf2049bb3ba6e
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
@@ -69,18 +82,18 @@ export type TSignUpErrors = Partial<ISignUpData>;
 // } //! es igual a IUserData
 
 export interface IpqrProps {
-  fullName: string;
+  fullname: string;
   email: string;
   type: string;
   description: string;
-  userId?: string;
+  userId: string;
 }
 
 export interface IpetForm {
   id?: string;
   name: string;
   type: string;
-  raza: string;
+  genero: string;
   description: string;
   status: string;
   imgUrl: string;
@@ -91,7 +104,7 @@ export interface IUserBack {
   id: string;
   name: string;
   email: string;
-  phone?: string; //number?
+  phone?: string | number;
   createdAt: string;
 }
 

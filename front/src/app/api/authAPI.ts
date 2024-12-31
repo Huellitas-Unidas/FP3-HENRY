@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 //Operaciones relacionadas con usuarios: registro, login, obtener perfil, etc.
-/* eslint-disable @typescript-eslint/no-explicit-any */
 //import { Toast } from "@/helpers/index";
 import { ISignUpData, IUserData } from "@/interfaces/types";
 import Swal from "sweetalert2";
