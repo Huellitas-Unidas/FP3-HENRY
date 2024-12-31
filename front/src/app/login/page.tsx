@@ -115,7 +115,9 @@ const Login: React.FC = () => {
             />
             Ingresar con Google
           </button>
-          <GreenButton props="Loguearme" />
+          <GreenButton
+            props={formik.isSubmitting ? "Logueando..." : "Loguearme"}
+          />
         </form>
       </div>
     </div>

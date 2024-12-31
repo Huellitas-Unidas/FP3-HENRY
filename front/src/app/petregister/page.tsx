@@ -5,9 +5,11 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 import { postPet } from "../api/petAPI";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const PetRegister: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -38,7 +40,7 @@ const PetRegister: React.FC = () => {
       }
       return errors;
     },
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       try {
         const formData = new FormData();
         formData.append("name", values.name);
@@ -54,7 +56,7 @@ const PetRegister: React.FC = () => {
         formData.append("userId", values.userId);
 
         await postPet(formData);
-        resetForm();
+        router.push("/dashboard");
       } catch (error) {
         Swal.fire({
           icon: "error",
@@ -172,7 +174,9 @@ const PetRegister: React.FC = () => {
             </span>
           )}
 
-          <GreenButton props="Añadir" />
+          <GreenButton
+            props={formik.isSubmitting ? "Añadiendo..." : "Añadir"}
+          />
         </form>
       </div>
     </div>
