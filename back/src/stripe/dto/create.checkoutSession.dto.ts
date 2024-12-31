@@ -1,10 +1,13 @@
-import { IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsNumber, IsString, IsUrl } from 'class-validator';
 
 export class CreateCheckoutSessionDto {
   @IsNumber()
   amount: number;
     @IsNumber()
-  quantity: number
+  quantity: number;
+
+  @IsEmail()
+  email: string;
 
   @IsString()
   currency: string;
