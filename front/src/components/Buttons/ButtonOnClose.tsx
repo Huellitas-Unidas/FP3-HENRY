@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const ButtonOnClose = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [posts, setPosts] = useState<IPost[]>([]); // Estado para almacenar los posts
+  const [posts, setPosts] = useState<IPost[]>([]);   // Estado para almacenar los posts
 
 
   const handleOpenModal = () => {
@@ -30,7 +30,7 @@ const ButtonOnClose = () => {
     try {
       const response = await fetch(`${API_URL}/posts`);
       const data = await response.json();
-      setPosts(data); // Actualizar posts en el estado
+      setPosts(data);        // Actualizar posts en el estado
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
