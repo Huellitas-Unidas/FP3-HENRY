@@ -68,7 +68,7 @@ const Navbar = () => {
         </Link>
         <div className="hidden w-3/5 items-center justify-evenly font-semibold md:flex">
           <Link href="/lostandfound">Buscados / Encontrados</Link>
-          <Link href="not-found">Ayudanos donando</Link>
+          <Link href="donations">Ayudanos donando</Link>
           <Link href="/aboutUs">Sobre Huellas Unidas</Link>
           <Link href="not-found">🐾Recomendaciones</Link>
         </div>

@@ -4,10 +4,10 @@ import Link from "next/link";
 
 export default function NotFound() {
     return (
-        <div className="h-screen w-screen bg-white flex items-center justify-center">
+        <div className="h-screen w-screen bg-snowWhite flex items-center justify-center">
             
-            <div className="container flex flex-col md:flex-row items-center justify-center px-3  max-w-2xl">
-                <div className="max-w-lg flex flex-col items-center mb-16">
+            <div className="container flex flex-col md:flex-row items-center justify-center max-w-2xl">
+                <div className="max-w-lg flex flex-col items-center mb-4">
                     <Image
                         src="/images/notFound.png"
                         alt="Not Found 404, vamos al inicio"
@@ -21,7 +21,7 @@ export default function NotFound() {
 
                     <Link
                         href="/"
-                        className="mt-8 px-4 py-2 text-md font-medium leading-5 shadow-xl text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-[#285D57] active:bg-[#74C3B3] hover:bg-[#3C9083]"
+                        className="mt-4 px-4 py-2 text-md font-medium leading-5 shadow-xl text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-[#285D57] active:bg-[#74C3B3] hover:bg-[#3C9083]"
                     >
                         Vamos al inicio
                     </Link>

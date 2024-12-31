@@ -6,7 +6,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   try {
     if (!API_URL) {
       console.error('API_URL is not defined');
-      return NextResponse.json({ error: 'Internal server error: API_URL is not defined' }, { status: 500 });
+      return NextResponse.json({ error: 'Error interno del Servidor: API_URL no esta definida' }, { status: 500 });
     }
 
     const response = await fetch(`${API_URL}/posts/${params.id}`, {
@@ -15,7 +15,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     });
 
     if (!response.ok) {
-      return NextResponse.json({ error: 'Failed to fetch post' }, { status: response.status });
+      return NextResponse.json({ error: 'No fue posible encontrar el post' }, { status: response.status });
     }
 
     const post = await response.json();
@@ -26,27 +26,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function updatePostStatus(id: string, status: string) {
-  try {
-    const response = await fetch(`${API_URL}/posts/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to update post with ID ${id}`);
-    }
-
-    return await response.json(); 
-  } catch (error) {
-    console.error('Error updating post status:', error);
-    throw error;
-  }
-}
-
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+/*export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     if (!API_URL) {
       console.error('API_URL is not defined');
@@ -67,4 +48,4 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     console.error('Error deleting post:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+} */

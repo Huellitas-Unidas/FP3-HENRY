@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
-import { register } from "../api/authAPI"; // Servicio de registro
+
 import Swal from "sweetalert2";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { ISignUpData } from "@/interfaces/types";
-import validate from "@/helpers/validate"; // Validación importada
+import validate from "@/helpers/validate";
+import { register } from "../api/authAPI";
 
 const Register: React.FC = () => {
   const router = useRouter();
@@ -40,8 +42,8 @@ const Register: React.FC = () => {
             text: "Ya puedes iniciar sesión.",
             customClass: {
               confirmButton:
-                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-            },
+                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            }
           });
           resetForm();
           router.push("/login");
@@ -60,11 +62,11 @@ const Register: React.FC = () => {
           text: errorMessage,
           customClass: {
             confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          }
         });
       }
-    },
+    }
   });
 
   return (
@@ -133,7 +135,7 @@ const Register: React.FC = () => {
             placeholder="Teléfono"
             type="number"
             name="phone"
-            value={formik.values.phone}
+            value={formik.values.phone} 
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />

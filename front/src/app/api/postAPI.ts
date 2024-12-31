@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 if (!API_URL) {
-  throw new Error('API_URL is not defined'); // Validación única para evitar repetirla
+  throw new Error('API_URL is not defined');     // Validación única para evitar repetirla
 }
 
 // GET: Obtener un post por ID
@@ -30,10 +30,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 if (!API_URL) {
-  throw new Error('API_URL is not defined');
+  throw new Error('API_URL no esta definida');
 }
 
-// Función para actualizar el estado de un post
+// Función para actualizar el estado perdido o encontrado de un post
 export async function updatePostStatus(id: string, status: string) {
   try {
     const response = await fetch(`${API_URL}/posts/${id}`, {
@@ -44,18 +44,25 @@ export async function updatePostStatus(id: string, status: string) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to update post with ID ${id}`);
+      throw new Error(errorData.error || `Error al actualizar el Post por ID ${id}`);
     }
 
     return await response.json(); 
   } catch (error) {
-    console.error('Error updating post status:', error);
+    console.error('Error actualizando el post por status:', error);
     throw error;
   }
 }
 
+
+
+
+
+
+
+
 // DELETE: Eliminar un post por ID
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+/*export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     const response = await fetch(`${API_URL}/posts/${params.id}`, {
       method: 'DELETE',
@@ -75,7 +82,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
+*/
 
 
 

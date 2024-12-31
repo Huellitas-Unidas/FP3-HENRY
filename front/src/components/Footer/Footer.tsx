@@ -26,7 +26,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="not-found" className="hover:underline me-4 md:me-6">
+              <Link href="donations" className="hover:underline me-4 md:me-6">
                 Ayudanos donando
               </Link>
             </li>
