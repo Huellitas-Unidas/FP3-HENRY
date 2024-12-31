@@ -30,18 +30,23 @@ export const validatePost = (formData: Partial<IPost & { file?: File | null }>):
 
  
   if (formData.location) {
-    if (!formData.location.address || formData.location.address.trim().length === 0) {
-      errors['location.address'] = 'La dirección es obligatoria.';
-    }
     if (
-      typeof formData.location.latitude !== 'number' ||
-      typeof formData.location.longitude !== 'number' ||
-      isNaN(formData.location.latitude) ||
-      isNaN(formData.location.longitude)
+      !formData.location.address ||
+      formData.location.address.trim().length === 0
     ) {
-      errors['location.latitude'] = 'Latitud y longitud deben ser números válidos.';
+      errors["location.address"] = "La dirección es obligatoria.";
+    }
+  
+    // Valida que latitude y longitude sean números válidos
+    if (
+      isNaN(Number(formData.location.latitude)) ||
+      isNaN(Number(formData.location.longitude))
+    ) {
+      errors["location.latitude"] =
+        "Latitud y longitud deben ser números válidos.";
     }
   }
+  
 
   if (!formData.photoUrl && (!formData.file || formData.file === null)) {
     errors.file = 'Debe adjuntar una imagen.';
