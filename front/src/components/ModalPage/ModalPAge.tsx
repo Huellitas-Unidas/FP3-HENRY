@@ -5,12 +5,13 @@ import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { getUserId } from "@/helpers/userId";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface ModalPageProps {
-  // Definición de la interfaz para las props
+
   onClose: () => void;
   onRefreshList: () => void;
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,28 +36,29 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
 
   // Verificar el userId del almacenamiento local
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId && storedUserId !== "null") {
-      setFormData((prevState) => ({
-        ...prevState,
-        userId: storedUserId // Actualiza el userId en el estado
-      }));
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error de autenticación",
-        text: "No estás autenticado. Por favor, inicia sesión para continuar.",
-        customClass: {
-          confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-        }
-      }).then(() => {
-        onClose();
-        router.push("/login");
-      });
-    }
-  }, [onClose, router]);
+useEffect(() => {
+  const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+  if (storedUserId) {
+    setFormData((prevState) => ({
+      ...prevState,
+      userId: storedUserId, // Actualiza el userId dinámicamente
+    }));
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Error de autenticación",
+      text: "No estás autenticado. Por favor, inicia sesión para continuar.",
+      customClass: {
+        confirmButton:
+          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
+    }).then(() => {
+      onClose();
+      router.push("/login");
+    });
+  }
+}, [onClose, router]);
+
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -75,11 +77,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         ...prevState,
         location: {
           ...prevState.location,
-          [field]:
-            field === "latitude" || field === "longitude"
-              ? parseFloat(value)
-              : value // Convertir a número si es latitude o longitude
-        }
+          [field]: value,           // Mantén el valor como string para permitir el signo negativo
+        },
       }));
     } else if (name === "dateLost") {
       const isoDate = new Date(value).toISOString(); // Convertir a formato ISO
@@ -117,15 +116,29 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         return;
       }
       // Validar userId antes de enviar el formulario
-      if (!formData.userId) {
-        throw new Error(
-          "No estás autenticado. Por favor, inicia sesión para continuar."
-        );
+      if (!formData.userId || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(formData.userId)) {
+        throw new Error("El ID de usuario no es válido o no fue proporcionado.");
       }
-
+ 
       if (!formData.file) {
         throw new Error("Debe adjuntar una imagen");
       }
+
+      if (
+        !formData.location.address ||
+        !formData.location.latitude ||
+        !formData.location.longitude
+      ) {
+        throw new Error("La ubicación es obligatoria y debe ser válida.");
+      }
+  
+      // Convertir la latitud y longitud a números flotantes y enviarlos como strings
+      const locationData = {
+        address: formData.location.address,
+        latitude: parseFloat(String(formData.location.latitude)) || 0, // Asegurar número flotante
+        longitude: parseFloat(String(formData.location.longitude)) || 0, // Asegurar número flotante
+      };
+      
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -133,7 +146,6 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
       data.append("dateLost", formData.dateLostISO);
-      const locationData = { ...formData.location };
       data.append("location", JSON.stringify(locationData));
       data.append("file", formData.file as File);
       data.append("status", formData.status);
@@ -142,7 +154,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`
+          Authorization: `Bearer ${token}`,
         },
         body: data,
       });
@@ -311,7 +323,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
           <div>
             <label className="text-gray-800 text-sm mb-2 block">Latitud</label>
             <input
-              type="number"
+              type="text"
               name="location.latitude"
               value={formData.location.latitude}
               onChange={handleChange}
@@ -325,7 +337,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
           <div>
             <label className="text-gray-800 text-sm mb-2 block">Longitud</label>
             <input
-              type="number"
+              type="text"
               name="location.longitude"
               value={formData.location.longitude}
               onChange={handleChange}
