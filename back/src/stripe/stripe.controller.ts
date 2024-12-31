@@ -20,9 +20,9 @@ export class StripeController {
     body: {
       amount: number;
       currency: string;
+      email: string;
     },
   ) {
-    console.log('ESTOY PROBANDO', body);
 
     try {
       const { amount, currency } = body;
