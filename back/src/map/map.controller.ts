@@ -9,4 +9,8 @@ export class MapController {
   async getLocation(@Param('postId') postId: string) {
     return await this.mapService.getLocation(postId);
   }
+  @Get('locations')
+  async getAllLocations() {
+    return await this.mapService.getAllLocations();
+  }
 }
