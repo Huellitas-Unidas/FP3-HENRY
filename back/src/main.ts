@@ -6,16 +6,26 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
   const swaggerConfig = new DocumentBuilder()
-  .setTitle('Huellas Unidas')
-  .setDescription('API DEL PROYECTO FINAL')
-  .setVersion('1.0')
-  .addBearerAuth()
-  .build()
+    .setTitle('Huellas Unidas')
+    .setDescription('API DEL PROYECTO FINAL')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig)
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
 
-  SwaggerModule.setup("api", app,document, {customSiteTitle: "Proyecto Huellas Unidas"})
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'Proyecto Huellas Unidas',
+  });
 
   app.enableCors({
     origin: 'http://localhost:3000',
@@ -28,15 +38,8 @@ async function bootstrap() {
     next();
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-
   const PORT = process.env.PORT || 4000;
+
   await app.listen(PORT);
   console.log(`🚀 Backend corriendo en http://localhost:${PORT}/`);
 }

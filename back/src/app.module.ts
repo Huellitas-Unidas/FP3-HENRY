@@ -9,18 +9,25 @@ import { DonationModule } from './donation/donation.module';
 import { PostsModule } from './posts/posts.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 import { PetsModule } from './pets/pets.module';
-
+import { StripeModule } from './stripe/stripe.module';
+import { ConfigModule } from '@nestjs/config';
+import { PqrModule } from './pqr/pqr.module';
 
 @Module({
   imports: [
     UserModule,
+    PostsModule,
+    PetsModule,
+    ChatbotModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    StripeModule,
     NotificationsModule,
     MapModule,
     AdministrationModule,
     DonationModule,
-    PostsModule,
-    ChatbotModule,
-    PetsModule
+    PqrModule,
   ],
   controllers: [AppController],
   providers: [AppService],
