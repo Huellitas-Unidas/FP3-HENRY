@@ -12,7 +12,7 @@ export interface IPost {
     latitude: number;
     longitude: number;
   } | null; // Permitir que sea null si no hay ubicación
-  userId?: string;
+  userId: string;
 }
 
 export interface IPostAnimal {
@@ -58,7 +58,7 @@ export interface ISignUpData {
   email: string;
   password: string;
   confirm?: string;
-  phone?: number;
+  phone: string;
 } //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;
@@ -69,18 +69,18 @@ export type TSignUpErrors = Partial<ISignUpData>;
 // } //! es igual a IUserData
 
 export interface IpqrProps {
-  fullName: string;
+  fullname: string;
   email: string;
   type: string;
   description: string;
-  userId?: string;
+  userId: string;
 }
 
 export interface IpetForm {
   id?: string;
   name: string;
   type: string;
-  raza: string;
+  genero: string;
   description: string;
   status: string;
   imgUrl: string;
@@ -91,6 +91,13 @@ export interface IUserBack {
   id: string;
   name: string;
   email: string;
-  phone?: string; //number?
+  phone?: string | number;
   createdAt: string;
 }
+
+export interface IUserSessionDt {
+  id: number;      
+  email: string;   
+  name?: string;   
+}
+

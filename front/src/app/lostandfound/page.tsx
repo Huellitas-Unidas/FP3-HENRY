@@ -9,8 +9,8 @@ import ModalPage from '@/components/ModalPage/ModalPAge';
 const LostAndFound: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [posts, setPosts] = useState<IPost[]>([]); 
-  const [filter, setFilter] = useState<string>('todos'); // Estado para el filtro
-  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]); // Lista filtrada
+  const [filter, setFilter] = useState<string>('todos');    // Estado para el filtro
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);   // Lista filtrada
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);

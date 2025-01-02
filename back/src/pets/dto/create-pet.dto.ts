@@ -8,7 +8,7 @@ export class CreatePetDto {
   type: string;
 
   @IsString()
-  raza: string;
+  genero: string;
 
   @IsString()
   description: string;
