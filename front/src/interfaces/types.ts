@@ -1,5 +1,40 @@
-import { LargeNumberLike } from "crypto";
+export interface IPost {
+  id: string;
+  title: string;
+  description: string;
+  petType: string;
+  dateLost: string;
+  contactInfo: string;
+  photoUrl: string;
+  status: string;
+  location?: {
+    address: string;
+    latitude: number;
+    longitude: number;
+  } | null; // Permitir que sea null si no hay ubicación
+  userId?: string;
+}
 
+export interface IPostAnimal {
+  // Esta interfaz ahora es redundante, usa IPost
+  id?: string; // Haz que id sea opcional aquí también para las solicitudes POST
+  userId?: string;
+  status?: string;
+  title?: string;
+  photoUrl?: string;
+  description?: string;
+  petType?: string;
+  dateLost?: string;
+  contactInfo?: string;
+}
+
+export interface IPostDetailProps {
+  params: {
+    id: string;
+  };
+}
+
+// Las otras interfaces permanecen sin cambios, ya que no están directamente relacionadas con la respuesta de la API.
 export interface ICardAnimal {
   id: number;
   name: string;
@@ -9,89 +44,53 @@ export interface ICardAnimal {
   description: string;
 }
 
-/* export interface IValidateErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  confirm?: string;
-  phone?: string;
-} */
-
 export interface IButton {
   props: string;
 }
 
- export interface IUserData {
+export interface IUserData {
   email?: string;
   password?: string;
-}
+} //! es igual a IUserLogin
 
-/* export interface ILoginErrors {
-  email?: string;
-  password?: string;
-} */
-
-export interface ISignUpData { 
+export interface ISignUpData {
+  name: string;
   email: string;
   password: string;
-  name: string;
-  //address: string;  no necesaria
-  //phone: string;
+  confirm?: string;
+  phone?: number;
+} //! register
+
+export type TSignUpErrors = Partial<ISignUpData>;
+
+// export interface IUserLogin {
+//   email: string;
+//   password: string;
+// } //! es igual a IUserData
+
+export interface IpqrProps {
+  fullName: string;
+  email: string;
+  type: string;
+  description: string;
+  userId?: string;
 }
 
-export type TSignUpErrors = Partial<ISignUpData>;  
-
-//TSignUpErrors -> es el mismo IValidateErrors?
-
-/* export interface IPost {
-  id: string;
-  title: string;
-  content: string;
-  userId: string;
-}  */
-
-
-
-export interface IPetValidateErrors {
+export interface IpetForm {
+  id?: string;
   name: string;
   type: string;
-  genre: string;
+  raza: string;
   description: string;
-} 
-
-export interface IUserLogin {
-  email: string;
-  password: string; 
-}
-
-export interface IPostAnimal { //LOSTANDFOUND
-  id?: number;
-  userId?: string;
-  status?: string;
-  title?: string;
-  photoUrl?: string;
-  description?: string;
-  petType?: string;
-  dateLost? : Date;
-  location?: string;
-  contactInfo?: string
-}
-
-export interface IPost { //POST DEL ANIMAL
-  id: number;
-  userId: string;
   status: string;
-  title: string;
-  photoUrl: string;
-  description: string;
-  petType: string;
-  dateLost: Date;
-  location: string;
-  contactInfo: string
+  imgUrl: string;
+  userId?: number;
 }
 
-export interface IPostDetailProps {
-  params: {
-    id: string; // Parámetro dinámico "id" de la URL
-  };
+export interface IUserBack {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string; //number?
+  createdAt: string;
 }

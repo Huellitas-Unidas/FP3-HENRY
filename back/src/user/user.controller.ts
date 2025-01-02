@@ -5,21 +5,25 @@ import {
   Body,
   Param,
   Delete,
-  ParseIntPipe,
   Put,
   ParseUUIDPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
+@UseInterceptors(FileInterceptor('file'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
+    console.log(createUserDto);
+    
     return this.userService.create(createUserDto);
   }
 

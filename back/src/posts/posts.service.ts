@@ -1,18 +1,23 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { isUUID } from 'class-validator';
 import { FilesUploadService } from '../files-upload/files-upload.service';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly filesUploadService: FilesUploadService,
+    private emailService: EmailService,
   ) {}
 
-  async create(createPostDto: CreatePostDto, file: Express.Multer.File) {
+  async create(
+    createPostDto: CreatePostDto,
+    file: Express.Multer.File | undefined,
+  ) {
     const {
       title,
       description,
@@ -21,6 +26,7 @@ export class PostsService {
       location,
       contactInfo,
       userId,
+      status = 'Perdido',
     } = createPostDto;
 
     if (!isUUID(userId)) {
@@ -35,10 +41,26 @@ export class PostsService {
       throw new HttpException('El usuario no existe', 404);
     }
 
-    let photoUrl = '';
-    if (file) {
-      const uploadResult = await this.filesUploadService.uploadPostImage(file);
-      photoUrl = uploadResult.secure_url;
+    if (!file) {
+      throw new HttpException('Se debe proporcionar una foto para el post', 400);
+    }
+
+    const uploadResult = await this.filesUploadService.uploadPostImage(file);
+    const photoUrl = uploadResult.secure_url;
+
+    let locationId: string | null = null;
+    if (location) {
+      const { latitude, longitude, address } = location;
+
+      const newLocation = await this.prisma.location.create({
+        data: {
+          latitude,
+          longitude,
+          address,
+        },
+      });
+
+      locationId = newLocation.id; 
     }
 
     const post = await this.prisma.post.create({
@@ -47,13 +69,14 @@ export class PostsService {
         description,
         petType,
         dateLost,
-        location,
         contactInfo,
         photoUrl,
         status,
         userId,
-      } 
+        location: locationId ? { connect: { id: locationId } } : undefined,
+      },
     });
+
     return post;
   }
 
@@ -66,6 +89,7 @@ export class PostsService {
 
     const post = await this.prisma.post.findUnique({
       where: { id },
+      include: { location: true },
     });
 
     if (!post) {
@@ -80,15 +104,37 @@ export class PostsService {
 
     const post = await this.prisma.post.findUnique({
       where: { id },
+      include: { location: true },
     });
 
     if (!post) {
       throw new HttpException(`Post con ID ${id} no encontrado`, 404);
     }
 
+    const data: any = { ...updatePostDto };
+
+    if (updatePostDto.location) {
+      const { latitude, longitude, address } = updatePostDto.location;
+      const newLocation = await this.prisma.location.upsert({
+        where: { id: post.location?.id ?? '' },
+        update: {
+          latitude,
+          longitude,
+          address,
+        },
+        create: {
+          latitude,
+          longitude,
+          address,
+        },
+      });
+
+      data.location = { connect: { id: newLocation.id } };
+    }
+
     const updatedPost = await this.prisma.post.update({
       where: { id },
-      data: updatePostDto,
+      data: data,
     });
 
     return {
