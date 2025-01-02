@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
-
 import Swal from "sweetalert2";
 import GreenButton from "@/components/Buttons/GreenButton";
 import { ISignUpData } from "@/interfaces/types";
@@ -73,6 +72,7 @@ const Register: React.FC = () => {
     <div className="flex flex-col place-items-center my-8 px-4">
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
+          noValidate
           onSubmit={(e) => {
             formik.handleSubmit(e);
             setIsSubmitted(true);

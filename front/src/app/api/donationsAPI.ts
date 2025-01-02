@@ -1,8 +1,9 @@
 import { Toast } from "@/helpers";
 //import Swal from "sweetalert2";
 
-export const createCheckoutSession = async ({ amount, email, quantity }: { amount: number; email: string; quantity: number; 
-
+export const createCheckoutSession = async ({ amount, email }: {
+   amount: number,
+   email: string,  
 }): Promise<string | null> => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
  
@@ -13,7 +14,7 @@ export const createCheckoutSession = async ({ amount, email, quantity }: { amoun
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount, email, quantity  }),     
+      body: JSON.stringify({ amount,  email, currency: "usd" }),     
     });
 
     if (!response.ok) {
@@ -33,7 +34,7 @@ export const createCheckoutSession = async ({ amount, email, quantity }: { amoun
     }
 
     const data = await response.json();
-    return data.checkoutUrl;;                   
+    return data.checkoutUrl;                   
   } catch (error) {
     console.error("Error al crear la sesión de pago", error);
       Toast.fire({
