@@ -1,4 +1,4 @@
-import { IpetForm } from "@/interfaces/types";
+import { IpetForm, IUserBack } from "@/interfaces/types";
 import Swal from "sweetalert2";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -48,11 +48,9 @@ export const postPet = async (formData: FormData): Promise<IpetForm> => {
 };
 
 // read - obtener las mascotas relacionadas al usuario
-export async function getPetsByUser(): Promise<IpetForm[] | null> {
-  const userId = "042138bf-1613-4e96-8be0-e3467ab81fca"; //! Hardcodeado por ahora
-
+export async function getPetsByUser(id: string): Promise<IpetForm[] | null> {
   try {
-    const response = await fetch(`${API_URL}/user/${userId}/pets`, {
+    const response = await fetch(`${API_URL}/user/${id}/pets`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -85,10 +83,10 @@ export async function getPetsByUser(): Promise<IpetForm[] | null> {
 }
 
 // update - modificar el estado de una mascota
-export async function updatePetStatus(petId: number): Promise<IpetForm | null> {
+export async function updatePetStatus(petId: string): Promise<IpetForm | null> {
   try {
-    const updateResponse = await fetch(`${API_URL}/user/pets/${petId}`, {
-      method: "PATCH",
+    const updateResponse = await fetch(`${API_URL}/pets/${petId}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "lost" }),
     });
@@ -98,6 +96,15 @@ export async function updatePetStatus(petId: number): Promise<IpetForm | null> {
         `Error ${updateResponse.status}: ${updateResponse.statusText}`
       );
     }
+    Swal.fire({
+      title: "Estado de la mascota actualizado",
+      icon: "success",
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton:
+          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
+    });
     const updatedPet: IpetForm = await updateResponse.json();
     console.log("Mascota actualizada:", updatedPet);
     return updatedPet;
@@ -121,9 +128,9 @@ export async function updatePetStatus(petId: number): Promise<IpetForm | null> {
 }
 
 // delete - eliminar una mascota
-export async function deletePet(petId: number): Promise<void> {
+export async function deletePet(petId: string): Promise<void> {
   try {
-    const response = await fetch(`${API_URL}/user/pets/${petId}`, {
+    const response = await fetch(`${API_URL}/pets/${petId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -157,6 +164,39 @@ export async function deletePet(petId: number): Promise<void> {
     });
 
     console.error("Error al eliminar la mascota:", errorMessage);
+    throw error;
+  }
+}
+
+// get user by id
+export async function getUserById(id: string): Promise<IUserBack | null> {
+  try {
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Error al obtener el usuario";
+
+    Swal.fire({
+      icon: "error",
+      iconColor: "rose",
+      text: errorMessage,
+      title: "No se logró obtener el usuario",
+      customClass: {
+        confirmButton:
+          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+      },
+    });
+    console.error("Error al obtener el usuario:", errorMessage);
     throw error;
   }
 }
