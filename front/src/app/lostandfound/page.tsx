@@ -22,7 +22,7 @@ const LostAndFound: React.FC = () => {
       if (!response.ok) {
         throw new Error('Error al obtener los posts');
       }
-      const data = await response.json();
+      const data: IPost[] = await response.json();  // Asegúrate de que la API incluya `location`
       console.log('Todos los posts:', data);
       setPosts(data);
     } catch (error) {
