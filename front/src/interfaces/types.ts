@@ -77,14 +77,14 @@ export interface IpqrProps {
 }
 
 export interface IpetForm {
-  id?: string;
+  id: string;
   name: string;
   type: string;
   genero: string;
   description: string;
   status: string;
   imgUrl: string;
-  userId?: number;
+  userId: string;
 }
 
 export interface IUserBack {
