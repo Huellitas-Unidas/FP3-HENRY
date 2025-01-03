@@ -1,0 +1,16 @@
+/* Container div height and width must be specified to run Maps Correctly */
+.App {
+    padding:40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .Map {
+    height: 60vh;
+    width: 80vw;
+  }
+  /* map container height and width to be provided to GoogleMaps Component */
+  .map_container {
+    height: 100%;
+    width: 100%;
+  }
