@@ -41,6 +41,8 @@ model Post {
 model Donations {
   id        String   @id @default(uuid()) @db.Uuid
   amount    Float
+  email     String
+  paymentIntent String @unique
   userId    String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
