@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CreateCheckoutSessionDto } from './dto/create.checkoutSession.dto';
+import { log } from 'console';
 
 @Controller('stripe')
 export class StripeController {
@@ -54,8 +55,6 @@ export class StripeController {
     @Headers('stripe-signature') signature: string,
     @Req() req: Request,
   ) {
-    console.log('ESTO ES SIGNATURE', signature);
-
     const payload = Buffer.from(req.body as any);
 
     try {

@@ -73,18 +73,18 @@ export interface IpqrProps {
   email: string;
   type: string;
   description: string;
-  userId: string;
+  userId?: string;
 }
 
 export interface IpetForm {
-  id?: string;
+  id: string;
   name: string;
   type: string;
   genero: string;
   description: string;
   status: string;
   imgUrl: string;
-  userId?: number;
+  userId: string;
 }
 
 export interface IUserBack {
@@ -96,8 +96,7 @@ export interface IUserBack {
 }
 
 export interface IUserSessionDt {
-  id: number;      
-  email: string;   
-  name?: string;   
+  id: number;
+  email: string;
+  name?: string;
 }
-
