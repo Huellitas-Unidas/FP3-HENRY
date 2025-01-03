@@ -30,7 +30,7 @@ const EditPost: React.FC = () => {
         title: `Estado actualizado a: ${newStatus}`,
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded"
+            "bg-green500 hover:bg-teal-600 text-white font-bold py-10 px-8 rounded"
         }
       });
       
@@ -42,7 +42,7 @@ const EditPost: React.FC = () => {
         title: `Error: ${(error as Error).message}`,
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded"
+            "bg-green500 hover:bg-teal-600 text-white font-bold py-10 px-8 rounded"
         }
       });
       

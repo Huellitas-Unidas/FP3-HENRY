@@ -9,58 +9,76 @@ import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
+import {
+  deletePet,
+  getPetsByUser,
+  getUserById,
+  updatePetStatus,
+} from "../api/petAPI";
 import { useSession } from "next-auth/react";
-// import { IUserBack } from "@/interfaces/types";
+import { getUserId } from "@/helpers/userId";
+import { IUserBack } from "@/interfaces/types";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-  const [pets, setPets] = useState<IpetForm[] | null>([]);
-  console.log(pets);
-
+  const userId = getUserId();
   const session = useSession();
-  // const [userData, setUserData] = useState<IUserBack | null>(null);
+  const [pets, setPets] = useState<IpetForm[] | null>([]);
+  const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto = session.data?.user?.image || emptyProfile;
+  const [refreshPets, setRefreshPets] = useState(false);
+  const router = useRouter();
 
-  const handleUpdateStatus = async (value: number | null) => {
+  const handleUpdateStatus = async (value: string | null) => {
     if (value) {
       await updatePetStatus(value);
+      setRefreshPets((prev) => !prev); // Cambiar el estado para forzar el refetch
+      router.push("/lostandfound");
     } else {
       return;
     }
   };
 
-  const handleDeletePet = async (value: number | null) => {
+  const handleDeletePet = async (value: string | null) => {
     if (value) {
       await deletePet(value);
+      setRefreshPets((prev) => !prev); // Cambiar el estado para forzar el refetch
     } else {
       return;
     }
   };
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchPets = async () => {
       try {
-        const userPets = await getPetsByUser();
-        // console.log(userPets);
-
-        setPets(userPets);
-        // console.log(pets);
+        if (userId) {
+          const userPets = await getPetsByUser(userId);
+          setPets(userPets);
+        } else {
+          console.error("No se encontraron las mascotas");
+        }
       } catch (error) {
         console.error(error);
       }
     };
-    fetch();
+    fetchPets();
+  }, [userId, refreshPets]);
 
-    // const fetchUser = async () => {
-    //   try {
-    //     const user = await getUser();
-    //     setUserData(user);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-    // fetchUser();
-  }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (userId) {
+          const user = await getUserById(userId);
+          setUserData(user);
+        } else {
+          console.error("No se encontró el usuario");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, [userId]); // Solo depende de userId
 
   return (
     <div className="flex flex-row my-6">
@@ -84,11 +102,13 @@ const Dashboard = () => {
         <div className="flex flex-col h-full gap-3 mr-28">
           <p className="font-semibold">Nombre:</p>
           <p className="inline-flex gap-2">
-            {session.data?.user ? session.data?.user.name : "Cargando..."}
+            {session.data?.user ? session.data?.user.name : userData?.name}
           </p>
           <br />
           <p className="font-semibold">Email:</p>
-          <p>{session.data?.user ? session.data?.user.email : "Cargando..."}</p>
+          <p>
+            {session.data?.user ? session.data?.user.email : userData?.email}
+          </p>
           <br />
           <p className="font-semibold">Teléfono:</p>
           <p className="inline-flex gap-2">
@@ -131,19 +151,24 @@ const Dashboard = () => {
                     <p>{animal.genero}</p>
                     <p>{animal.description}</p>
                   </div>
+
+                  {animal.status === "none" ? (
+                    <button
+                      onClick={() => handleUpdateStatus(animal.id)}
+                      className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
+                    >
+                      <RiEmotionSadLine className="text-lg" />
+                      Marcar como perdida
+                    </button>
+                  ) : (
+                    <p className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1">
+                      <RiEmotionSadLine className="text-lg" />
+                      Perdida
+                    </p>
+                  )}
+
                   <button
-                    onClick={() =>
-                      handleUpdateStatus(animal.id ? Number(animal.id) : null)
-                    }
-                    className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
-                  >
-                    <RiEmotionSadLine className="text-lg" />
-                    Marcar como perdida
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleDeletePet(animal.id ? Number(animal.id) : null)
-                    }
+                    onClick={() => handleDeletePet(animal.id)}
                     className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                   >
                     <TiDeleteOutline className="text-lg" />

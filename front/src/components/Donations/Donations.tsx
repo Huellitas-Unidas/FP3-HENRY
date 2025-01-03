@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
 
 import React, { useState } from "react";
@@ -7,8 +7,6 @@ import { createCheckoutSession } from "@/app/api/donationsAPI";
 import { IUserSessionDt } from "@/interfaces/types";
 import DonationsCarousel from "./DonationsCarousel";
 
-const SUCCESS_URL = "API_URL/stripe/success";
-const CANCEL_URL = "API_URL/stripe/cancel";
 
 const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => {
   const [amount, setAmount] = useState<number>(25); 
@@ -17,7 +15,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
   const [amountError, setAmountError] = useState<string | null>(null);
 
   // Precio unitario para calcular "quantity" basado en "amount" (100 centavos = $1)
-  const UNIT_PRICE = 500; // Precio por unidad ($5.00)
+  //const UNIT_PRICE = 500; // Precio por unidad ($5.00)
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
@@ -38,7 +36,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
     if (!emailRegex.test(value)) {
       setEmailError("Por favor, ingresa un correo electrónico válido.");
     } else {
-      setEmailError(null); // Limpia el error si el correo es válido
+      setEmailError(null);     // Limpia el error si el correo es válido
     }
   };
 
@@ -72,16 +70,15 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
     }
 
    
-    const quantity = Math.ceil((amount * 100) / UNIT_PRICE);
+    //const quantity = Math.ceil((amount * 100) / UNIT_PRICE);
 
     try {
       const emailToSend = userSession?.email || email;
       const checkoutUrl = await createCheckoutSession({
-        amount,
+        amount: amount * 100,
         email: emailToSend,
-        quantity, 
-        // success_url: SUCCESS_URL,
-      // cancel_url: CANCEL_URL,
+        //quantity, 
+       
       });
 
       if (checkoutUrl) {
