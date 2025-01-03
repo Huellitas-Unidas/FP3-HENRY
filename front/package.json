@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.5",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.4.0",
     "@sweetalert2/themes": "^5.0.18",
