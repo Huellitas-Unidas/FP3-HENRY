@@ -6,10 +6,23 @@ import { postPet } from "../api/petAPI";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getUserId } from "@/helpers/userId";
+// import { getUserId } from "@/helpers/userId";
 
 const PetRegister: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [userData, setUserData] = useState<string>("");
   const router = useRouter();
+
+  // useEffect(() => {
+  //   const userId = getUserId();
+  //   if (userId) {
+  //     setUserData(userId);
+  //     console.log(userData);
+  //   } else {
+  //     console.error("No se encontró el userId");
+  //   }
+  // }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -19,7 +32,8 @@ const PetRegister: React.FC = () => {
       status: "none",
       description: "",
       file: null,
-      userId: "042138bf-1613-4e96-8be0-e3467ab81fca", //! Hardcodeado por ahora
+      userId: getUserId(),
+      //"042138bf-1613-4e96-8be0-e3467ab81fca", //! Hardcodeado por ahora
     },
     validate: (values) => {
       const errors: Record<string, string> = {};
@@ -53,7 +67,11 @@ const PetRegister: React.FC = () => {
         } else {
           throw new Error("El archivo no puede ser nulo");
         }
-        formData.append("userId", values.userId);
+        if (values.userId) {
+          formData.append("userId", values.userId);
+        } else {
+          throw new Error("El userId no puede ser nulo");
+        }
 
         await postPet(formData);
         router.push("/dashboard");
