@@ -15,14 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="flex flex-col bg-white text-gray-900 h-screen justify-around p-4 overflow-y-scroll">
+    <html lang="en" >
+      <body className="flex flex-col bg-[#f3faf8] text-gray-900 h-screen justify-around p-4 overflow-y-scroll">
         <Providers>
-          <Navbar />
-          <main className="flex-grow w-full">{children}</main>
-          <Footer />
-        </Providers>
-      </body>
+        <Navbar /> 
+       <main className="flex-grow w-full">
+           {children}
+        </main>
+     <Footer /> 
+     </Providers>
+     </body>
     </html>
   );
 }
