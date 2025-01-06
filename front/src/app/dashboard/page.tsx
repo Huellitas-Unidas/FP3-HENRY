@@ -112,7 +112,7 @@ const Dashboard = () => {
           <br />
           <p className="font-semibold">Teléfono:</p>
           <p className="inline-flex gap-2">
-            {"Cargando..."}
+            {userData?.phone}
             <button className="text-lg">
               <CiEdit />
             </button>
