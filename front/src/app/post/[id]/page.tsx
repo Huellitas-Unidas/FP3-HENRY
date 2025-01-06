@@ -5,6 +5,7 @@ import { IPost } from "@/interfaces/types";
 import { useParams } from "next/navigation";
 import { Toast } from "@/helpers";
 import { updatePostStatus } from "@/app/api/postAPI";
+import Link from "next/link";
 
 const EditPost: React.FC = () => {
   const params = useParams();
@@ -129,10 +130,10 @@ const EditPost: React.FC = () => {
             <strong>Fecha:</strong>{" "}
             {new Date(post.dateLost).toLocaleDateString()}
           </p>
-          <p className="text-base text-gray-700 mb-2">
+          <Link href="/maps" className="text-base text-gray-700 mb-2">
             <strong>Ubicación:</strong>{" "}
             {post.location?.address || "No especificada"}
-          </p>
+          </Link>
           <p className="text-base text-gray-700 mb-2">
             <strong>Contacto:</strong> {post.contactInfo}
           </p>
