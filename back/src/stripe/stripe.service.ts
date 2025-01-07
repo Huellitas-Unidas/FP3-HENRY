@@ -33,11 +33,7 @@ export class StripeService {
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
       });
-      await this.emailService.sendMail(
-        email,
-        'Session de pago Creada',
-        'Se ha creado una session de pago satisfactoriamente',
-      );
+   
 
       return session;
     } catch (error) {
@@ -99,7 +95,8 @@ export class StripeService {
         await this.emailService.sendMail(
           session.customer_email,
           'Pago Exitoso',
-          `Tu pago de $ ${session.amount_total / 100} fue exitoso muchas gracias`,
+          
+          ` Hola ${user.name}, \n\n  Tu pago de $ ${session.amount_total / 100} fue exitoso muchas gracias por aportar a nuestra causa. \n\n Saludos, \n El equipo de Huellas Unidas!`,
         );
 
         break;
