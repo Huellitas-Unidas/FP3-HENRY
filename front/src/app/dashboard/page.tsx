@@ -9,16 +9,12 @@ import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import {
-  deletePet,
-  getPetsByUser,
-  getUserById,
-  updatePetStatus,
-} from "../api/petAPI";
+import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
 import { useRouter } from "next/navigation";
+import { getUserById } from "../api/userAPI";
 
 const Dashboard = () => {
   const userId = getUserId();
