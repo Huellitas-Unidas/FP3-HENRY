@@ -1,34 +1,68 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  Get,
+  Headers,
+  Req,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CreateCheckoutSessionDto } from './dto/create.checkoutSession.dto';
+import { log } from 'console';
 
 @Controller('stripe')
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
-  @Post('checkout-session')
+  @Post('create')
+  @UsePipes()
   async createCheckoutSession(
-    @Body() createCheckoutSessionDto: CreateCheckoutSessionDto,
+    @Body()
+    body: CreateCheckoutSessionDto,
   ) {
-    const { amount, currency, successUrl, cancelUrl } =
-      createCheckoutSessionDto;
     try {
+      const { amount, currency, email } = body;
       const session = await this.stripeService.createCheckoutSession(
         amount,
         currency,
-        successUrl,
-        cancelUrl,
+        email,
       );
-      return {
-        message: 'Checkout session created successfully',
-        sessionId: session.id,
-        url: session.url,
-      };
+      return { checkoutUrl: session.url };
     } catch (error) {
-      return {
-        message: 'Failed to create checkout session',
-        error: error,
-      };
+      throw new HttpException('Error al crear la session, puede que el correo no esté registrado', 400);
+    }
+  }
+  @Get('success')
+  success() {
+    return {
+      message: 'Pago realizado exitosamente. Gracias por tu donación.',
+    };
+  }
+
+  @Get('cancel')
+  cancel() {
+    return {
+      message: 'El pago fue cancelado. Vuelve a intentarlo.',
+    };
+  }
+
+  @Post('webhook')
+  async handleWebhoook(
+    @Headers('stripe-signature') signature: string,
+    @Req() req: Request,
+  ) {
+    const payload = Buffer.from(req.body as any);
+
+    try {
+      const event = await this.stripeService.verifyWebhoock(payload, signature);
+      await this.stripeService.processEvent(event);
+      return { received: true };
+    } catch (err) {
+      throw new HttpException(`Error ${err}`, HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -7,14 +7,16 @@ import {
   Delete,
   Put,
   ParseUUIDPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { log } from 'console';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
+@UseInterceptors(FileInterceptor('file'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -51,5 +53,14 @@ export class UserController {
   @Delete(':id')
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     return await this.userService.remove(id);
+  }
+
+  @Get(':id/pets')
+  async userPets(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.userService.userPets(id);
+  }
+  @Get(':id/posts')
+  async userPosts(@Param('id', ParseUUIDPipe) id: string) { 
+    return await this.userService.userPosts(id);
   }
 }

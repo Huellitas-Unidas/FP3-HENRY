@@ -1,130 +1,106 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import validate from "@/helpers/validate";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import GreenButton from "@/components/Buttons/GreenButton";
-import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { register } from "../api/authAPI";
+import { useFormik } from "formik";
 import Swal from "sweetalert2";
+import GreenButton from "@/components/Buttons/GreenButton";
+import { ISignUpData } from "@/interfaces/types";
+import validate from "@/helpers/validate";
+import { register } from "../api/authAPI";
 
 const Register: React.FC = () => {
- const router = useRouter();
- 
- const formik = useFormik({
-  initialValues: {
-    name: "",
-    email: "",
-    password: "",
-    confirm: "",   // Solo para validación
-    //phone: "",
-  },
+  const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
- validate: validate,
- onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
-  try {
-    const registrationResult = await register(userData);
-    if (registrationResult) {
+  const formik = useFormik<ISignUpData>({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirm: "",
+      phone: "",
+    },
+    validate: validate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSubmit: async ({ confirm, phone, ...userData }, { resetForm }) => {
+      try {
+        const formattedUserData = {
+          ...userData,
+          phone: Number(phone), // Convertir phone a número
+        };
+
+        const registrationResult = await register(formattedUserData);
+
+        if (registrationResult) {
+          Swal.fire({
+            icon: "success",
+            iconColor: "green",
+            title: "Usuario registrado con éxito",
+            text: "Ya puedes iniciar sesión.",
+            customClass: {
+              confirmButton:
+                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            }
+          });
+          resetForm();
+          router.push("/login");
+        }
+      } catch (error: unknown) {
+        let errorMessage = "No se pudo completar el registro";
+
+        if (error instanceof Error && error.message.includes("409")) {
+          errorMessage = "El correo electrónico ya está en uso";
+        }
+
         Swal.fire({
-        icon: "success",
-        iconColor: "green",
-        title: "Usuario registrado con éxito",
-        customClass: {
-          confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-      });
-      resetForm(); 
-      router.push("/login"); 
-    }
-  } catch (error) {
-    console.error("Error durante el registro:", error);
-    Swal.fire({
-      icon: "error",
-      iconColor: "red",
-        title: "No se pudo completar el registro",
-        customClass: {
-          confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-      });
-    }
-  },
-});
-    /* onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
-      try {
-        await register(userData); 
-        resetForm();
-        router.push("/login"); 
-      } catch (error) {
-        console.error("Error durante el registro:", error);
+          icon: "error",
+          iconColor: "red",
+          title: "Error en el registro",
+          text: errorMessage,
+          customClass: {
+            confirmButton:
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          }
+        });
       }
-    }, */
-  //});
-
-  
-
-    /*validate: (values) => {
-      const errors = validate({ ...values, confirm: values.confirm});
-      return errors;
-    },
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        // Excluye el campo `confirm` antes de enviar los datos
-        const { ...userData } = values;     //El campo confirm se incluye solo 
-        // para validación en el front-end. Antes de enviar los datos, lo excluimos utilizando destructuración ts
-
-
-        // Llama a la API para registrar al usuario
-        const response = await register(userData);
-        console.log("Usuario registrado con éxito:", response);
-
-        resetForm();     // Resetea el formulario tras el registro
-        router.push("/login"); // Redirige al login
-      } catch (error) {
-        console.error("Error durante el registro:", error);
-      }
-    },
-  }); */ 
-
-   /*  validate: validate,
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
-    },
-  }); */
+    }
+  });
 
   return (
-    <div className="flex flex-col place-items-center my-8">
-      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-1/4 ">
+    <div className="flex flex-col place-items-center my-8 px-4">
+      <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 items-center text-xl"
+          noValidate
+          onSubmit={(e) => {
+            formik.handleSubmit(e);
+            setIsSubmitted(true);
+          }}
+          className="flex flex-col gap-4 items-center text-lg"
         >
           <input
             placeholder="Nombre completo"
-            type="name"
+            type="text"
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.name && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.name}
-            </span>
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.name && (
+            <span className="text-red-500 text-sm">{formik.errors.name}</span>
           )}
 
           <input
-            placeholder="Email"
+            placeholder="Correo electrónico"
             type="email"
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.email && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.email}
-            </span>
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.email && (
+            <span className="text-red-500 text-sm">{formik.errors.email}</span>
           )}
 
           <input
@@ -133,58 +109,50 @@ const Register: React.FC = () => {
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.password && (
-            <span className="text-red-500 text-sm text-center">
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.password && (
+            <span className="text-red-500 text-sm">
               {formik.errors.password}
             </span>
           )}
 
-         <input
+          <input
             placeholder="Confirma tu contraseña"
             type="password"
             name="confirm"
             value={formik.values.confirm}
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors.confirm && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.confirm}
-            </span>
-          )} 
-
-      
-          {formik.errors.confirm && (
-            <span className="text-red-500 text-sm text-center">
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.confirm && (
+            <span className="text-red-500 text-sm">
               {formik.errors.confirm}
             </span>
           )}
-        
 
-         {/*  <input
+          <input
             placeholder="Teléfono"
             type="number"
             name="phone"
-            value={formik.values.phone}
+            value={formik.values.phone} 
             onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
-          ></input>
-          {formik.errors && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.phone}
-            </span>
-          )} */}
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.phone && (
+            <span className="text-red-500 text-sm">{formik.errors.phone}</span>
+          )}
 
-          <label className="text-sm mb-2">
-            Ya tienes una cuenta?{" "}
-            <Link href={"/login"} className="underline hover:no-underline">
+          <label className="text-sm mb-2 text-center">
+            ¿Ya tienes una cuenta?{" "}
+            <Link href="/login" className="underline hover:no-underline">
               Loguéate
             </Link>
           </label>
 
-          <GreenButton props="Registrarme" />
+          <GreenButton
+            props={formik.isSubmitting ? "Registrando..." : "Registrarme"}
+          />
         </form>
       </div>
     </div>
