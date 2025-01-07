@@ -1,26 +1,21 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
+import {Module } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { StripeController } from './stripe.controller';
-import Stripe from 'stripe';
-@Global()
+import { ConfigModule } from '@nestjs/config';
+import { EmailModule } from 'src/email/email.module';
+import { PrismaService } from 'prisma/prisma.service';
+import { UserModule } from 'src/user/user.module';
+import { DonationModule } from 'src/donation/donation.module';
 @Module({
-  providers: [StripeService],
-  controllers: [StripeController]
+  imports: [ConfigModule, EmailModule, UserModule, DonationModule], 
+  providers: [StripeService,
+    {
+    provide: "STRIPE",
+    useValue: new (require('stripe'))(process.env.STRIPE_API_KEY, {apiVersion: '2024-12-18.acacia', timeout: 10000}),
+    }, PrismaService
+  ],
+  controllers: [StripeController],
+  exports: [StripeService ],
+
 })
-export class StripeModule {
-    static forRoot(apiKey: string): DynamicModule {
-        const stripe = new Stripe(apiKey, {
-            apiVersion: '2024-11-20.acacia',
-        })
-        return {
-            module: StripeModule,
-            providers: [
-                {
-                    provide: 'STRIPE_CLIENT',
-                    useValue: stripe,
-                }
-            ],
-            exports: ['STRIPE_CLIENT']
-        }
-    }
-}
+export class StripeModule {}

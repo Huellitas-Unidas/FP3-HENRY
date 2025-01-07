@@ -16,7 +16,7 @@ export class UserService {
     private emailService: EmailService,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    const { email, password, name } = createUserDto;
+    const { email, password, name, phone } = createUserDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -32,6 +32,7 @@ export class UserService {
       data: {
         email,
         password: hashedPassword,
+        phone,
         name,
       },
     });
@@ -118,5 +119,29 @@ export class UserService {
       where: { id },
     });
     return { message: `Usuario con ID ${id} eliminado exitosamente` };
+  }
+  async userPets(id: string) { 
+     const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        pets: true,
+      },
+    });
+    if (!user) {
+      throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
+    }
+    return  user.pets
+  }
+  async userPosts(id: string) {     
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        posts: true,
+      },
+    });
+    if (!user) {
+      throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
+    }
+    return  user.posts
   }
 }

@@ -1,17 +1,18 @@
-import { IsNumber, IsString, IsUrl, Min, IsPositive } from 'class-validator';
+import { IsEmail, IsNotEmpty, isNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
 
 export class CreateCheckoutSessionDto {
   @IsNumber()
-  @IsPositive()
-  @Min(1)
   amount: number;
+  quantity: number;
+
+  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required' })
+  email: string;
 
   @IsString()
   currency: string;
 
-  @IsUrl()
   successUrl: string;
 
-  @IsUrl()
   cancelUrl: string;
 }
