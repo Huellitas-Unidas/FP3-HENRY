@@ -46,7 +46,7 @@ const LostAndFound: React.FC = () => {
 
   return (
     <div className="p-8">
-  {/* Contenedor del botón alineado a la derecha */}
+  
   <div className="flex justify-end mb-4">
     <button
       onClick={handleOpenModal}
@@ -56,7 +56,7 @@ const LostAndFound: React.FC = () => {
     </button>
   </div>
 
-      {/* Otro botón adicional */}
+  
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
       {/* Lista de Tarjetas */}

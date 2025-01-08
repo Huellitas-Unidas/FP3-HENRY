@@ -101,9 +101,11 @@ const Login: React.FC = () => {
 
           <label className="text-sm mb-2 text-center">
             ¿No tienes una cuenta?{" "}
-            <Link href={"/register"} className="underline hover:no-underline">
+            <span className="underline hover:no-underline">
+            <Link href={"/register"} >
               Regístrate
             </Link>
+            </span>
           </label>
 
           <button
