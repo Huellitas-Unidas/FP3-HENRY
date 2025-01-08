@@ -32,7 +32,7 @@ export class UserService {
       data: {
         email,
         password: hashedPassword,
-        phone,
+        phone: String(phone),
         name,
       },
     });

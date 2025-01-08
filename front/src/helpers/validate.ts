@@ -30,12 +30,10 @@ const validate = (values: ISignUpData): TSignUpErrors => {
     errors.confirm = "Las contraseñas no coinciden.";
   }
 
-  // Validar teléfono (como cadena de texto)
-  const phone = values.phone ? String(values.phone) : ""; // Convertir a cadena
-  if (phone.trim() === "") {
-    errors.phone = "El teléfono es requerido.";
-  } else if (!/^\d+$/.test(phone) || phone.length < 7 || phone.length > 10) {
-    errors.phone = "El teléfono debe contener entre 7 y 10 dígitos y solo números.";
+  // Validar teléfono 
+  const phone = values.phone ? String(values.phone) : "";
+  if (!/^\d{7,15}$/.test(phone)) {
+    errors.phone = "El teléfono debe contener entre 7 y 15 dígitos.";
   }
 
   return errors;
