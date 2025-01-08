@@ -2,14 +2,14 @@ import Carousel from "@/components/Carousel/Carousel";
 import { HiOutlineLocationMarker, HiOutlineMail } from "react-icons/hi";
 import { BsChatLeftHeart } from "react-icons/bs";
 import React from "react";
-import SearchBar from "@/components/SearchBar/SearchBar";
+//import SearchBar from "@/components/SearchBar/SearchBar";
 import Link from "next/link";
 
 
 export default function Home() {
   return (
     <div>
-      <SearchBar />
+      {/*<SearchBar />*/}
       <Carousel />
       <div className="max-w-6xl mx-auto font-[sans-serif]">
         <h2 className="text-gray-800 sm:text-4xl text-lg font-extrabold text-center my-10">

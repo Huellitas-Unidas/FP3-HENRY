@@ -1,4 +1,4 @@
-import { IPost } from "@/interfaces/types";
+//import { IPost } from "@/interfaces/types";
 
 // Función para obtener los post de la API
 export const FetchPosts = async () => {

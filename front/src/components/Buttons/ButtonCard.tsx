@@ -11,7 +11,7 @@ const ButtonCard: React.FC<ButtonCardProps> = ({ post }) => {
   const handleStatusChange = async (newStatus: string) => {
     try {
      
-      if (!process.env.NEXT_PUBLIC_API_URL) { // Verifica que la URL de la API esté configurada
+      if (!process.env.NEXT_PUBLIC_API_URL) { 
         throw new Error('La URL de la API no está configurada.');
       }
 

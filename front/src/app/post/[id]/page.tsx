@@ -130,14 +130,14 @@ const EditPost: React.FC = () => {
             <strong>Fecha:</strong>{" "}
             {new Date(post.dateLost).toLocaleDateString()}
           </p>
-          <Link href="/maps" className="text-base text-gray-700 mb-2">
-            <strong>Ubicación:</strong>{" "}
+          <Link href="/maps">
+            <span className="text-base text-gray-700 mb-2 font-bold">Ubicación:{" "}
             {post.location?.address || "No especificada"}
+            </span>
           </Link>
           <p className="text-base text-gray-700 mb-2">
             <strong>Contacto:</strong> {post.contactInfo}
           </p>
-          
           <p className="text-base text-gray-700 mb-2">
             <strong>Estado:</strong>{" "}
             {post.status === "encontrado" ? "Encontrado" : "Perdido"}
