@@ -24,14 +24,14 @@ const Register: React.FC = () => {
     },
     validate: validate,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSubmit: async ({ confirm, phone, ...userData }, { resetForm }) => {
+    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
-        const formattedUserData = {
-          ...userData,
-          phone: Number(phone), // Convertir phone a número
-        };
+        //const formattedUserData = {
+        //  ...userData,
+        //  phone: Number(phone), // Convertir phone a número
+        //};
 
-        const registrationResult = await register(formattedUserData);
+        const registrationResult = await register(userData);
 
         if (registrationResult) {
           Swal.fire({
@@ -133,7 +133,7 @@ const Register: React.FC = () => {
 
           <input
             placeholder="Teléfono"
-            type="number"
+            type="text"
             name="phone"
             value={formik.values.phone} 
             onChange={formik.handleChange}
