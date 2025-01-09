@@ -15,16 +15,20 @@ import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
 import { useRouter } from "next/navigation";
 import { getUserById } from "../api/userAPI";
+import Swal from "sweetalert2";
+import { patchPic } from "../api/profilePicAPI";
 
 const Dashboard = () => {
   const userId = getUserId();
   const session = useSession();
   const [pets, setPets] = useState<IpetForm[]>([]);
   const [userData, setUserData] = useState<IUserBack | null>(null);
-  const profilePhoto = session.data?.user?.image || emptyProfile;
+  const profilePhoto =
+    session.data?.user?.image || userData?.profilePicture || emptyProfile;
   const [refreshPets, setRefreshPets] = useState(false);
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -46,6 +50,38 @@ const Dashboard = () => {
     } else {
       return;
     }
+  };
+
+  const handlePicButton = () => {
+    return async () => {
+      const fileInput = document.querySelector(
+        'input[type="file"]'
+      ) as HTMLInputElement;
+
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se seleccionó ningún archivo",
+          text: "Por favor selecciona una imagen antes de subirla.",
+          customClass: {
+            confirmButton:
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      try {
+        await patchPic(formData); // Llama a la función para subir la imagen
+        closeModal(); // Cierra el modal después de una subida exitosa
+      } catch (error) {
+        console.error("Error al subir la foto de perfil:", error);
+        // No es necesario mostrar una alerta aquí, ya que `patchPic` ya maneja los errores con Swal
+      }
+    };
   };
 
   useEffect(() => {
@@ -78,7 +114,7 @@ const Dashboard = () => {
       }
     };
     fetchUser();
-  }, [userId]); // Solo depende de userId
+  }, [userId]);
 
   return (
     <div className="font-sans text-lg flex flex-row my-6">
@@ -201,7 +237,16 @@ const Dashboard = () => {
               >
                 Cancelar
               </button>
-              <GreenButton props="Subir"></GreenButton>
+              <button
+                onClick={() => {
+                  handlePicButton();
+                  setIsSubmitted(true);
+                }}
+                type="submit"
+                className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
+              >
+                {isSubmitted === false ? "Subir" : "Subiendo..."}
+              </button>
             </div>
           </div>
         </div>
