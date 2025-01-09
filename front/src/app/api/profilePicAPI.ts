@@ -49,20 +49,25 @@ export const patchPic = async (formData: FormData): Promise<IProfilePic> => {
   }
 };
 
-//! delete - eliminar la foto
-export async function deletePic(petId: string): Promise<void> {
+// delete - eliminar la foto
+export async function deletePic(userId: string): Promise<void> {
+  //const userId = getUserId();
+
   try {
-    const response = await fetch(`${API_URL}/pets/${petId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `${API_URL}/profile/${userId}/profile-picture`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
     Swal.fire({
-      title: "Mascota eliminada con éxito 🌟",
+      title: "Foto eliminada con éxito",
       icon: "success",
       confirmButtonText: "OK",
       customClass: {
@@ -72,20 +77,20 @@ export async function deletePic(petId: string): Promise<void> {
     });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Error al eliminar la mascota";
+      error instanceof Error ? error.message : "Error al eliminar la foto";
 
     Swal.fire({
       icon: "error",
       iconColor: "rose",
       text: errorMessage,
-      title: "No se logró eliminar la mascota",
+      title: "No se logró eliminar la foto",
       customClass: {
         confirmButton:
           "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
       },
     });
 
-    console.error("Error al eliminar la mascota:", errorMessage);
+    console.error("Error al eliminar la foto:", errorMessage);
     throw error;
   }
 }

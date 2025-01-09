@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import emptyProfile from "../../../public/images/emptyProfile.png";
 import Link from "next/link";
-import { PiCameraFill } from "react-icons/pi";
+// import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -16,7 +16,7 @@ import { IUserBack } from "@/interfaces/types";
 import { useRouter } from "next/navigation";
 import { getUserById } from "../api/userAPI";
 import Swal from "sweetalert2";
-import { patchPic } from "../api/profilePicAPI";
+import { deletePic, patchPic } from "../api/profilePicAPI";
 
 const Dashboard = () => {
   const userId = getUserId();
@@ -25,10 +25,11 @@ const Dashboard = () => {
   const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto =
     session.data?.user?.image || userData?.profilePicture || emptyProfile;
-  const [refreshPets, setRefreshPets] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDeleted, setisDeleted] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -36,7 +37,7 @@ const Dashboard = () => {
   const handleUpdateStatus = async (value: string | null) => {
     if (value) {
       await updatePetStatus(value);
-      setRefreshPets((prev) => !prev); // Cambiar el estado para forzar el refetch
+      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
       router.push("/lostandfound");
     } else {
       return;
@@ -46,42 +47,54 @@ const Dashboard = () => {
   const handleDeletePet = async (value: string | null) => {
     if (value) {
       await deletePet(value);
-      setRefreshPets((prev) => !prev); // Cambiar el estado para forzar el refetch
+      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
     } else {
       return;
     }
   };
 
-  const handlePicButton = () => {
-    return async () => {
-      const fileInput = document.querySelector(
-        'input[type="file"]'
-      ) as HTMLInputElement;
-
-      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-        Swal.fire({
-          icon: "warning",
-          title: "No se seleccionó ningún archivo",
-          text: "Por favor selecciona una imagen antes de subirla.",
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
-        });
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", fileInput.files[0]);
-
+  const handleDeletePic = async () => {
+    if (userId)
       try {
-        await patchPic(formData); // Llama a la función para subir la imagen
+        await deletePic(userId); // Llama a la función para subir la imagen
         closeModal(); // Cierra el modal después de una subida exitosa
+        setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
+        setisDeleted(false);
       } catch (error) {
-        console.error("Error al subir la foto de perfil:", error);
+        console.error("Error al eliminar la foto de perfil:", error);
         // No es necesario mostrar una alerta aquí, ya que `patchPic` ya maneja los errores con Swal
       }
-    };
+  };
+
+  const handlePicButton = async () => {
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "No se seleccionó ningún archivo",
+        text: "Por favor selecciona una imagen antes de subirla.",
+        customClass: {
+          confirmButton:
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
+      });
+      setIsSubmitted(false);
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+    try {
+      await patchPic(formData); // Llama a la función para subir la imagen
+      closeModal(); // Cierra el modal después de una subida exitosa
+      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
+      setIsSubmitted(false);
+    } catch (error) {
+      console.error("Error al subir la foto de perfil:", error);
+      // No es necesario mostrar una alerta aquí, ya que `patchPic` ya maneja los errores con Swal
+    }
   };
 
   useEffect(() => {
@@ -98,7 +111,7 @@ const Dashboard = () => {
       }
     };
     fetchPets();
-  }, [userId, refreshPets]);
+  }, [userId, refresh]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -114,7 +127,7 @@ const Dashboard = () => {
       }
     };
     fetchUser();
-  }, [userId]);
+  }, [userId, refresh]);
 
   return (
     <div className="font-sans text-lg flex flex-row my-6">
@@ -122,7 +135,7 @@ const Dashboard = () => {
         <div className="w-1/4 h-1/4 p-4 relative border border-green500 rounded-lg">
           <Image
             src={profilePhoto}
-            alt="profilePic"
+            alt={`foto de ${userData?.name} ${userData?.id}`}
             width={500}
             height={500}
             className="w-full h-full object-cover"
@@ -132,7 +145,7 @@ const Dashboard = () => {
             className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
             aria-label="changeProfilePic"
           >
-            <PiCameraFill />
+            <CiEdit />
           </button>
         </div>
 
@@ -172,12 +185,12 @@ const Dashboard = () => {
             {pets.map((animal) => {
               return (
                 <div
-                  key={animal.name}
+                  key={animal.id}
                   className="w-48 h-auto p-4 border border-gray-200 rounded-lg shadow-md flex flex-col justify-between"
                 >
                   <Image
                     src={animal.imgUrl}
-                    alt="animalImg"
+                    alt={`foto de ${animal.name} ${animal.id}`}
                     className="w-full h-32 object-cover rounded-lg"
                     width={500}
                     height={500}
@@ -224,13 +237,22 @@ const Dashboard = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-xl font-semibold mb-4">Subir nueva foto</h2>
+            <h2 className="text-2xl font-semibold mb-4">Subir nueva foto</h2>
             <input
               type="file"
               accept="image/*"
-              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
+              className="block w-full text-lg text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
             />
             <div className="mt-4 flex justify-end space-x-2">
+              <button
+                onClick={() => {
+                  handleDeletePic();
+                  setisDeleted(true);
+                }}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+              >
+                {isDeleted === false ? "🗑️ Foto actual" : "🗑️ Eliminando..."}
+              </button>
               <button
                 onClick={closeModal}
                 className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"

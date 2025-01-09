@@ -92,7 +92,7 @@ export interface IUserBack {
   name: string;
   email: string;
   phone?: string | number;
-  profilePicture?: string;
+  profilePicture: string | null;
   createdAt: string;
 }
 
