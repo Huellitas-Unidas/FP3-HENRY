@@ -27,15 +27,33 @@ export class EmailService {
       console.error('Error al enviar el correo:', error);
     }
   }
-  async sendMailWithTemplate(to: string, subject: string, data: Record<string, any>) {
+  async sendMailWithTemplate(
+    to: string,
+    subject: string,
+    data: Record<string, any>,
+    templateType: string,
+  ) {
+    let template = '';
 
-    const html = this.replacePlaceholders(templates.register, data);
-    
+    if (templateType === 'donationCreation') {
+      template = templates.donationCreation;
+    } else if (templateType === 'donationSuccess') {
+      template = templates.donationSuccess;
+    } else if (templateType === 'register') {
+      template = templates.register;
+    } else if (templateType === 'postCreation') {
+      template = templates.postCreation;
+    } else if (templateType === 'petCreation') {
+      template = templates.petCreation;
+    }
+
+    const html = this.replacePlaceholders(template, data);
+
     const msg = {
       to,
       from: process.env.SENDGRID_FROM_EMAIL,
       subject,
-      html
+      html,
     };
 
     try {
@@ -45,8 +63,10 @@ export class EmailService {
     }
   }
 
-  // Método para reemplazar variables dinámicas
-  private replacePlaceholders(template: string, data: Record<string, any>): string {
+  private replacePlaceholders(
+    template: string,
+    data: Record<string, any>,
+  ): string {
     let result = template;
     for (const key in data) {
       const placeholder = `{{${key}}}`;
