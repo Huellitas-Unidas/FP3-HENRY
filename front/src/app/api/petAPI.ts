@@ -48,7 +48,7 @@ export const postPet = async (formData: FormData): Promise<IpetForm> => {
 };
 
 // read - obtener las mascotas relacionadas al usuario
-export async function getPetsByUser(id: string): Promise<IpetForm[] | null> {
+export async function getPetsByUser(id: string): Promise<IpetForm[] | []> {
   try {
     const response = await fetch(`${API_URL}/user/${id}/pets`, {
       method: "GET",
@@ -60,7 +60,7 @@ export async function getPetsByUser(id: string): Promise<IpetForm[] | null> {
     }
 
     const data = await response.json();
-    return data || null;
+    return data || [];
   } catch (error) {
     const errorMessage =
       error instanceof Error
