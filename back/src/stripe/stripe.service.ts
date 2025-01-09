@@ -100,8 +100,6 @@ export class StripeService {
           'Pago Exitoso',
           { message: ` Hola ${user.name}, \n\n  Tu pago de $ ${session.amount_total / 100} fue exitoso muchas gracias por aportar a nuestra causa. \n\n Saludos, \n El equipo de Huellas Unidas!` },
           'donationSuccess'
-          
-          ` Hola ${user.name}, \n\n  Tu pago de $ ${session.amount_total / 100} fue exitoso muchas gracias por aportar a nuestra causa. \n\n Saludos, \n El equipo de Huellas Unidas!`,
         );
         break;
 
