@@ -35,7 +35,7 @@ export class UserService {
       data: {
         email,
         password: hashedPassword,
-        phone,
+        phone: String(phone),
         name,
         role: (role ? role.toUpperCase() : 'USER') as Role,
       },
@@ -131,7 +131,6 @@ export class UserService {
     });
     return { message: `Usuario con ID ${id} eliminado exitosamente` };
   }
-
   async userPets(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -144,8 +143,7 @@ export class UserService {
     }
     return user.pets;
   }
-
-  async userPosts(id: string) {
+  async userPosts(id: string) {     
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {

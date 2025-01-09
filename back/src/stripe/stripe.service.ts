@@ -13,13 +13,7 @@ export class StripeService {
 
   async createCheckoutSession(amount: number, currency: string, email: string) {
     try {
-      const user = await this.prisma.user.findUnique({
-        where: { email },
-      });
-      if (!user) {
-        throw new Error('User not found');
-      }
-
+        
       const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
@@ -39,13 +33,7 @@ export class StripeService {
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
       });
-
-      await this.emailService.sendMailWithTemplate(
-        email,
-        'Donación en proceso',
-        { email, amount: amount / 100 },
-        'donationCreation'
-      );
+   
 
       return session;
     } catch (error) {
@@ -109,8 +97,8 @@ export class StripeService {
 
         await this.emailService.sendMailWithTemplate(
           session.customer_email,
-          'Pago de donación exitoso',
-          { amount: session.amount_total / 100, currency },
+          'Pago Exitoso',
+          { message: ` Hola ${user.name}, \n\n  Tu pago de $ ${session.amount_total / 100} fue exitoso muchas gracias por aportar a nuestra causa. \n\n Saludos, \n El equipo de Huellas Unidas!` },
           'donationSuccess'
         );
         break;

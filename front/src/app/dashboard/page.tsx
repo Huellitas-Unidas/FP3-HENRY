@@ -9,25 +9,25 @@ import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import {
-  deletePet,
-  getPetsByUser,
-  getUserById,
-  updatePetStatus,
-} from "../api/petAPI";
+import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
 import { useRouter } from "next/navigation";
+import { getUserById } from "../api/userAPI";
 
 const Dashboard = () => {
   const userId = getUserId();
   const session = useSession();
-  const [pets, setPets] = useState<IpetForm[] | null>([]);
+  const [pets, setPets] = useState<IpetForm[]>([]);
   const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto = session.data?.user?.image || emptyProfile;
   const [refreshPets, setRefreshPets] = useState(false);
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleUpdateStatus = async (value: string | null) => {
     if (value) {
@@ -81,7 +81,7 @@ const Dashboard = () => {
   }, [userId]); // Solo depende de userId
 
   return (
-    <div className="flex flex-row my-6">
+    <div className="font-sans text-lg flex flex-row my-6">
       <div className="flex flex-row gap-6 w-1/2 h-1/2 justify-start">
         <div className="w-1/4 h-1/4 p-4 relative border border-green500 rounded-lg">
           <Image
@@ -92,6 +92,7 @@ const Dashboard = () => {
             className="w-full h-full object-cover"
           />
           <button
+            onClick={openModal}
             className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
             aria-label="changeProfilePic"
           >
@@ -112,7 +113,7 @@ const Dashboard = () => {
           <br />
           <p className="font-semibold">Teléfono:</p>
           <p className="inline-flex gap-2">
-            {"Cargando..."}
+            {userData?.phone}
             <button className="text-lg">
               <CiEdit />
             </button>
@@ -128,9 +129,9 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
-        <p className="text-lg text-green500">Mis mascotas:</p>
+        <p className="text-green500">Mis mascotas:</p>
 
-        {pets !== null ? (
+        {pets?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4">
             {pets.map((animal) => {
               return (
@@ -179,9 +180,32 @@ const Dashboard = () => {
             })}
           </div>
         ) : (
-          <p>No has registrado ninguna mascota...</p> //!
+          <p>Aún no has registrado ninguna mascota</p>
         )}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <h2 className="text-xl font-semibold mb-4">Subir nueva foto</h2>
+            <input
+              type="file"
+              accept="image/*"
+              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
+            />
+            <div className="mt-4 flex justify-end space-x-2">
+              <button
+                onClick={closeModal}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+              >
+                Cancelar
+              </button>
+              <GreenButton props="Subir"></GreenButton>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

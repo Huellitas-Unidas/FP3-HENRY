@@ -1,5 +1,5 @@
 import { IsEmail, IsNumber, IsString, MinLength, IsOptional, IsEnum } from 'class-validator';
-import { Transform } from 'class-transformer';  // Importar el transformador
+import { Transform } from 'class-transformer';
 
 enum Role {
   user = 'user',
@@ -18,7 +18,7 @@ export class CreateUserDto {
   name: string;
 
   @IsNumber()
-  phone: number;
+  phone: string;
 
   @IsOptional()
   @IsEnum(Role)
