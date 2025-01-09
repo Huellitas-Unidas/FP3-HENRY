@@ -2,6 +2,7 @@
   "name": "front",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,15 +20,14 @@
     "jwt-decode": "^4.0.0",
     "next": "15.0.4",
     "next-auth": "^4.24.11",
+    "postcss": "^8.4.49",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-toastify": "^10.0.6",
     "sweetalert2": "^11.14.5",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
@@ -37,6 +37,5 @@
     "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.4"
-    
   }
 }
