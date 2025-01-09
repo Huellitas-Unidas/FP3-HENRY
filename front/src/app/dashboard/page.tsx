@@ -19,7 +19,7 @@ import { getUserById } from "../api/userAPI";
 const Dashboard = () => {
   const userId = getUserId();
   const session = useSession();
-  const [pets, setPets] = useState<IpetForm[] | null>([]);
+  const [pets, setPets] = useState<IpetForm[]>([]);
   const [userData, setUserData] = useState<IUserBack | null>(null);
   const profilePhoto = session.data?.user?.image || emptyProfile;
   const [refreshPets, setRefreshPets] = useState(false);
@@ -81,7 +81,7 @@ const Dashboard = () => {
   }, [userId]); // Solo depende de userId
 
   return (
-    <div className="flex flex-row my-6">
+    <div className="font-sans text-lg flex flex-row my-6">
       <div className="flex flex-row gap-6 w-1/2 h-1/2 justify-start">
         <div className="w-1/4 h-1/4 p-4 relative border border-green500 rounded-lg">
           <Image
@@ -129,9 +129,9 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
-        <p className="text-lg text-green500">Mis mascotas:</p>
+        <p className="text-green500">Mis mascotas:</p>
 
-        {pets !== null ? (
+        {pets?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4">
             {pets.map((animal) => {
               return (
@@ -180,7 +180,7 @@ const Dashboard = () => {
             })}
           </div>
         ) : (
-          <p>No has registrado ninguna mascota...</p> //!
+          <p>Aún no has registrado ninguna mascota</p>
         )}
       </div>
 
