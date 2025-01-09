@@ -143,7 +143,7 @@ export class UserService {
     }
     return user.pets;
   }
-  async userPosts(id: string) {     
+  async userPosts(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
