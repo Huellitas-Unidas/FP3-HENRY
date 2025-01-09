@@ -56,7 +56,7 @@ export class UserController {
 
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles('admin', 'user')
+  @Roles('admin')
   async remove(@Param('id', ParseUUIDPipe) id: string, @Req() req) {
     console.log('Encabezado Authorization:', req.headers.authorization);
     return await this.userService.remove(id);

@@ -53,14 +53,14 @@ export class PetsController {
 
   @Put(':id')
   @UseGuards(RolesGuard)
-  @Roles('ADMIN') 
+  @Roles('admin', 'user') 
   update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
     return this.petsService.update(id, updatePetDto);
   }
 
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles('ADMIN') 
+  @Roles('admin', 'user') 
   remove(@Param('id') id: string) {
     return this.petsService.remove(id);
   }
