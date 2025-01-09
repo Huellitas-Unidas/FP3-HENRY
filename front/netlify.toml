@@ -1,3 +1,7 @@
 [build]
-command = "npm run build"
-publish = ".next"
+  base = "front"
+  publish = "front/.next"
+  command = "npm run build"
+
+[functions]
+  directory = "front/netlify/functions"
