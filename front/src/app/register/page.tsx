@@ -24,14 +24,14 @@ const Register: React.FC = () => {
     },
     validate: validate,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSubmit: async ({ confirm, phone, ...userData }, { resetForm }) => {
+    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
       try {
-        const formattedUserData = {
-          ...userData,
-          phone: Number(phone), // Convertir phone a número
-        };
+        // const formattedUserData = {
+        //   ...userData,
+        //   phone: Number(phone), // Convertir phone a número
+        // };
 
-        const registrationResult = await register(formattedUserData);
+        const registrationResult = await register(userData);
 
         if (registrationResult) {
           Swal.fire({
@@ -41,8 +41,8 @@ const Register: React.FC = () => {
             text: "Ya puedes iniciar sesión.",
             customClass: {
               confirmButton:
-                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-            }
+                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+            },
           });
           resetForm();
           router.push("/login");
@@ -61,11 +61,11 @@ const Register: React.FC = () => {
           text: errorMessage,
           customClass: {
             confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-          }
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
         });
       }
-    }
+    },
   });
 
   return (
@@ -133,9 +133,9 @@ const Register: React.FC = () => {
 
           <input
             placeholder="Teléfono"
-            type="number"
+            type="text"
             name="phone"
-            value={formik.values.phone} 
+            value={formik.values.phone}
             onChange={formik.handleChange}
             className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
           />

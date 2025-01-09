@@ -32,7 +32,7 @@ export class UserService {
       data: {
         email,
         password: hashedPassword,
-        phone,
+        phone: String(phone),
         name,
       },
     });
@@ -120,8 +120,8 @@ export class UserService {
     });
     return { message: `Usuario con ID ${id} eliminado exitosamente` };
   }
-  async userPets(id: string) { 
-     const user = await this.prisma.user.findUnique({
+  async userPets(id: string) {
+    const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
         pets: true,
@@ -130,9 +130,9 @@ export class UserService {
     if (!user) {
       throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    return  user.pets
+    return user.pets;
   }
-  async userPosts(id: string) {     
+  async userPosts(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
@@ -142,6 +142,6 @@ export class UserService {
     if (!user) {
       throw new HttpException(`Usuario con ID ${id} no encontrado`, 404);
     }
-    return  user.posts
+    return user.posts;
   }
 }
