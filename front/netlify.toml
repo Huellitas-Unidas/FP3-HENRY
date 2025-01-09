@@ -3,5 +3,4 @@
   publish = ".next"
   command = "npm run build"
 
-[functions]
-  directory = "front/netlify/functions"
+
