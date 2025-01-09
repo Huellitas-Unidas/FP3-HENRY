@@ -6,26 +6,26 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 enum Role {
   USER
   ADMIN
 }
 
 model User {
-  id            String    @id @default(uuid()) @db.Uuid
+  id            String          @id @default(uuid()) @db.Uuid
   name          String
-  phone         Int
-  email         String    @unique
+  phone         String         
+  email         String          @unique
   password      String
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime        @default(now())
+  role          Role            @default(USER) 
   posts         Post[]
   donations     Donations[]
   notifications Notifications[]
   pets          Pets[]
   pqr           Pqr[]
-  role          Role      @default(USER)
 }
+
 model Post {
   id          String    @id @default(uuid()) @db.Uuid
   title       String
