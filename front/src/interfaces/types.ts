@@ -92,6 +92,7 @@ export interface IUserBack {
   name: string;
   email: string;
   phone?: string | number;
+  profilePicture: string | null;
   createdAt: string;
 }
 
@@ -99,4 +100,8 @@ export interface IUserSessionDt {
   id: number;
   email: string;
   name?: string;
+}
+
+export interface IProfilePic {
+  profilePic: string;
 }
