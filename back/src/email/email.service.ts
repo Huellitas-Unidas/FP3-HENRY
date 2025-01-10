@@ -34,7 +34,7 @@ export class EmailService {
     templateType: string,
   ) {
     let template = '';
-
+  
     if (templateType === 'donationCreation') {
       template = templates.donationCreation;
     } else if (templateType === 'donationSuccess') {
@@ -45,24 +45,26 @@ export class EmailService {
       template = templates.postCreation;
     } else if (templateType === 'petCreation') {
       template = templates.petCreation;
+    } else if (templateType === 'pqrCreation') {
+      template = templates.pqrCreation;
     }
-
+  
     const html = this.replacePlaceholders(template, data);
-
+  
     const msg = {
       to,
       from: process.env.SENDGRID_FROM_EMAIL,
       subject,
       html,
     };
-
+  
     try {
       await sendgrid.send(msg);
     } catch (error) {
       console.error('Error al enviar el correo:', error);
     }
   }
-
+  
   private replacePlaceholders(
     template: string,
     data: Record<string, any>,
