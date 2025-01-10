@@ -17,16 +17,24 @@ export class PqrService {
     const userFound = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-    if (!userFound) throw new HttpException('usuario no encontrado', 404);
+    if (!userFound) throw new HttpException('Usuario no encontrado', 404);
 
     const pqr = await this.prisma.pqr.create({
       data: { fullname, email, type, description, userId },
     });
 
-    await this.emailService.sendMail(
+    const emailData = {
+      fullname,
+      email,
+      type,
+      description,
+    };
+
+    await this.emailService.sendMailWithTemplate(
       userFound.email,
       'Confirmación de PQR recibido',
-      `Hola ${userFound.name},\n\nHemos recibido tu ${type} con éxito. A continuación te compartimos los detalles:\n\nTipo: ${type}\nDescripción: ${description}\n\nNuestro equipo está trabajando en ello y te responderá lo antes posible.\n\nGracias por contactarnos.\n\nSaludos,\nEl equipo de Huellas Unidas`,
+      emailData,
+      'pqrCreation',
     );
 
     return pqr;
