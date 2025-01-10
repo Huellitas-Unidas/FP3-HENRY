@@ -1,4 +1,10 @@
-import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNumber, IsString, MinLength, IsOptional, IsEnum } from 'class-validator';
+import { Transform } from 'class-transformer';
+
+enum Role {
+  user = 'user',
+  admin = 'admin',
+}
 
 export class CreateUserDto {
   @IsEmail()
@@ -11,6 +17,11 @@ export class CreateUserDto {
   @IsString()
   name: string;
 
-  @IsString()
+  @IsNumber()
   phone: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  @Transform(({ value }) => value?.toLowerCase())
+  role?: Role;
 }

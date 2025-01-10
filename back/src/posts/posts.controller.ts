@@ -12,11 +12,14 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/common/roles.decorator';
+import { RolesGuard } from 'src/common/roles.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -42,12 +45,16 @@ export class PostsController {
   }
 
   @Put(':id')
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'user') 
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'user') 
+  remove(@Param('id') id: string) {
     return this.postsService.remove(id);
   }
 }
