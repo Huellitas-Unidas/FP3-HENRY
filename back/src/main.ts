@@ -20,11 +20,20 @@ async function bootstrap() {
   );
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Huellas Unidas')
-    .setDescription('API DEL PROYECTO FINAL')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  .setTitle('Huellas Unidas')
+  .setDescription('API DEL PROYECTO FINAL')
+  .setVersion('1.0')
+  .addBearerAuth(
+    { 
+      type: 'http', 
+      scheme: 'bearer', 
+      bearerFormat: 'JWT' 
+    },
+    'access-token',
+  )
+  .build();
+
+
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 
@@ -35,8 +44,10 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    allowedHeaders: 'Authorization, Content-Type',
+    credentials: true, 
   });
+  
 
   app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);

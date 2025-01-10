@@ -8,6 +8,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuthService } from 'src/auth/auth.service';
 import { EmailService } from 'src/email/email.service';
+import { Role } from '@prisma/client';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -15,36 +17,41 @@ export class UserService {
     private authService: AuthService,
     private emailService: EmailService,
   ) {}
-  async create(createUserDto: CreateUserDto) {
-    const { email, password, name, phone } = createUserDto;
 
+  async create(createUserDto: CreateUserDto) {
+    const { email, password, name, phone, role } = createUserDto;
+  
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
-
+  
     if (existingUser) {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
-
+  
     const hashedPassword = await this.authService.hashPassword(password);
-
+  
     const user = await this.prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         phone: String(phone),
         name,
+        role: (role ? role.toUpperCase() : 'USER') as Role,
       },
     });
-    await this.emailService.sendMail(
-      email,
-      'Bienvenido a nuestra plataforma',
-      `Hola ${name},\n\n¡Gracias por registrarte! Estamos felices de tenerte con nosotros.\n\nSaludos,\nEl equipo de Huellas Unidas!`,
-    );
-
-    return { user };
+  
+ 
+    await this.emailService.sendMailWithTemplate(user.email, 'register', {
+      name: user.name,
+    }, 'register');
+  
+    return {
+      user,
+      message: 'Usuario creado exitosamente y correo enviado.',
+    };
   }
-
+  
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -63,12 +70,13 @@ export class UserService {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
 
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, role: user.role };
+
     const token = this.authService.generateToken(payload);
 
     return {
       message: `Te has logueado exitosamente.`,
-      token: token,
+      token,
     };
   }
 
@@ -102,7 +110,10 @@ export class UserService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const updatedUser = await this.prisma.user.update({
       where: { id },
-      data: updateUserDto,
+      data: {
+        ...updateUserDto,
+        role: updateUserDto.role ? (updateUserDto.role.toUpperCase() as Role) : undefined,
+      },
     });
 
     return updatedUser;
