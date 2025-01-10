@@ -8,12 +8,16 @@ import { IUserData } from "@/interfaces/types";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { getUserId } from "@/helpers/userId";
+import { getUserById } from "@/app/api/userAPI";
 
 const Navbar = () => {
+  const userId = getUserId();
   const [userSession, setUserSession] = useState<IUserData | null>(null);
+  const [userPic, setUserPic] = useState<string | null>(null);
   const router = useRouter();
   const session = useSession();
-  const profilePhoto = session.data?.user?.image || emptyProfile;
+  const profilePhoto = session.data?.user?.image || userPic || emptyProfile;
 
   const handleLogout = async () => {
     try {
@@ -52,7 +56,26 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("storageChange", handleStorageChange);
     };
-  }, []);
+  }, [profilePhoto]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (userId) {
+          const user = await getUserById(userId);
+          if (user) setUserPic(user.profilePicture);
+          else {
+            setUserPic(null);
+          }
+        } else {
+          console.error("No se encontró el usuario");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, [userId, profilePhoto]);
 
   return (
     <nav className="flex shadow-lg rounded-lg justify-between md:h-20 border border-[#3c9083] bg-[#d7f0e9]">
