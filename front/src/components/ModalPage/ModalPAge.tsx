@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
@@ -7,11 +6,9 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
 
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface ModalPageProps {
-
   onClose: () => void;
   onRefreshList: () => void;
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,29 +33,28 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
 
   // Verificar el userId del almacenamiento local
 
-useEffect(() => {
-  const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
-  if (storedUserId) {
-    setFormData((prevState) => ({
-      ...prevState,
-      userId: storedUserId, // Actualiza el userId dinámicamente
-    }));
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Error de autenticación",
-      text: "No estás autenticado. Por favor, inicia sesión para continuar.",
-      customClass: {
-        confirmButton:
-          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-    }).then(() => {
-      onClose();
-      router.push("/login");
-    });
-  }
-}, [onClose, router]);
-
+  useEffect(() => {
+    const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+    if (storedUserId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        userId: storedUserId, // Actualiza el userId dinámicamente
+      }));
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error de autenticación",
+        text: "No estás autenticado. Por favor, inicia sesión para continuar.",
+        customClass: {
+          confirmButton:
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
+      }).then(() => {
+        onClose();
+        router.push("/login");
+      });
+    }
+  }, [onClose, router]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -77,7 +73,7 @@ useEffect(() => {
         ...prevState,
         location: {
           ...prevState.location,
-          [field]: value,           // Mantén el valor como string para permitir el signo negativo
+          [field]: value, // Mantén el valor como string para permitir el signo negativo
         },
       }));
     } else if (name === "dateLost") {
@@ -85,7 +81,7 @@ useEffect(() => {
       setFormData((prevState) => ({
         ...prevState,
         dateLost: value,
-        dateLostISO: isoDate
+        dateLostISO: isoDate,
       })); // Actualizar ambos
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -116,10 +112,17 @@ useEffect(() => {
         return;
       }
       // Validar userId antes de enviar el formulario
-      if (!formData.userId || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(formData.userId)) {
-        throw new Error("El ID de usuario no es válido o no fue proporcionado.");
+      if (
+        !formData.userId ||
+        !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+          formData.userId
+        )
+      ) {
+        throw new Error(
+          "El ID de usuario no es válido o no fue proporcionado."
+        );
       }
- 
+
       if (!formData.file) {
         throw new Error("Debe adjuntar una imagen");
       }
@@ -131,14 +134,13 @@ useEffect(() => {
       ) {
         throw new Error("La ubicación es obligatoria y debe ser válida.");
       }
-  
+
       // Convertir la latitud y longitud a números flotantes y enviarlos como strings
       const locationData = {
         address: formData.location.address,
         latitude: parseFloat(String(formData.location.latitude)) || 0, // Asegurar número flotante
         longitude: parseFloat(String(formData.location.longitude)) || 0, // Asegurar número flotante
       };
-      
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -172,8 +174,8 @@ useEffect(() => {
         title: "El post se creó exitosamente",
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded"
-        }
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
+        },
       });
 
       onRefreshList();
@@ -189,7 +191,7 @@ useEffect(() => {
         location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
         file: null,
         status: "",
-        userId: formData.userId
+        userId: formData.userId,
       });
 
       onClose();
@@ -371,7 +373,7 @@ useEffect(() => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-green-500"
+              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
             >
               {loading ? "Cargando..." : "Publicar"}
             </button>
