@@ -13,7 +13,7 @@ const Pqr = () => {
     email: "",
     type: "",
     description: "",
-    userId: "", 
+    userId: "",
   });
 
   const [errors, setErrors] = useState<Partial<IpqrProps>>({
@@ -23,8 +23,8 @@ const Pqr = () => {
     description: "",
   });
 
-  useEffect(() => {    // función para get el userId del token 
-    const userId = getUserId();   //get user esta definida en helpers/userId.ts
+  useEffect(() => {
+    const userId = getUserId();
     if (userId) {
       setPqrData((prev) => ({ ...prev, userId }));
     } else {
@@ -35,27 +35,27 @@ const Pqr = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-      const newErrors = validateForm(pqrData); // Validar form antes de enviar
-      setErrors(newErrors);
-       
-      if (Object.values(newErrors).some((error) => error)) {   // Si hay errores, mensaje de no enviar
-        Toast.fire({
-          title: "Por favor, corrige los errores antes de enviar",
-          icon: "error",
-          customClass: {
-            confirmButton:
-              "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
-          },
-        });
-        return;
-      }
+    const newErrors = validateForm(pqrData);
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((error) => error)) {
+      Toast.fire({
+        title: "Por favor, corrige los errores antes de enviar",
+        icon: "error",
+        customClass: {
+          confirmButton:
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
+        },
+      });
+      return;
+    }
 
     if (
       !pqrData.fullname ||
       !pqrData.email ||
       !pqrData.type ||
-      !pqrData.description ||      
-      !pqrData.userId    //userId esté siempre incluido al enviar los datos!
+      !pqrData.description ||
+      !pqrData.userId
     ) {
       Toast.fire({
         title: "Todos los campos son obligatorios",
@@ -67,30 +67,30 @@ const Pqr = () => {
         },
       });
       return;
-    };
+    }
 
     postPqr(pqrData)
-    .then(() => {  // modificación breve para ajustar las validaciones en tiempo real!
-      setPqrData({
-        fullname: "",
-        email: "",
-        type: "",
-        description: "",
-        userId: pqrData.userId,       // Preservar el userId
+      .then(() => {
+        setPqrData({
+          fullname: "",
+          email: "",
+          type: "",
+          description: "",
+          userId: pqrData.userId,
+        });
+        Swal.fire({
+          title: "¡Formulario enviado con éxito!",
+          icon: "success",
+          customClass: {
+            confirmButton:
+              "bg-green500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error al enviar el formulario:", error);
       });
-      Swal.fire({
-        title: "¡Formulario enviado con éxito!",
-        icon: "success",
-        customClass: {
-          confirmButton:
-            "bg-green500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
-      });
-    }) .catch((error) => {
-      console.error("Error al enviar el formulario:", error);
-    });
-}; // para vaciar los campos
- 
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -103,7 +103,7 @@ const Pqr = () => {
       [name]: value,
     }));
 
-    const error = validateField(name, value);   // validación en tiempo real
+    const error = validateField(name, value);
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
@@ -121,58 +121,83 @@ const Pqr = () => {
           className="space-y-2 flex flex-col gap-2 items-center text-sm w-full"
           onSubmit={handleSubmit}
         >
-          <input
-            type="text"
-            placeholder="Lulu Alvarado"
-            className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-            name="fullname"
-            value={pqrData.fullname}
-            onChange={handleChange}
-          />
-          {errors.fullname && (
-            <span className="text-red-500 text-sm">{errors.fullname}</span>
-          )}
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="Lulu Alvarado"
+              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+                errors.fullname ? "border-red-300" : "border-gray-300"
+              }`}
+              name="fullname"
+              value={pqrData.fullname}
+              onChange={handleChange}
+            />
+            {errors.fullname && (
+              <div className="absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md bg-customGreen-400 text-white z-10">
+                {errors.fullname}
+              </div>
+            )}
+          </div>
 
-          <input
-            type="email"
-            placeholder="lulu.alvarado@mail.com"
-            className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-            name="email"
-            value={pqrData.email}
-            onChange={handleChange}
-          />
-          {errors.email && (
-            <span className="text-red-500 text-sm">{errors.email}</span>
-          )}
-         
-          <select
-            className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-            name="type"
-            value={pqrData.type}
-            onChange={handleChange}
-          >                     
-            <option value="" disabled>
-              Tipo
-            </option>
-            <option value="peticion">Peticiones</option>
-            <option value="queja">Quejas</option>
-            <option value="reclamo">Reclamos</option>
-          </select>
-          {errors.type && (
-            <span className="text-red-500 text-sm">{errors.type}</span>
-          )}
+          <div className="relative w-full">
+            <input
+              type="email"
+              placeholder="lulu.alvarado@mail.com"
+              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+                errors.email ? "border-red-300" : "border-gray-300"
+              }`}
+              name="email"
+              value={pqrData.email}
+              onChange={handleChange}
+            />
+            {errors.email && (
+              <div className="absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md bg-customGreen-400 text-white z-10">
+                {errors.email}
+              </div>
+            )}
+          </div>
 
-          <textarea
-            placeholder="En este espacio puedes escribir y detallar tu solicitud."
-            className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-            rows={3}
-            name="description"
-            value={pqrData.description}
-            onChange={handleChange}
-          ></textarea>
+          <div className="relative w-full">
+            <select
+              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+                errors.type ? "border-red-300" : "border-gray-300"
+              }`}
+              name="type"
+              value={pqrData.type}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Tipo
+              </option>
+              <option value="peticion">Peticiones</option>
+              <option value="queja">Quejas</option>
+              <option value="reclamo">Reclamos</option>
+            </select>
+            {errors.type && (
+              <div className="absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md bg-customGreen-400 text-white z-10">
+                {errors.type}
+              </div>
+            )}
+          </div>
+
+          <div className="relative w-full">
+            <textarea
+              placeholder="En este espacio puedes escribir y detallar tu solicitud."
+              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+                errors.description ? "border-red-300" : "border-gray-300"
+              }`}
+              rows={3}
+              name="description"
+              value={pqrData.description}
+              onChange={handleChange}
+            ></textarea>
             {errors.description && (
-            <span className="text-red-500 text-sm">{errors.description}</span>
-          )}
+              <div className="absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md bg-customGreen-400 text-white z-10">
+                {errors.description}
+              </div>
+            )}
+          </div>
+
           <button
             type="submit"
             className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
@@ -186,3 +211,4 @@ const Pqr = () => {
 };
 
 export default Pqr;
+
