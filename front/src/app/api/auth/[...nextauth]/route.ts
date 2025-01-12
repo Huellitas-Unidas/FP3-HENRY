@@ -10,25 +10,41 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Callback para manejar el token JWT
     async jwt({ token, account }: { token: JWT; account?: Account | null }): Promise<JWT> {
-      // Guarda el accessToken en el JWT si existe
       if (account) {
+        // Almacena el accessToken de Google en el token
         token.accessToken = account.access_token;
       }
       return token;
     },
+    // Callback para agregar el token a la sesión
     async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
-      // Agrega el accessToken a la sesión
-      session.user.accessToken = token.accessToken as string;
+      session.user.accessToken = token.accessToken as string; // Agrega el accessToken a la sesión
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true, // Protege contra acceso del cliente
+        sameSite: "lax", // Protege contra ataques CSRF
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // Solo HTTPS en producción
+      },
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET, // Secreto para firmar los tokens
+  session: {
+    strategy: "jwt", // Manejo de sesión con JWT
+  },
 };
 
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+
 
 
 
