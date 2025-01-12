@@ -143,7 +143,7 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
-        <p className="text-green500">Mis mascotas:</p>
+        <p className="text-green500 font-semibold">Mis mascotas:</p>
 
         {pets?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4">
