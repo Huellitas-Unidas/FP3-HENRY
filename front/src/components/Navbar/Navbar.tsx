@@ -33,12 +33,28 @@ const Navbar = () => {
       });
       localStorage.removeItem("userData");
       setUserSession(null);
-      await signOut();
+      await signOut({ redirect: false });  ////***////// */ solo se incluyo redirect: false -> evitamos conflictos con la redirección automática.
       router.push("/");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
   };
+  /////Se añade un listener detecte cambios en las cookies de sesión o el estado de autenticación //
+  useEffect(() => {
+    const handleStorageEvent = (event: StorageEvent) => {
+      if (event.key === "next-auth.session-token" && !event.newValue) {
+        // Si la cookie de sesión ha sido eliminada, redirige al usuario
+        setUserSession(null);
+        router.push("/");
+      }
+    };
+    window.addEventListener("storage", handleStorageEvent);
+    return () => {
+      window.removeEventListener("storage", handleStorageEvent);
+    };
+  }, [router]);
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
     const handleStorageChange = () => {

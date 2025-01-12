@@ -53,15 +53,20 @@ export async function updatePostStatus(id: string, status: string) {
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(
-        errorData.error || `Error al actualizar el Post por ID ${id}`
+        errorData.error || `Error al actualizar el Post con ID ${id}`
       );
     }
+
+  const result = await response.json(); 
+  return result.updatedPost;
 
     return await response.json();
   } catch (error) {
     console.error("Error actualizando el post por status:", error);
     throw error;
   }
+
+  
 }
 
 // read - obtener los posteos relacionadas al usuario
