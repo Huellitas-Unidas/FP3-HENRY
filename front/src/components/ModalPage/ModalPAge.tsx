@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+
+const libraries: Libraries = ["places"];
 
 interface ModalPageProps {
   onClose: () => void;
@@ -25,11 +28,12 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     location: { address: "", latitude: 0, longitude: 0 },
     file: null as File | null,
     status: "perdido",
-    userId: "",
+    userId: ""
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   // Verificar el userId del almacenamiento local
 
@@ -67,8 +71,21 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0] || null;
       setFormData((prevState) => ({ ...prevState, file }));
-    } else if (name.startsWith("location")) {
-      const field = name.split(".")[1];
+      //}
+      //else if (name.startsWith("location")) {
+      //const field = name.split(".")[1];
+      //setFormData((prevState) => ({
+      //  ...prevState,
+      //  location: {
+      //    ...prevState.location,
+      //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
+      //  },
+      //}));
+    } else  if (name === "dateLost") {
+      const selectedDate = new Date(value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      const isoDate = selectedDate.toISOString();
+  
       setFormData((prevState) => ({
         ...prevState,
         location: {
@@ -127,7 +144,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         throw new Error("Debe adjuntar una imagen");
       }
 
-      if (
+      /* if (
         !formData.location.address ||
         !formData.location.latitude ||
         !formData.location.longitude
@@ -148,7 +165,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
       data.append("dateLost", formData.dateLostISO);
-      data.append("location", JSON.stringify(locationData));
+      data.append("location", JSON.stringify(formData.location));
       data.append("file", formData.file as File);
       data.append("status", formData.status);
       data.append("userId", formData.userId);
@@ -156,9 +173,9 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: data,
+        body: data
       });
 
       if (!response.ok) {
