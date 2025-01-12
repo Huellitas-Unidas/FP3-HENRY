@@ -25,13 +25,13 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
       return;
     }
 
-    // Realiza la solicitud al backend con los datos formateados
+   
     const res = await fetch(`${API_URL}/user/register`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(userData), // `phone` ya es un número
+      body: JSON.stringify(userData), 
     });
 
     if (res.ok) {
@@ -105,7 +105,7 @@ export async function login(userData: IUserData) {
           console.log("Token decodificado:", decodedToken);
 
           if (decodedToken && decodedToken.sub) {
-            localStorage.setItem("userId", decodedToken.sub); // Guardar el `sub` como `userId`
+            localStorage.setItem("userId", decodedToken.sub); 
           } else {
             throw new Error(
               "El token no contiene un ID de usuario válido (sub)."
