@@ -1,12 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
+import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+
+const libraries: Libraries = ["places"];
 
 interface ModalPageProps {
   onClose: () => void;
@@ -25,11 +30,12 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     location: { address: "", latitude: 0, longitude: 0 },
     file: null as File | null,
     status: "perdido",
-    userId: "",
+    userId: ""
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   // Verificar el userId del almacenamiento local
 
@@ -38,7 +44,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId, // Actualiza el userId dinámicamente
+        userId: storedUserId // Actualiza el userId dinámicamente
       }));
     } else {
       Swal.fire({
@@ -47,14 +53,28 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         text: "No estás autenticado. Por favor, inicia sesión para continuar.",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+        }
       }).then(() => {
         onClose();
         router.push("/login");
       });
     }
   }, [onClose, router]);
+
+  const handlePlaceChanged = () => {
+    const place = placeRef.current?.getPlace();
+    if (place?.geometry?.location) {
+      const latitude = place.geometry.location.lat();
+      const longitude = place.geometry.location.lng();
+      const address = place.formatted_address || "";
+
+      setFormData((prevState) => ({
+        ...prevState,
+        location: { address, latitude, longitude }
+      }));
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -67,22 +87,26 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0] || null;
       setFormData((prevState) => ({ ...prevState, file }));
-    } else if (name.startsWith("location")) {
-      const field = name.split(".")[1];
+      //}
+      //else if (name.startsWith("location")) {
+      //const field = name.split(".")[1];
+      //setFormData((prevState) => ({
+      //  ...prevState,
+      //  location: {
+      //    ...prevState.location,
+      //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
+      //  },
+      //}));
+    } else  if (name === "dateLost") {
+      const selectedDate = new Date(value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      const isoDate = selectedDate.toISOString();
+  
       setFormData((prevState) => ({
         ...prevState,
-        location: {
-          ...prevState.location,
-          [field]: value, // Mantén el valor como string para permitir el signo negativo
-        },
+        dateLost: value, 
+        dateLostISO: isoDate, 
       }));
-    } else if (name === "dateLost") {
-      const isoDate = new Date(value).toISOString(); // Convertir a formato ISO
-      setFormData((prevState) => ({
-        ...prevState,
-        dateLost: value,
-        dateLostISO: isoDate,
-      })); // Actualizar ambos
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: value }));
     }
@@ -127,20 +151,21 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         throw new Error("Debe adjuntar una imagen");
       }
 
-      if (
+      /* if (
         !formData.location.address ||
         !formData.location.latitude ||
         !formData.location.longitude
       ) {
         throw new Error("La ubicación es obligatoria y debe ser válida.");
       }
-
+  
       // Convertir la latitud y longitud a números flotantes y enviarlos como strings
       const locationData = {
         address: formData.location.address,
         latitude: parseFloat(String(formData.location.latitude)) || 0, // Asegurar número flotante
         longitude: parseFloat(String(formData.location.longitude)) || 0, // Asegurar número flotante
       };
+      */
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -148,7 +173,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
       data.append("dateLost", formData.dateLostISO);
-      data.append("location", JSON.stringify(locationData));
+      data.append("location", JSON.stringify(formData.location));
       data.append("file", formData.file as File);
       data.append("status", formData.status);
       data.append("userId", formData.userId);
@@ -156,9 +181,9 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: data,
+        body: data
       });
 
       if (!response.ok) {
@@ -174,8 +199,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         title: "El post se creó exitosamente",
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
-        },
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded"
+        }
       });
 
       onRefreshList();
@@ -191,7 +216,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
         file: null,
         status: "",
-        userId: formData.userId,
+        userId: formData.userId
       });
 
       onClose();
@@ -207,185 +232,179 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   };
 
   return (
-    <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
-      <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
-        <div className="flex items-center">
-          <h3 className="text-[#2e736b] text-xl font-bold flex-1">
-            Publicar una mascota perdida o encontrada
-          </h3>
-          <button
-            onClick={onClose} // Llama a la función onClose al hacer clic
-            className="text-gray-400 hover:text-red-500"
-            aria-label="Cerrar modal"
-          >
-            ✕
-          </button>
+    <LoadScript googleMapsApiKey={GOOGLE_API_KEY!} libraries={libraries}>
+      <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
+        <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
+          <div className="flex items-center">
+            <h3 className="text-[#2e736b] text-xl font-bold flex-1">
+              Publicar una mascota perdida o encontrada
+            </h3>
+            <button
+              onClick={onClose} // Llama a la función onClose al hacer clic
+              className="text-gray-400 hover:text-red-500"
+              aria-label="Cerrar modal"
+            >
+              ✕
+            </button>
+          </div>
+          <form className="space-y-4 mt-8" onSubmit={handleSubmit} noValidate>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">Título</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Ej: Osito Perdido"
+                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                  errors.title ? "border-red-500" : ""
+                }`}
+              />
+              {errors.title && (
+                <span className="text-red-500 text-sm">{errors.title}</span>
+              )}
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Descripción
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Escriba características del animal"
+                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                  errors.description ? "border-red-500" : ""
+                }`}
+              />
+              {errors.description && (
+                <span className="text-red-500 text-sm">
+                  {errors.description}
+                </span>
+              )}
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">Tipo</label>
+              <select
+                name="petType"
+                value={formData.petType}
+                onChange={handleChange}
+                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                  errors.petType ? "border-red-500" : ""
+                }`}
+              >
+                <option value="">Seleccione un tipo</option>
+                <option value="perro">Perro</option>
+                <option value="gato">Gato</option>
+                <option value="otro">Otro</option>
+              </select>
+              {errors.petType && (
+                <span className="text-red-500 text-sm">{errors.petType}</span>
+              )}
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Número de contacto
+              </label>
+              <input
+                type="text"
+                name="contactInfo"
+                value={formData.contactInfo}
+                onChange={handleChange}
+                placeholder="Ej: 123456789"
+                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                  errors.contactInfo ? "border-red-500" : ""
+                }`}
+              />
+              {errors.contactInfo && (
+                <span className="text-red-500 text-sm">
+                  {errors.contactInfo}
+                </span>
+              )}
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Fecha de pérdida/encontrado
+              </label>
+              <input
+                type="date"
+                name="dateLost"
+                value={formData.dateLost}
+                onChange={handleChange}
+                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                  errors.dateLost ? "border-red-500" : ""
+                }`}
+              />
+              {errors.dateLost && (
+                <span className="text-red-500 text-sm">{errors.dateLost}</span>
+              )}
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Ubicación
+              </label>
+              <Autocomplete
+                onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+                onPlaceChanged={handlePlaceChanged}
+              >
+                <input
+                  type="text"
+                  placeholder="Ingrese una dirección"
+                  className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+                />
+              </Autocomplete>
+            </div>
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Estado de la mascota
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              >
+                <option value="perdido">Perdido</option>
+                <option value="encontrado">Encontrado</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-gray-800 text-sm mb-2 block">
+                Subir imagen
+              </label>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                onChange={handleChange}
+                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              />
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                className="px-6 py-3 rounded-lg text-gray-800 text-sm border-none outline-none tracking-wide bg-gray-200 hover:bg-gray-300"
+                onClick={onClose} // También llama a onClose en el botón Cancelar
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-green-500"
+              >
+                {loading ? "Cargando..." : "Publicar"}
+              </button>
+            </div>
+          </form>
         </div>
-        <form className="space-y-4 mt-8" onSubmit={handleSubmit} noValidate>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Título</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Ej: Osito Perdido"
-              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                errors.title ? "border-red-500" : ""
-              }`}
-            />
-            {errors.title && (
-              <span className="text-red-500 text-sm">{errors.title}</span>
-            )}
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">
-              Descripción
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Escriba características del animal"
-              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                errors.description ? "border-red-500" : ""
-              }`}
-            />
-            {errors.description && (
-              <span className="text-red-500 text-sm">{errors.description}</span>
-            )}
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Tipo</label>
-            <select
-              name="petType"
-              value={formData.petType}
-              onChange={handleChange}
-              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                errors.petType ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Seleccione un tipo</option>
-              <option value="perro">Perro</option>
-              <option value="gato">Gato</option>
-              <option value="otro">Otro</option>
-            </select>
-            {errors.petType && (
-              <span className="text-red-500 text-sm">{errors.petType}</span>
-            )}
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">
-              Número de contacto
-            </label>
-            <input
-              type="text"
-              name="contactInfo"
-              value={formData.contactInfo}
-              onChange={handleChange}
-              placeholder="Ej: 123456789"
-              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                errors.contactInfo ? "border-red-500" : ""
-              }`}
-            />
-            {errors.contactInfo && (
-              <span className="text-red-500 text-sm">{errors.contactInfo}</span>
-            )}
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">
-              Fecha de pérdida/encontrado
-            </label>
-            <input
-              type="date"
-              name="dateLost"
-              value={formData.dateLost}
-              onChange={handleChange}
-              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                errors.dateLost ? "border-red-500" : ""
-              }`}
-            />
-            {errors.dateLost && (
-              <span className="text-red-500 text-sm">{errors.dateLost}</span>
-            )}
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">
-              Ubicación
-            </label>
-            <input
-              type="text"
-              name="location.address"
-              value={formData.location.address}
-              onChange={handleChange}
-              placeholder="Ej: La Plata"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Latitud</label>
-            <input
-              type="text"
-              name="location.latitude"
-              value={formData.location.latitude}
-              onChange={handleChange}
-              placeholder="Ej: 30.71"
-              min="-90"
-              max="90"
-              step="0.0001"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Longitud</label>
-            <input
-              type="text"
-              name="location.longitude"
-              value={formData.location.longitude}
-              onChange={handleChange}
-              placeholder="Ej: -34.060"
-              min="-180"
-              max="180"
-              step="0.0001"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">
-              Subir imagen
-            </label>
-            <input
-              type="file"
-              name="file"
-              accept="image/*"
-              onChange={handleChange}
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </div>
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className="px-6 py-3 rounded-lg text-gray-800 text-sm border-none outline-none tracking-wide bg-gray-200 hover:bg-gray-300"
-              onClick={onClose} // También llama a onClose en el botón Cancelar
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
-            >
-              {loading ? "Cargando..." : "Publicar"}
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
+    </LoadScript>
   );
 };
 
 export default ModalPage;
-
 {
   /*
   'use client'
