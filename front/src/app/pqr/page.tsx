@@ -202,7 +202,7 @@ const Pqr = () => {
             type="submit"
             className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
           >
-            Enviar mi Solicitud
+            Enviar
           </button>
         </form>
       </div>
