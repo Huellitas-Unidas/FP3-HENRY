@@ -13,7 +13,7 @@ const Pqr = () => {
     email: "",
     type: "",
     description: "",
-    userId: "", 
+    userId: "",
   });
 
   const [errors, setErrors] = useState<Partial<IpqrProps>>({
@@ -23,8 +23,9 @@ const Pqr = () => {
     description: "",
   });
 
-  useEffect(() => {    // función para get el userId del token 
-    const userId = getUserId();   //get user esta definida en helpers/userId.ts
+  useEffect(() => {
+    // función para get el userId del token
+    const userId = getUserId(); //get user esta definida en helpers/userId.ts
     if (userId) {
       setPqrData((prev) => ({ ...prev, userId }));
     } else {
@@ -35,27 +36,28 @@ const Pqr = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-      const newErrors = validateForm(pqrData); // Validar form antes de enviar
-      setErrors(newErrors);
-       
-      if (Object.values(newErrors).some((error) => error)) {   // Si hay errores, mensaje de no enviar
-        Toast.fire({
-          title: "Por favor, corrige los errores antes de enviar",
-          icon: "error",
-          customClass: {
-            confirmButton:
-              "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
-          },
-        });
-        return;
-      }
+    const newErrors = validateForm(pqrData); // Validar form antes de enviar
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((error) => error)) {
+      // Si hay errores, mensaje de no enviar
+      Toast.fire({
+        title: "Por favor, corrige los errores antes de enviar",
+        icon: "error",
+        customClass: {
+          confirmButton:
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-10 px-8 rounded",
+        },
+      });
+      return;
+    }
 
     if (
       !pqrData.fullname ||
       !pqrData.email ||
       !pqrData.type ||
-      !pqrData.description ||      
-      !pqrData.userId    //userId esté siempre incluido al enviar los datos!
+      !pqrData.description ||
+      !pqrData.userId //userId esté siempre incluido al enviar los datos!
     ) {
       Toast.fire({
         title: "Todos los campos son obligatorios",
@@ -67,30 +69,31 @@ const Pqr = () => {
         },
       });
       return;
-    };
+    }
 
     postPqr(pqrData)
-    .then(() => {  // modificación breve para ajustar las validaciones en tiempo real!
-      setPqrData({
-        fullname: "",
-        email: "",
-        type: "",
-        description: "",
-        userId: pqrData.userId,       // Preservar el userId
+      .then(() => {
+        // modificación breve para ajustar las validaciones en tiempo real!
+        setPqrData({
+          fullname: "",
+          email: "",
+          type: "",
+          description: "",
+          userId: pqrData.userId, // Preservar el userId
+        });
+        Swal.fire({
+          title: "¡Formulario enviado con éxito!",
+          icon: "success",
+          customClass: {
+            confirmButton:
+              "bg-green500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error al enviar el formulario:", error);
       });
-      Swal.fire({
-        title: "¡Formulario enviado con éxito!",
-        icon: "success",
-        customClass: {
-          confirmButton:
-            "bg-green500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
-      });
-    }) .catch((error) => {
-      console.error("Error al enviar el formulario:", error);
-    });
-}; // para vaciar los campos
- 
+  }; // para vaciar los campos
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -103,7 +106,7 @@ const Pqr = () => {
       [name]: value,
     }));
 
-    const error = validateField(name, value);   // validación en tiempo real
+    const error = validateField(name, value); // validación en tiempo real
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
@@ -144,13 +147,13 @@ const Pqr = () => {
           {errors.email && (
             <span className="text-red-500 text-sm">{errors.email}</span>
           )}
-         
+
           <select
             className="py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
             name="type"
             value={pqrData.type}
             onChange={handleChange}
-          >                     
+          >
             <option value="" disabled>
               Tipo
             </option>
@@ -170,14 +173,14 @@ const Pqr = () => {
             value={pqrData.description}
             onChange={handleChange}
           ></textarea>
-            {errors.description && (
+          {errors.description && (
             <span className="text-red-500 text-sm">{errors.description}</span>
           )}
           <button
             type="submit"
             className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
           >
-            Enviar mi Solicitud
+            Enviar
           </button>
         </form>
       </div>
