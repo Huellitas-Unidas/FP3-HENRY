@@ -69,7 +69,7 @@ const LostAndFound: React.FC = () => {
         </div>
       </div>
 
-      {/* Otro botón adicional */}
+  
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
       {/* Lista de Tarjetas */}
