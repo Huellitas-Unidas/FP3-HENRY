@@ -4,13 +4,14 @@ import CardList from "@/components/CardList/CardList";
 import React, { useState, useEffect } from "react";
 import { IPost } from "@/interfaces/types";
 import ModalPage from "@/components/ModalPage/ModalPAge";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const LostAndFound: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [filter, setFilter] = useState<string>("todos"); // Estado para el filtro
   const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]); // Lista filtrada
+  const router = useRouter();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -50,8 +51,11 @@ const LostAndFound: React.FC = () => {
     <div className="p-8">
       <div className="flex flex-row justify-between">
         <div className="mb-4">
-          <button className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md">
-            <Link href={"/myposts"}>Mis posteos</Link>
+          <button
+            onClick={() => router.push("/myposts")}
+            className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
+          >
+            Mis posteos
           </button>
         </div>
 

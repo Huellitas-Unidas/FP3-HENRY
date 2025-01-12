@@ -6,7 +6,12 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-  generateToken(payload: any) {
+  generateToken(user: any) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+    };
     return this.jwtService.sign(payload);
   }
 
