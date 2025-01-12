@@ -55,7 +55,7 @@ async function bootstrap() {
   });
 
 
-  const PORT = process.env.PORT || 4000;
+  const PORT = parseInt(process.env.PORT) || 4000;
 
   await app.listen(PORT);
   console.log(`🚀 Backend corriendo en http://localhost:${PORT}/`);
