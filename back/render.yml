@@ -7,5 +7,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: production           # Aseguramos que el entorno sea de producción
-    directory: ./back                    # Ya que estamos en la carpeta 'back', podemos usar '.' como referencia al directorio actual
-    staticPublishPath: /dist         # Si hay archivos estáticos generados en 'dist', los publicamos aquí (opcional)
+    directory: /opt/render/project/back              # Correcto: indica que el 'package.json' está en la carpeta 'back'
+    staticPublishPath: /dist         # Si tienes archivos estáticos en /dist (opcional)
