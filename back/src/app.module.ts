@@ -12,6 +12,7 @@ import { PetsModule } from './pets/pets.module';
 import { StripeModule } from './stripe/stripe.module';
 import { ConfigModule } from '@nestjs/config';
 import { PqrModule } from './pqr/pqr.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -21,13 +22,16 @@ import { PqrModule } from './pqr/pqr.module';
     ChatbotModule,
     ConfigModule.forRoot({
       isGlobal: true,
+     
     }),
+    
     StripeModule,
     NotificationsModule,
     MapModule,
     AdministrationModule,
     DonationModule,
     PqrModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
