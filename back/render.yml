@@ -1,0 +1,11 @@
+services:
+  - name: back
+    type: web
+    env: node
+    buildCommand: npm install        # Comando para instalar dependencias
+    startCommand: npm run start:prod # Comando para iniciar la aplicación en producción
+    envVars:
+      - key: NODE_ENV
+        value: production           # Aseguramos que el entorno sea de producción
+    directory: .                     # Ya que estamos en la carpeta 'back', podemos usar '.' como referencia al directorio actual
+    staticPublishPath: /dist         # Si hay archivos estáticos generados en 'dist', los publicamos aquí (opcional)
