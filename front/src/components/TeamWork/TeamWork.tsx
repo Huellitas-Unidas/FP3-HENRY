@@ -31,7 +31,7 @@ const TeamWork = () => {
             </div>
 
             <div className="bg-gray-800 p-4 border rounded-lg">
-                <Image src="/images/logo.jpeg" className="w-full object-contain object-top rounded-lg" width={250} 
+                <Image src="/images/rocio.jpg" className="w-full object-contain object-top rounded-lg" width={250} 
           height={250} alt='rocio' />
 
                 <div className="text-center mt-4">

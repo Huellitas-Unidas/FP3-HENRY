@@ -70,7 +70,7 @@ const Navbar = () => {
           <Link href="/lostandfound">Buscados / Encontrados</Link>
           <Link href="donations">Ayudanos donando</Link>
           <Link href="/aboutUs">Sobre Huellas Unidas</Link>
-          <Link href="not-found">🐾Recomendaciones</Link>
+          <Link href="/recommendation">🐾Recomendaciones</Link>
         </div>
 
         {userSession !== null || session?.data?.user ? (
