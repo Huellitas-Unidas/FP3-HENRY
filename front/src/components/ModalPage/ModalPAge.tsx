@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
@@ -30,7 +29,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     location: { address: "", latitude: 0, longitude: 0 },
     file: null as File | null,
     status: "perdido",
-    userId: ""
+    userId: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,7 +43,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId // Actualiza el userId dinámicamente
+        userId: storedUserId, // Actualiza el userId dinámicamente
       }));
     } else {
       Swal.fire({
@@ -53,8 +52,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         text: "No estás autenticado. Por favor, inicia sesión para continuar.",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-        }
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
       }).then(() => {
         onClose();
         router.push("/login");
@@ -71,7 +70,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
 
       setFormData((prevState) => ({
         ...prevState,
-        location: { address, latitude, longitude }
+        location: { address, latitude, longitude },
       }));
     }
   };
@@ -97,15 +96,15 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
       //  },
       //}));
-    } else  if (name === "dateLost") {
+    } else if (name === "dateLost") {
       const selectedDate = new Date(value);
       selectedDate.setDate(selectedDate.getDate() + 1);
       const isoDate = selectedDate.toISOString();
-  
+
       setFormData((prevState) => ({
         ...prevState,
-        dateLost: value, 
-        dateLostISO: isoDate, 
+        dateLost: value,
+        dateLostISO: isoDate,
       }));
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -181,9 +180,9 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: data
+        body: data,
       });
 
       if (!response.ok) {
@@ -199,8 +198,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         title: "El post se creó exitosamente",
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded"
-        }
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
+        },
       });
 
       onRefreshList();
@@ -216,7 +215,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
         file: null,
         status: "",
-        userId: formData.userId
+        userId: formData.userId,
       });
 
       onClose();
