@@ -13,12 +13,7 @@ export class StripeService {
 
   async createCheckoutSession(amount: number, currency: string, email: string) {
     try {
-      const user = await this.prisma.user.findUnique({
-        where: { email },
-      });
-      if (!user) {
-        throw new Error('User not found');
-      }
+   
   
       const session = await this.stripe.checkout.sessions.create({
         payment_method_types: ['card'],
