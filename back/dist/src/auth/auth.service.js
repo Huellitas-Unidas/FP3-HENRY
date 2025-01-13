@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 let AuthService = class AuthService {
     constructor(jwtService) {
         this.jwtService = jwtService;

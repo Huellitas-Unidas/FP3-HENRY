@@ -5,6 +5,7 @@ const app_module_1 = require("./app.module");
 const bodyParser = require("body-parser");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const pg_1 = require("pg");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use('/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
@@ -26,6 +27,9 @@ async function bootstrap() {
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerConfig);
     swagger_1.SwaggerModule.setup('api', app, document, {
         customSiteTitle: 'Proyecto Huellas Unidas',
+    });
+    new pg_1.default.Pool({
+        connectionString: process.env.DATABASE_URL,
     });
     app.enableCors({
         origin: 'http://localhost:3000',
