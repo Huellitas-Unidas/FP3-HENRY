@@ -33,7 +33,7 @@ export class StripeController {
       );
       return { checkoutUrl: session.url };
     } catch (error) {
-      throw new HttpException('Error al crear la session', 400);
+      throw new HttpException('Error al crear la session, puede que el correo no esté registrado', 400);
     }
   }
   @Get('success')

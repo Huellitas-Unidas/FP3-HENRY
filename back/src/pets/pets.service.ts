@@ -28,25 +28,30 @@ export class PetsService {
       const uploadResult = await this.filesUploadService.uploadPostImage(file);
       imgUrl = uploadResult.secure_url;
     }
-    const findPet = await this.prisma.pets.findFirst({ where: { name: name.toLowerCase() } });
-    if (findPet) throw new HttpException('La mascota ya existe  ', 409);
+
+    const findPet = await this.prisma.pets.findFirst({
+      where: { name: name.toLowerCase() },
+    });
+    if (findPet) throw new HttpException('La mascota ya existe', 409);
 
     const createPet = await this.prisma.pets.create({
       data: { ...createPetDto, imgUrl, userId: userFound.id },
     });
 
-    await this.emailService.sendMail(
+    const emailData = {
+      name,
+      type,
+      genero,
+      description,
+      status,
+      imgUrl,
+    };
+
+    await this.emailService.sendMailWithTemplate(
       userFound.email,
       'Registro de mascota exitoso',
-      `Hola ${userFound.name},\n\n¡Gracias por registrar a tu mascota en nuestra plataforma! Aquí están los detalles del registro:\n\n` +
-        `Nombre: ${name}\n` +
-        `Tipo: ${type}\n` +
-        `Genero: ${genero}\n` +
-        `Descripción: ${description}\n` +
-        `Estado: ${status}\n\n` +
-        (imgUrl ? `Imagen: ${imgUrl}\n\n` : '') +
-        `¡Gracias por ser parte de nuestra comunidad! Si tienes alguna pregunta, no dudes en contactarnos.\n\n` +
-        `Saludos,\nEl equipo de Huellas Unidas.`,
+      emailData,
+      'petCreation',
     );
 
     return createPet;

@@ -11,11 +11,14 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/common/roles.decorator';
+import { RolesGuard } from 'src/common/roles.guard';
 
 @Controller('pets')
 export class PetsController {
@@ -49,11 +52,15 @@ export class PetsController {
   }
 
   @Put(':id')
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'user') 
   update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
     return this.petsService.update(id, updatePetDto);
   }
 
   @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'user') 
   remove(@Param('id') id: string) {
     return this.petsService.remove(id);
   }
