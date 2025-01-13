@@ -4,19 +4,17 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import emptyProfile from "../../../public/images/emptyProfile.png";
 import Link from "next/link";
-// import { PiCameraFill } from "react-icons/pi";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import { deletePet, getPetsByUser, updatePetStatus } from "../api/petAPI";
+import { deletePet, getPetsByUser } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
-import { useRouter } from "next/navigation";
 import { getUserById } from "../api/userAPI";
-import Swal from "sweetalert2";
-import { deletePic, patchPic } from "../api/profilePicAPI";
+import ModalDashboardPic from "@/components/ModalPage/ModalDashboardPic";
+import ModalDashboardForm from "@/components/ModalPage/ModalDashboardForm";
 
 const Dashboard = () => {
   const userId = getUserId();
@@ -26,74 +24,41 @@ const Dashboard = () => {
   const profilePhoto =
     session.data?.user?.image || userData?.profilePicture || emptyProfile;
   const [refresh, setRefresh] = useState(false);
-  const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isDeleted, setisDeleted] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const [activeModal, setActiveModal] = useState<
+    "profilePicModal" | "petFormModal" | null
+  >(null);
+  const [selectedPet, setSelectedPet] = useState<IpetForm | null>(null); // Para almacenar la mascota seleccionada
 
-  const handleUpdateStatus = async (value: string | null) => {
-    if (value) {
-      await updatePetStatus(value);
-      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
-      router.push("/lostandfound");
-    } else {
-      return;
-    }
+  const openModal = (
+    modal: "profilePicModal" | "petFormModal",
+    pet?: IpetForm
+  ) => {
+    setActiveModal(modal);
+    if (pet) setSelectedPet(pet); // Establecer la mascota seleccionada, si aplica
   };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setSelectedPet(null);
+  };
+
+  // const handleUpdateStatus = async (value: string | null) => {
+  //   if (value) {
+  //     await updatePetStatus(value);
+  //     setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
+  //     router.push("/lostandfound");
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   const handleDeletePet = async (value: string | null) => {
     if (value) {
       await deletePet(value);
-      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
+      setRefresh((prev) => !prev);
     } else {
       return;
-    }
-  };
-
-  const handleDeletePic = async () => {
-    if (userId)
-      try {
-        await deletePic(userId); // Llama a la función para subir la imagen
-        closeModal(); // Cierra el modal después de una subida exitosa
-        setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
-        setisDeleted(false);
-      } catch (error) {
-        console.error("Error al eliminar la foto de perfil:", error);
-        // No es necesario mostrar una alerta aquí, ya que `patchPic` ya maneja los errores con Swal
-      }
-  };
-
-  const handlePicButton = async () => {
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "No se seleccionó ningún archivo",
-        text: "Por favor selecciona una imagen antes de subirla.",
-        customClass: {
-          confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
-      });
-      setIsSubmitted(false);
-      return;
-    }
-    const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
-    try {
-      await patchPic(formData); // Llama a la función para subir la imagen
-      closeModal(); // Cierra el modal después de una subida exitosa
-      setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
-      setIsSubmitted(false);
-    } catch (error) {
-      console.error("Error al subir la foto de perfil:", error);
-      // No es necesario mostrar una alerta aquí, ya que `patchPic` ya maneja los errores con Swal
     }
   };
 
@@ -141,7 +106,7 @@ const Dashboard = () => {
             className="w-full h-full object-cover"
           />
           <button
-            onClick={openModal}
+            onClick={() => openModal("profilePicModal")}
             className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
             aria-label="changeProfilePic"
           >
@@ -178,7 +143,7 @@ const Dashboard = () => {
       </div>
 
       <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
-        <p className="text-green500">Mis mascotas:</p>
+        <p className="text-green500 font-semibold">Mis mascotas:</p>
 
         {pets?.length !== 0 ? (
           <div className="grid grid-cols-3 gap-4">
@@ -200,11 +165,12 @@ const Dashboard = () => {
                     <p>Tipo: {animal.type}</p>
                     <p>{animal.genero}</p>
                     <p>{animal.description}</p>
+                    <p>{animal.status}</p>
                   </div>
 
                   {animal.status === "none" ? (
                     <button
-                      onClick={() => handleUpdateStatus(animal.id)}
+                      onClick={() => openModal("petFormModal", animal)}
                       className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                     >
                       <RiEmotionSadLine className="text-lg" />
@@ -233,45 +199,21 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-2xl font-semibold mb-4">Subir nueva foto</h2>
-            <input
-              type="file"
-              accept="image/*"
-              className="block w-full text-lg text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
-            />
-            <div className="mt-4 flex justify-end space-x-2">
-              <button
-                onClick={() => {
-                  handleDeletePic();
-                  setisDeleted(true);
-                }}
-                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-              >
-                {isDeleted === false ? "🗑️ Foto actual" : "🗑️ Eliminando..."}
-              </button>
-              <button
-                onClick={closeModal}
-                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={() => {
-                  handlePicButton();
-                  setIsSubmitted(true);
-                }}
-                type="submit"
-                className="bg-green500 text-white p-2 rounded-lg hover:bg-white hover:text-green500 transition-all duration-300"
-              >
-                {isSubmitted === false ? "Subir" : "Subiendo..."}
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Modales */}
+      {activeModal === "profilePicModal" && (
+        <ModalDashboardPic
+          isOpen={activeModal}
+          onClose={closeModal}
+          onRefresh={() => setRefresh((prev) => !prev)}
+        />
+      )}
+
+      {activeModal === "petFormModal" && selectedPet && userData && (
+        <ModalDashboardForm
+          animal={selectedPet}
+          userData={userData}
+          onClose={closeModal}
+        />
       )}
     </div>
   );
