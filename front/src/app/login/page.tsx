@@ -1,6 +1,6 @@
 "use client";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -14,6 +14,7 @@ import { signIn } from "next-auth/react";
 
 const Login: React.FC = () => {
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik<IUserData>({
     initialValues: {
@@ -26,7 +27,7 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       try {
         const response = await login(values);
-        Cookies.set("token", response.token, { expires: 1 });
+        Cookies.set("token", response.token, { expires: 1 }); //!
         localStorage.setItem(
           "userData",
           JSON.stringify({ token: response.token })
@@ -62,71 +63,49 @@ const Login: React.FC = () => {
       <div className="rounded-xl border border-green500 shadow-2xl p-8 w-full sm:w-3/4 md:w-2/3 lg:w-1/3 xl:w-1/4">
         <form
           noValidate
-          onSubmit={formik.handleSubmit}
+          onSubmit={(e) => {
+            formik.handleSubmit(e);
+            setIsSubmitted(true);
+          }}
           className="flex flex-col gap-4 items-center text-lg"
         >
-          {/* Email Field */}
-          <div className="relative w-full">
-            <input
-              placeholder="Correo electrónico"
-              type="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              onFocus={() => formik.setFieldTouched("email", true)}
-              className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
-                formik.touched.email && formik.errors.email
-                  ? "border-red-300"
-                  : formik.touched.email && !formik.errors.email
-                  ? "border-customGreen-400"
-                  : "border-gray-300"
-              }`}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <div
-                className={`absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md z-10 bg-customGreen-300 text-white`}
-              >
-                {formik.errors.email}
-              </div>
-            )}
-          </div>
+          <input
+            placeholder="Email"
+            type="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
+          {isSubmitted && formik.touched.email && formik.errors.email && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.email}
+            </span>
+          )}
 
-          {/* Password Field */}
-          <div className="relative w-full">
-            <input
-              placeholder="Contraseña"
-              type="password"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              onFocus={() => formik.setFieldTouched("password", true)}
-              className={`py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
-                formik.touched.password && formik.errors.password
-                  ? "border-red-300"
-                  : formik.touched.password && !formik.errors.password
-                  ? "border-customGreen-400"
-                  : "border-gray-300"
-              }`}
-            />
-            {formik.touched.password && formik.errors.password && (
-              <div
-                className={`absolute left-0 top-full mt-1 px-4 py-2 text-sm rounded-md shadow-md z-10 bg-customGreen-300 text-white`}
-              >
-                {formik.errors.password}
-              </div>
-            )}
-          </div>
+          <input
+            placeholder="Contraseña"
+            type="password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="w-full py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none"
+          />
+          {isSubmitted && formik.touched.password && formik.errors.password && (
+            <span className="text-red-500 text-sm text-center">
+              {formik.errors.password}
+            </span>
+          )}
 
           <label className="text-sm mb-2 text-center">
             ¿No tienes una cuenta?{" "}
-            <span className="underline hover:no-underline">
-              <Link href={"/register"}>Regístrate</Link>
-            </span>
+            <Link href={"/register"} className="underline hover:no-underline">
+              Regístrate
+            </Link>
           </label>
 
-          {/* Google Sign-In */}
           <button
             onClick={() => signIn("google", { callbackUrl: "/" })}
             type="button"
@@ -141,8 +120,6 @@ const Login: React.FC = () => {
             />
             Ingresar con Google
           </button>
-
-          {/* Submit Button */}
           <GreenButton
             props={formik.isSubmitting ? "Logueando..." : "Loguearme"}
           />
@@ -153,4 +130,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

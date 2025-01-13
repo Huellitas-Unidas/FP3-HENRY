@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+//Operaciones relacionadas con usuarios: registro, login
+//import { Toast } from "@/helpers/index";
 import { ISignUpData, IUserData } from "@/interfaces/types";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { Toast } from "@/helpers";
 import { jwtDecode } from "jwt-decode";
 
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const isFormSignUpFull = (data: ISignUpData): boolean =>
   Object.values(data).every(Boolean);
 
-export async function register(userData: Omit<ISignUpData, "confirm">) {
+export async function register(userData: Omit<ISignUpData, "confirm">){
   try {
+  
     if (!isFormSignUpFull(userData)) {
       Swal.fire({
         icon: "error",
@@ -25,13 +29,13 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
       return;
     }
 
-   
+    // Realiza la solicitud al backend con los datos formateados
     const res = await fetch(`${API_URL}/user/register`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(userData), 
+      body: JSON.stringify(userData), // `phone` ya es un número
     });
 
     if (res.ok) {
@@ -64,6 +68,7 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
         confirmButton:
           "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
       },
+
     });
 
     console.error("Error en el registro:", errorMessage);
@@ -71,15 +76,17 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
   }
 }
 
+
 //////////**************///////////////
 
 export async function login(userData: IUserData) {
+
   interface DecodedToken {
     sub: string; // ID del usuario (cambia según la estructura real de tu token)
     email?: string; // Si el token incluye email
     exp?: number; // Tiempo de expiración del token
   }
-
+  
   try {
     const res = await fetch(`${API_URL}/user/login`, {
       method: "POST",
@@ -99,17 +106,13 @@ export async function login(userData: IUserData) {
 
         // Decodificar el token para obtener el userId (campo `sub`)
         try {
-          const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
-            data.token
-          );
+          const decodedToken: DecodedToken = jwtDecode<DecodedToken>(data.token);
           console.log("Token decodificado:", decodedToken);
 
           if (decodedToken && decodedToken.sub) {
-            localStorage.setItem("userId", decodedToken.sub); 
+            localStorage.setItem("userId", decodedToken.sub); // Guardar el `sub` como `userId`
           } else {
-            throw new Error(
-              "El token no contiene un ID de usuario válido (sub)."
-            );
+            throw new Error("El token no contiene un ID de usuario válido (sub).");
           }
         } catch (decodeError) {
           throw new Error("Error al decodificar el token.");
@@ -157,8 +160,10 @@ export async function login(userData: IUserData) {
   }
 }
 
-{
-  /*}
+
+
+
+{/*}
 export async function login(userData: IUserData) {
   try {
     const res = await fetch(`${API_URL}/user/login`, {
@@ -223,5 +228,4 @@ export async function login(userData: IUserData) {
     console.error("Error en el login:", errorMessage);
     throw error;
   }
-}*/
-}
+}*/}
