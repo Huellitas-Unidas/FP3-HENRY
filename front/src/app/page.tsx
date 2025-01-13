@@ -22,28 +22,31 @@ export default function Home() {
 
             <div>
               <Link href='/maps'>
-              <h3 className="text-gray-800 text-xl font-semibold mb-3">
-                Mapa Interactivo
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Ubica mascotas perdidas, encontradas y servicios en tu área con
-                nuestro mapa interactivo.
-              </p>
+                <h3 className="text-gray-800 text-xl font-semibold mb-3">
+                  Mapa Interactivo
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Ubica mascotas perdidas, encontradas y servicios en tu área con
+                  nuestro mapa interactivo.
+                </p>
               </Link>
             </div>
           </div>
+
 
           <div className="p-4 flex gap-6 rounded-lg hover:shadow-md hover:scale-105 transition-all duration-300">
             <div className="flex space-x-2 mb-3">
               <HiOutlineMail size={30} className="text-[#1e1612]" />
             </div>
             <div>
-              <h3 className="text-gray-800 text-xl font-semibold mb-3">
-                Contacto
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Contáctanos pf3shhuellasunidas@hotmail.com
-              </p>
+              <Link href='/contact'>
+                <h3 className="text-gray-800 text-xl font-semibold mb-3">
+                  Contacto
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Contáctanos pf3shhuellasunidas@hotmail.com
+                </p>
+              </Link>
             </div>
           </div>
 

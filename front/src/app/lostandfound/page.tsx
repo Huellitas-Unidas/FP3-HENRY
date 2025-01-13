@@ -5,6 +5,7 @@ import CardList from '@/components/CardList/CardList';
 import React, { useState, useEffect } from 'react';
 import { IPost } from '@/interfaces/types';
 import ModalPage from '@/components/ModalPage/ModalPAge';
+import Link from 'next/link';
 
 const LostAndFound: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
@@ -46,8 +47,11 @@ const LostAndFound: React.FC = () => {
 
   return (
     <div className="p-8">
+      <div className='flex justify-between mb-4'>
+    <Link href='/maps' className='px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md'>Ver Mapa</Link>
+    {/*   </div>
   {/* Contenedor del botón alineado a la derecha */}
-  <div className="flex justify-end mb-4">
+  {/*</div><div className="flex justify-end mb-4"> */}
     <button
       onClick={handleOpenModal}
       className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
@@ -55,6 +59,7 @@ const LostAndFound: React.FC = () => {
       Publicar Mascota
     </button>
   </div>
+
 
       {/* Otro botón adicional */}
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
