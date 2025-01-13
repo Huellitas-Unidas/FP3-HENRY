@@ -10,6 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { getUserById } from "@/app/api/userAPI";
+// import Cookies from "js-cookie";
 
 const Navbar = () => {
   const userId = getUserId();
@@ -33,8 +34,10 @@ const Navbar = () => {
         },
       });
       localStorage.removeItem("userData");
+      // localStorage.removeItem("userId");  //!
+      // Cookies.remove("token"); //!
+      await signOut({ redirect: false });
       setUserSession(null);
-      await signOut({ redirect: false });  ////***////// */ solo se incluyo redirect: false -> evitamos conflictos con la redirección automática.
       router.push("/");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);

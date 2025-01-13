@@ -1,16 +1,15 @@
-FROM node:20
+FROM node:latest AS build
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ./package.json ./package-lock.json ./
 
+
+COPY . ./
 RUN npm install
-
-COPY . .
+RUN npx prisma generate
 
 RUN npm run build
-
-RUN npx prisma generate
 
 EXPOSE 4000
 
