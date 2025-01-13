@@ -59,31 +59,39 @@ export class UserService {
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+      },
     });
-
+  
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
-
+  
     const isPasswordValid = await this.authService.validatePassword(
       password,
       user.password,
     );
-
+  
     if (!isPasswordValid) {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
-
+  
     const payload = { email: user.email, sub: user.id, role: user.role };
-
+  
     const token = this.authService.generateToken(payload);
-
+  
     return {
-      message: `Te has logueado exitosamente.`,
+      message: 'Te has logueado exitosamente.',
       token,
+      userId: user.id, 
     };
   }
-
+  
+  
   async findAll() {
     const users = await this.prisma.user.findMany();
     return users.map(({ password, ...user }) => user);
