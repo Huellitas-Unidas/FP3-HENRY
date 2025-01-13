@@ -1,7 +1,7 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  db:
+  postgres-compose:
     image: postgres:15
     container_name: postgres_db
     restart: always
@@ -12,20 +12,29 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - db_data:/var/lib/postgresql/data
-
-  app:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:  
+      - app-network
+  back-compose:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest_app
+    container_name: back-compose
     restart: always
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgres://user:12345@db:5432/huellas_unidas
+      DATABASE_URL: postgres://postgres:12345@postgres-compose:5432/huellas_unidas
     depends_on:
-      - db
+      - postgres-compose
+    networks:
+      - app-network  
+networks:
+  app-network:          
 
 volumes:
-  db_data:
+  postgres_data:
+
+
+
+
