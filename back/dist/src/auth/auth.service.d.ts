@@ -4,5 +4,5 @@ export declare class AuthService {
     constructor(jwtService: JwtService);
     generateToken(user: any): string;
     validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean>;
-    hashPassword(password: string): Promise<string>;
+    hashPassword(password: string): Promise<any>;
 }
