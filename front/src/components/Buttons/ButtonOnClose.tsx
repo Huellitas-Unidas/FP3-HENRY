@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import ModalPage from '../ModalPage/ModalPAge';
 import CardList from '../CardList/CardList';
 import { IPost } from '@/interfaces/types';
-import ButtonLostAndFound from './ButtonLostAndFound';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,7 +10,6 @@ const ButtonOnClose = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [posts, setPosts] = useState<IPost[]>([]);   // Estado para almacenar los posts
-  const [filter, setFilter] = useState<string>("todos");
 
 
   const handleOpenModal = () => {
@@ -44,7 +42,7 @@ const ButtonOnClose = () => {
 
   return (
     <div className="p-4">
-     
+      {/* Botón alineado al extremo derecho */}
       <div className="flex justify-end mb-4">
         <button
           onClick={handleOpenModal}
@@ -54,18 +52,15 @@ const ButtonOnClose = () => {
         </button>
       </div>
 
-     
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <ModalPage onClose={handleCloseModal} onRefreshList={handleRefreshList} />
         </div>
       )}
 
-      <ButtonLostAndFound filter={filter} setFilter={setFilter} />
-
-      
-      <CardList key={refreshKey} 
-      posts={posts.filter((post) => filter === "todos" || post.status === filter)}/>
+      {/* Lista de tarjetas */}
+      <CardList key={refreshKey} posts={posts} />
     </div>
   );
 };

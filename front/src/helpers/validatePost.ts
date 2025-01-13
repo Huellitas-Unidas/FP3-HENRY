@@ -47,10 +47,6 @@ export const validatePost = (formData: Partial<IPost & { file?: File | null }>):
     }
   }
   
-  if (!formData.status || (formData.status !== "perdido" && formData.status !== "encontrado")) {
-    errors.status = "Debe seleccionar un estado válido.";
-  }
-
 
   if (!formData.photoUrl && (!formData.file || formData.file === null)) {
     errors.file = 'Debe adjuntar una imagen.';

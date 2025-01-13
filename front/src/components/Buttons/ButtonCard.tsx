@@ -2,18 +2,16 @@
 
 import React from 'react';
 import { IPost } from '@/interfaces/types';
-import { Toast } from '@/helpers';
 
 interface ButtonCardProps {
   post: IPost;
-  onStatusChange: (updatedPost: IPost) => void;
 }
 
-const ButtonCard: React.FC<ButtonCardProps> = ({ post, onStatusChange }) => {
+const ButtonCard: React.FC<ButtonCardProps> = ({ post }) => {
   const handleStatusChange = async (newStatus: string) => {
     try {
      
-      if (!process.env.NEXT_PUBLIC_API_URL) { 
+      if (!process.env.NEXT_PUBLIC_API_URL) { // Verifica que la URL de la API esté configurada
         throw new Error('La URL de la API no está configurada.');
       }
 
@@ -30,22 +28,10 @@ const ButtonCard: React.FC<ButtonCardProps> = ({ post, onStatusChange }) => {
         throw new Error(errorData.message || 'Error al actualizar el estado');
       }
 
-
-
-     const updatedPost = await response.json();
-     onStatusChange(updatedPost);
-        Toast.fire({
-        icon: "success",
-        iconColor: "green500",
-        title: `Estado actualizado a: ${newStatus}`,
-      });
+      alert(`Estado actualizado a: ${newStatus}`);
     } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-      Toast.fire({
-        icon: "error",
-        iconColor: "red",
-        title: `Error: ${(error as Error).message}`,
-      });
+      console.error('Error al actualizar el estado:', error);
+      alert(`Error: ${(error as Error).message}`);
     }
   };
 

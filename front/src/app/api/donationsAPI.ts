@@ -1,5 +1,5 @@
 import { Toast } from "@/helpers";
-
+//import Swal from "sweetalert2";
 
 export const createCheckoutSession = async ({ amount, email }: {
    amount: number,
@@ -52,4 +52,3 @@ export const createCheckoutSession = async ({ amount, email }: {
   }
 };
 
-  

@@ -3,35 +3,25 @@ import { ISignUpData, TSignUpErrors } from "@/interfaces/types";
 const validate = (values: ISignUpData): TSignUpErrors => {
   const errors: TSignUpErrors = {};
 
-  const fieldLabels: Record<string, string> = {
-    name: "Nombre y Apellido",
-    email: "Correo electrónico",
-    password: "Contraseña",
-    confirm: "Confirmación de contraseña",
-    phone: "Teléfono",
-  };
-  
   // Validar campos requeridos
   (Object.keys(values) as (keyof ISignUpData)[]).forEach((field) => {
-    if (!values[field] || (typeof values[field] === "string" && values[field].trim() === "")) {
-      errors[field] = `Por favor ingresa  ${fieldLabels[field]}.`
+    if (
+      !values[field] ||
+      (typeof values[field] === "string" && values[field].trim() === "")
+    ) {
+      errors[field] = "Este campo es requerido.";
     }
   });
 
-  // Validar nombre completo
-  if (values.name && values.name.trim().length > 30) {
-    errors.name = `El ${fieldLabels.name} no debe exceder los 30 caracteres.`;
-  } else if (
-    values.name &&
-    !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,}(\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,})+$/.test(values.name.trim())
-  ) {
+  // Validar nombre
+  if (values.name && !/^[a-zA-Z\s]{1,30}$/.test(values.name)) {
     errors.name =
-      "Debe ingresar al menos un nombre y un apellido válidos, separados por un espacio.";
+      "El nombre debe contener solo letras y no más de 30 caracteres.";
   }
 
   // Validar correo electrónico
   if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = "Por favor, ingresa un correo electrónico válido.";
+    errors.email = "El correo electrónico no es válido.";
   }
 
   // Validar contraseña
@@ -55,18 +45,3 @@ const validate = (values: ISignUpData): TSignUpErrors => {
 };
 
 export default validate;
-
-export const validationGuide = {
-  name: "Debe ingresar un nombre y apellido válido, separados por un espacio y máximo de 30 caracteres.",
-  email: "Debe ser un correo electrónico válido.",
-  password: "Debe tener al menos 6 caracteres, una mayúscula y un número.",
-  confirm: "Debe coincidir con la contraseña.",
-  phone: "Debe contener entre 7 y 15 dígitos.",
-};
-
-
-
-
-
-
-
