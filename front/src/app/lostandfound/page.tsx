@@ -52,7 +52,7 @@ const LostAndFound: React.FC = () => {
       <div className="flex flex-row justify-between">
         <div className="mb-4">
           <button
-            onClick={() => router.push("/myposts")}
+            onClick={() => router.push("/misposteos")}
             className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
           >
             Mis posteos
@@ -69,7 +69,6 @@ const LostAndFound: React.FC = () => {
         </div>
       </div>
 
-  
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
       {/* Lista de Tarjetas */}
