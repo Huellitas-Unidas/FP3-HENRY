@@ -24,7 +24,7 @@ model User {
   donations     Donations[]
   notifications Notifications[]
   pets          Pets[]
-  posts         Post[]
+  // posts         Post[]
   pqr           Pqr[]
 }
 
