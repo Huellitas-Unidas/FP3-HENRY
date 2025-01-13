@@ -20,17 +20,17 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const { email, password, name, phone, role } = createUserDto;
-  
+
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
-  
+
     if (existingUser) {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
-  
+
     const hashedPassword = await this.authService.hashPassword(password);
-  
+
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -40,18 +40,22 @@ export class UserService {
         role: (role ? role.toUpperCase() : 'USER') as Role,
       },
     });
-  
- 
-    await this.emailService.sendMailWithTemplate(user.email, 'register', {
-      name: user.name,
-    }, 'register');
-  
+
+    await this.emailService.sendMailWithTemplate(
+      user.email,
+      'register',
+      {
+        name: user.name,
+      },
+      'register',
+    );
+
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
     };
   }
-  
+
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -112,7 +116,9 @@ export class UserService {
       where: { id },
       data: {
         ...updateUserDto,
-        role: updateUserDto.role ? (updateUserDto.role.toUpperCase() as Role) : undefined,
+        role: updateUserDto.role
+          ? (updateUserDto.role.toUpperCase() as Role)
+          : undefined,
       },
     });
 
