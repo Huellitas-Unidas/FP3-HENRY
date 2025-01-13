@@ -75,9 +75,9 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
 
 export async function login(userData: IUserData) {
   interface DecodedToken {
-    sub: string; // ID del usuario (cambia según la estructura real de tu token)
-    email?: string; // Si el token incluye email
-    exp?: number; // Tiempo de expiración del token
+    sub: string;          // ID del usuario (cambia según la estructura real de tu token)
+    email?: string;          // Si el token incluye email
+    exp?: number;           // Tiempo de expiración del token
   }
 
   try {
@@ -104,6 +104,12 @@ export async function login(userData: IUserData) {
           );
           console.log("Token decodificado:", decodedToken);
 
+          // Verifica si el token ha expirado  
+          const currentTime = Math.floor(Date.now() / 1000); 
+          //Tiempo actual en segundos 
+          if (decodedToken.exp && decodedToken.exp < currentTime) { 
+             throw new Error("El token ha expirado.");          }
+
           if (decodedToken && decodedToken.sub) {
             localStorage.setItem("userId", decodedToken.sub); 
           } else {
@@ -111,7 +117,8 @@ export async function login(userData: IUserData) {
               "El token no contiene un ID de usuario válido (sub)."
             );
           }
-        } catch (decodeError) {
+        } catch (decodeError: unknown) {
+          console.error("Error al decodificar el token:", decodeError instanceof Error ? decodeError.message : decodeError);
           throw new Error("Error al decodificar el token.");
         }
 
