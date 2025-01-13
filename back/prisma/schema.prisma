@@ -20,7 +20,6 @@ model User {
   profilePicture String? 
   createdAt     DateTime        @default(now())
   role          Role            @default(USER) 
-  posts         Post[]
   donations     Donations[]
   notifications Notifications[]
   pets          Pets[]
