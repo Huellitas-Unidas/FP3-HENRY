@@ -22,7 +22,9 @@ import { ProfileModule } from './profile/profile.module';
     ChatbotModule,
     ConfigModule.forRoot({
       isGlobal: true,
+     
     }),
+    
     StripeModule,
     NotificationsModule,
     MapModule,

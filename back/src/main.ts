@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import pg from 'pg';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -41,12 +42,17 @@ async function bootstrap() {
     customSiteTitle: 'Proyecto Huellas Unidas',
   });
 
+   new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+  })
+
   app.enableCors({
     origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Authorization, Content-Type',
     credentials: true, 
   });
+  
   
 
   app.use((req: Request, res: Response, next: NextFunction) => {
