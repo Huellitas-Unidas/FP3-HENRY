@@ -20,8 +20,7 @@ model User {
   googleId      String?         @unique
   profilePicture String? 
   createdAt     DateTime        @default(now())
-  role          Role            @default(USER) 
-  donations     Donations[]
+  role          Role            @default(USER)   
   notifications Notifications[]
   pets          Pets[]
   posts         Post[]
@@ -48,10 +47,9 @@ model Donations {
   id        String   @id @default(uuid()) @db.Uuid
   amount    Float
   email     String
-  paymentIntent String @unique
-  userId    String   @db.Uuid
+  paymentIntent String @unique  
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+ 
 }
 
 model Notifications {
