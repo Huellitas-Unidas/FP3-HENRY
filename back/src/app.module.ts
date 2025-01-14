@@ -13,12 +13,14 @@ import { StripeModule } from './stripe/stripe.module';
 import { ConfigModule } from '@nestjs/config';
 import { PqrModule } from './pqr/pqr.module';
 import { ProfileModule } from './profile/profile.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     UserModule,
     PostsModule,
     PetsModule,
+    AdminModule,
     ChatbotModule,
     ConfigModule.forRoot({
       isGlobal: true,

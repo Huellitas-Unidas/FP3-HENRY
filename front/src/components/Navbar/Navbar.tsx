@@ -30,8 +30,8 @@ const Navbar = () => {
         confirmButtonText: "Ok",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+        }
       });
       localStorage.removeItem("userData"); //!
       localStorage.removeItem("userId"); //!
@@ -88,9 +88,9 @@ const Navbar = () => {
           else {
             setUserPic(null);
           }
-        } else {
-          console.error("No se encontró el usuario");
-        }
+        } //else {
+        //console.error("No se encontró el usuario");
+        //}
       } catch (error) {
         console.error(error);
       }
@@ -185,6 +185,18 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="hidden w-1/5 items-center justify-evenly md:flex">
+            <div>
+              <Link
+                className={`transition-opacity-transform duration-300 ${
+                  pathname === "/admin"
+                    ? "opacity-80 -translate-y-1"
+                    : "hover:opacity-80 hover:-translate-y-1"
+                }`}
+                href="/admin"
+              >
+                Admin
+              </Link>
+            </div>
             <div>
               <Link
                 className={`transition-opacity-transform duration-300 ${
