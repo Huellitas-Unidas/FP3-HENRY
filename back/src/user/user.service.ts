@@ -103,7 +103,6 @@ export class UserService {
       include: {
         posts: true,
         pets: true,
-        donations: true,
         pqr: true,
       },
     });
