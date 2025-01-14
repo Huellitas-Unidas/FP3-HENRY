@@ -1,12 +1,16 @@
 import { getUserId } from "@/helpers/userId";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { IpetForm, IUserBack } from "@/interfaces/types";
 import { useRouter } from "next/navigation";
-import { Autocomplete } from "@react-google-maps/api";
+import { Autocomplete, Libraries, LoadScript } from "@react-google-maps/api";
+import { updatePetStatus } from "@/app/api/petAPI";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+
+const libraries: Libraries = ["places"];
 
 const ModalDashboardForm = ({
   animal,
@@ -28,6 +32,9 @@ const ModalDashboardForm = ({
     file: `${animal.imgUrl}`,
     status: "perdido",
     userId: "",
+
+    // dateLost: "",
+    // dateLostISO: "",
   });
 
   const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -71,10 +78,23 @@ const ModalDashboardForm = ({
   };
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Verificar que name sea una clave válida de formData
+    if (name in formData) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: name === "dateLost" ? value : value, // Actualiza directamente el valor
+        dateLostISO:
+          name === "dateLost"
+            ? new Date(value).toISOString()
+            : prevState.dateLostISO,
+      }));
+    }
   };
 
   const convertUrlToFile = async (url: string, fileName: string) => {
@@ -83,7 +103,9 @@ const ModalDashboardForm = ({
     return new File([blob], fileName, { type: blob.type });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     try {
       const token = Cookies.get("token"); // Recupera el token desde las cookies
       if (!token) {
@@ -134,6 +156,8 @@ const ModalDashboardForm = ({
         body: data,
       });
 
+      updatePetStatus(animal.id); //!
+
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage =
@@ -141,7 +165,7 @@ const ModalDashboardForm = ({
         throw new Error(errorMessage);
       }
       const result = await response.json();
-      console.log(result);
+      console.log("Mascota marcada como perdida:", result);
 
       Swal.fire({
         icon: "success",
@@ -151,6 +175,7 @@ const ModalDashboardForm = ({
             "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
         },
       });
+      router.push("/misposteos"); // redirige a mis posteos luego de ser marcada como perdida
     } catch (error) {
       Swal.fire(
         "Error",
@@ -161,116 +186,98 @@ const ModalDashboardForm = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-        <h2 className="text-2xl font-semibold mb-4">
-          Publicar mascota perdida
-        </h2>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <label>
-            Título:
+    <LoadScript googleMapsApiKey={GOOGLE_API_KEY!} libraries={libraries}>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+          <h2 className="text-2xl font-semibold mb-4">
+            Publicar mascota perdida
+          </h2>
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <label>
+              Título:
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                disabled
+              />
+            </label>
+
+            <label>
+              Descripción:
+              <input
+                type="text"
+                name="title"
+                value={formData.description}
+                onChange={handleChange}
+                disabled
+              />
+            </label>
+
+            <label>
+              Teléfono:
+              <input
+                type="text"
+                name="title"
+                value={formData.contactInfo}
+                onChange={handleChange}
+                disabled
+              />
+            </label>
+
+            <label>Fecha en que se perdió:</label>
             <input
-              type="text"
-              name="title"
-              value={formData.title}
+              type="date"
+              name="dateLost"
+              value={formData.dateLost}
               onChange={handleChange}
-              disabled
             />
-          </label>
 
-          <label>
-            Descripción:
-            <input
-              type="text"
-              name="title"
-              value={formData.description}
-              onChange={handleChange}
-              disabled
-            />
-          </label>
-
-          <label>
-            Teléfono:
-            <input
-              type="text"
-              name="title"
-              value={formData.contactInfo}
-              onChange={handleChange}
-              disabled
-            />
-          </label>
-
-          <label>
-            DATE:
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              disabled
-            />
-          </label>
-
-          <label className="text-gray-800 text-sm mb-2 block">Ubicación</label>
-          <Autocomplete
-            onLoad={(autocomplete) => (placeRef.current = autocomplete)}
-            onPlaceChanged={handlePlaceChanged}
-          >
-            <input
-              type="text"
-              placeholder="Ingrese una dirección"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </Autocomplete>
-
-          <label>
-            Foto:
-            <input
-              type="text"
-              name="title"
-              value={formData.file}
-              onChange={handleChange}
-              disabled
-            />
-          </label>
-
-          {/* <label>
-            Foto:
-            <input
-              type="file"
-              accept="image/*"
-              className="block w-full text-lg text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
-            />
-          </label> */}
-
-          {/* <label>
-            Dirección:
-            <input
-              type="text"
-              name="direction"
-              value={formData.direction}
-              onChange={handleChange}
-              required
-            />
-          </label> */}
-
-          <div className="mt-4 flex justify-end space-x-2">
-            <button
-              onClick={onClose}
-              className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+            <label className="text-gray-800 text-sm mb-2 block">
+              Ubicación
+            </label>
+            <Autocomplete
+              onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+              onPlaceChanged={handlePlaceChanged}
             >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="bg-green500 text-white p-2 rounded-lg hover:bg-green600 hover:bg-white hover:text-green500"
-            >
-              Publicar
-            </button>
-          </div>
-        </form>
+              <input
+                type="text"
+                placeholder="Ingrese una dirección"
+                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              />
+            </Autocomplete>
+
+            <label>
+              Foto:
+              <input
+                type="text"
+                name="title"
+                value={formData.file}
+                onChange={handleChange}
+                disabled
+              />
+            </label>
+
+            <div className="mt-4 flex justify-end space-x-2">
+              <button
+                onClick={onClose}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSubmit}
+                type="submit"
+                className="bg-green500 text-white p-2 rounded-lg hover:bg-green600 hover:bg-white hover:text-green500"
+              >
+                Publicar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </LoadScript>
   );
 };
 
