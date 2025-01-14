@@ -23,12 +23,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           const token = session.user.accessToken as string; // Obtener token de Next-Auth
 
           // Usar el endpoint `/user` para obtener información del usuario
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/user`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
           if (response.ok) {
             const data = await response.json();
@@ -43,12 +46,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           const token = localStorage.getItem("token");
 
           if (token) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/user`,
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
 
             if (response.ok) {
               const data = await response.json();
@@ -84,10 +90,8 @@ export const useUser = () => {
   return context;
 };
 
-
-
-
-{/*import React, { createContext, useContext, useEffect, useState } from "react";
+{
+  /*import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 interface UserContextType {
@@ -154,4 +158,5 @@ export const useUser = () => {
     throw new Error("useUser debe usarse dentro de un UserProvider");
   }
   return context;
-};*/}
+};*/
+}

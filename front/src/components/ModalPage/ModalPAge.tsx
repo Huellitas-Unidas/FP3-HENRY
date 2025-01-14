@@ -391,7 +391,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-green-500"
+                className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
               >
                 {loading ? "Cargando..." : "Publicar"}
               </button>
