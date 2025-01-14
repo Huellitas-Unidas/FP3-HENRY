@@ -1,6 +1,7 @@
 import { IPost } from "@/interfaces/types";
 import { NextResponse } from "next/server";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -42,11 +43,18 @@ if (!API_URL) {
 }
 
 // Función para actualizar el estado perdido o encontrado de un post
+
 export async function updatePostStatus(id: string, status: string) {
+  const token = Cookies.get("token");
+  if(!token){
+    throw new Error("Token de auth no encontrado");
+  }
   try {
     const response = await fetch(`${API_URL}/posts/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+       },
       body: JSON.stringify({ status }),
     });
 
@@ -60,7 +68,7 @@ export async function updatePostStatus(id: string, status: string) {
   const result = await response.json(); 
   return result.updatedPost;
 
-    return await response.json();
+    //return await response.json();
   } catch (error) {
     console.error("Error actualizando el post por status:", error);
     throw error;
