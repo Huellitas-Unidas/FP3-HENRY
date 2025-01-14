@@ -87,9 +87,9 @@ const Navbar = () => {
           else {
             setUserPic(null);
           }
-        } else {
-          console.error("No se encontró el usuario");
-        }
+        } //else {
+          //console.error("No se encontró el usuario");
+        //}
       } catch (error) {
         console.error(error);
       }
