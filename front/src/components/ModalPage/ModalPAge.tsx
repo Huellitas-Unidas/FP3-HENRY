@@ -1,17 +1,16 @@
 "use client";
-
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
-import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
+import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+//const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
 
-const libraries: Libraries = ["places"];
+//const libraries: Libraries = ["places"];
 
 interface ModalPageProps {
   onClose: () => void;
@@ -30,7 +29,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     location: { address: "", latitude: 0, longitude: 0 },
     file: null as File | null,
     status: "perdido",
-    userId: ""
+    userId: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -40,11 +39,11 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   // Verificar el userId del almacenamiento local
 
   useEffect(() => {
-    const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+    const storedUserId = getUserId(); 
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId // Actualiza el userId dinámicamente
+        userId: storedUserId, 
       }));
     } else {
       Swal.fire({
@@ -53,8 +52,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         text: "No estás autenticado. Por favor, inicia sesión para continuar.",
         customClass: {
           confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-        }
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
       }).then(() => {
         onClose();
         router.push("/login");
@@ -71,7 +70,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
 
       setFormData((prevState) => ({
         ...prevState,
-        location: { address, latitude, longitude }
+        location: { address, latitude, longitude },
       }));
     }
   };
@@ -97,15 +96,15 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
       //  },
       //}));
-    } else  if (name === "dateLost") {
+    } else if (name === "dateLost") {
       const selectedDate = new Date(value);
       selectedDate.setDate(selectedDate.getDate() + 1);
       const isoDate = selectedDate.toISOString();
-  
+
       setFormData((prevState) => ({
         ...prevState,
-        dateLost: value, 
-        dateLostISO: isoDate, 
+        dateLost: value,
+        dateLostISO: isoDate,
       }));
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -130,7 +129,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     setLoading(true);
 
     try {
-      const token = Cookies.get("token"); // Recupera el token desde las cookies
+      const token = Cookies.get("token"); 
       if (!token) {
         console.error("Token no encontrado.");
         return;
@@ -181,9 +180,9 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: data
+        body: data,
       });
 
       if (!response.ok) {
@@ -199,8 +198,8 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         title: "El post se creó exitosamente",
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded"
-        }
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
+        },
       });
 
       onRefreshList();
@@ -213,10 +212,10 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         contactInfo: "",
         dateLost: "",
         dateLostISO: "",
-        location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
+        location: { address: "", latitude: 0, longitude: 0 }, 
         file: null,
         status: "",
-        userId: formData.userId
+        userId: formData.userId,
       });
 
       onClose();
@@ -232,7 +231,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   };
 
   return (
-    <LoadScript googleMapsApiKey={GOOGLE_API_KEY!} libraries={libraries}>
+  
       <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
         <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
           <div className="flex items-center">
@@ -240,7 +239,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
               Publicar una mascota perdida o encontrada
             </h3>
             <button
-              onClick={onClose} // Llama a la función onClose al hacer clic
+              onClick={onClose} 
               className="text-gray-400 hover:text-red-500"
               aria-label="Cerrar modal"
             >
@@ -400,7 +399,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
           </form>
         </div>
       </div>
-    </LoadScript>
+    
   );
 };
 
