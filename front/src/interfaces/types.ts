@@ -59,6 +59,7 @@ export interface ISignUpData {
   password: string;
   confirm?: string;
   phone: string;
+  role?: string;
 } //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;
@@ -95,6 +96,7 @@ export interface IUserBack {
   phone?: string | number;
   profilePicture: string | null;
   createdAt: string;
+  role: "admin" | "user";
 }
 
 export interface IUserSessionDt {
