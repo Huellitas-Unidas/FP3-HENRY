@@ -47,7 +47,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "stripe": "^17.5.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",
