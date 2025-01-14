@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres-compose:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: huellas_unidas
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:  
+      - app-network
+  back-compose:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: back-compose
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://postgres:12345@postgres-compose:5432/huellas_unidas
+    depends_on:
+      - postgres-compose
+    networks:
+      - app-network  
+networks:
+  app-network:          
+
+volumes:
+  postgres_data:
+
+
+
+

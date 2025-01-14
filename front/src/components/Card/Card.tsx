@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import { IPost } from "@/interfaces/types";
-import Link from "next/link";
+import {IPost} from "@/interfaces/types";
+//import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Card: React.FC<IPost> = ({
+  id,
   title,
   photoUrl,
   description,
@@ -13,8 +15,13 @@ const Card: React.FC<IPost> = ({
   location,
   status,
 }) => {
+
+  const router = useRouter();
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 max-w-xs w-full">
+    <div className="bg-white shadow-md rounded-lg p-4 max-w-xs w-full cursor-pointer"
+    onClick={() => router.push(`/post/${id}`)}>
+      
       <div className="relative">
         <img
           src={photoUrl}
@@ -33,25 +40,23 @@ const Card: React.FC<IPost> = ({
         </div>
       </div>
 
-      <div className="mt-4">
-        <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-        <p className="text-sm text-gray-600 mt-2">{description}</p>
-      </div>
-      <div className="absolute top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded">
-        {petType}
-      </div>
-      <div className="mt-4">
-        <p className="text-xs text-gray-500">
-          Fecha: {new Date(dateLost).toLocaleDateString()}
-        </p>{" "}
-        <div>
-          <Link href="/maps" className="text-xs text-gray-500">
-            Ubicación: {location?.address || "No especificada"}
-          </Link>
+            <div className="mt-4">
+                <h3 className="text-lg font-bold text-gray-800">{title}</h3>
+                <p className="text-sm text-gray-600 mt-2">{description}</p>
+            </div>
+            <div className="absolute top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded">{petType}</div>
+            <div className="mt-4">
+                <p className="text-xs text-gray-500">Fecha: {new Date(dateLost).toLocaleDateString()}</p>
+              <div>
+                {/*<Link href="/maps">*/}
+                <span className="text-xs text-gray-500">
+                  Ubicación: {location?.address || "No especificada"}</span>
+               {/* </Link>*/}
+              </div>
+            </div>
+            
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Card;
