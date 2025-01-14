@@ -57,7 +57,9 @@ export const patchPic = async (formData: FormData): Promise<IProfilePic> => {
 
 // delete - eliminar la foto
 export async function deletePic(userId: string): Promise<void> {
-  //const userId = getUserId();
+  const handleRefresh = () => {
+    window.location.reload();
+  };
 
   try {
     const response = await fetch(
@@ -80,6 +82,9 @@ export async function deletePic(userId: string): Promise<void> {
         confirmButton:
           "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
       },
+    }).then(() => {
+      // Ejecuta handleRefresh una vez que el usuario haga clic en "OK"
+      handleRefresh();
     });
   } catch (error) {
     const errorMessage =

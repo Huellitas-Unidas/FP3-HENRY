@@ -39,11 +39,11 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   // Verificar el userId del almacenamiento local
 
   useEffect(() => {
-    const storedUserId = getUserId(); 
+    const storedUserId = getUserId();
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId, 
+        userId: storedUserId,
       }));
     } else {
       Swal.fire({
@@ -129,7 +129,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     setLoading(true);
 
     try {
-      const token = Cookies.get("token"); 
+      const token = Cookies.get("token");
       if (!token) {
         console.error("Token no encontrado.");
         return;
@@ -212,7 +212,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         contactInfo: "",
         dateLost: "",
         dateLostISO: "",
-        location: { address: "", latitude: 0, longitude: 0 }, 
+        location: { address: "", latitude: 0, longitude: 0 },
         file: null,
         status: "",
         userId: formData.userId,
@@ -231,175 +231,169 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   };
 
   return (
-  
-      <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
-        <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
-          <div className="flex items-center">
-            <h3 className="text-[#2e736b] text-xl font-bold flex-1">
-              Publicar una mascota perdida o encontrada
-            </h3>
-            <button
-              onClick={onClose} 
-              className="text-gray-400 hover:text-red-500"
-              aria-label="Cerrar modal"
+    <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
+      <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
+        <div className="flex items-center">
+          <h3 className="text-[#2e736b] text-xl font-bold flex-1">
+            Publicar una mascota perdida o encontrada
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-red-500"
+            aria-label="Cerrar modal"
+          >
+            ✕
+          </button>
+        </div>
+        <form className="space-y-4 mt-8" onSubmit={handleSubmit} noValidate>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">Título</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Ej: Osito Perdido"
+              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                errors.title ? "border-red-500" : ""
+              }`}
+            />
+            {errors.title && (
+              <span className="text-red-500 text-sm">{errors.title}</span>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Descripción
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Escriba características del animal"
+              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                errors.description ? "border-red-500" : ""
+              }`}
+            />
+            {errors.description && (
+              <span className="text-red-500 text-sm">{errors.description}</span>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">Tipo</label>
+            <select
+              name="petType"
+              value={formData.petType}
+              onChange={handleChange}
+              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                errors.petType ? "border-red-500" : ""
+              }`}
             >
-              ✕
+              <option value="">Seleccione un tipo</option>
+              <option value="perro">Perro</option>
+              <option value="gato">Gato</option>
+              <option value="otro">Otro</option>
+            </select>
+            {errors.petType && (
+              <span className="text-red-500 text-sm">{errors.petType}</span>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Número de contacto
+            </label>
+            <input
+              type="text"
+              name="contactInfo"
+              value={formData.contactInfo}
+              onChange={handleChange}
+              placeholder="Ej: 123456789"
+              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                errors.contactInfo ? "border-red-500" : ""
+              }`}
+            />
+            {errors.contactInfo && (
+              <span className="text-red-500 text-sm">{errors.contactInfo}</span>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Fecha de pérdida/encontrado
+            </label>
+            <input
+              type="date"
+              name="dateLost"
+              value={formData.dateLost}
+              onChange={handleChange}
+              className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
+                errors.dateLost ? "border-red-500" : ""
+              }`}
+            />
+            {errors.dateLost && (
+              <span className="text-red-500 text-sm">{errors.dateLost}</span>
+            )}
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Ubicación
+            </label>
+            <Autocomplete
+              onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+              onPlaceChanged={handlePlaceChanged}
+            >
+              <input
+                type="text"
+                placeholder="Ingrese una dirección"
+                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              />
+            </Autocomplete>
+          </div>
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Estado de la mascota
+            </label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+            >
+              <option value="perdido">Perdido</option>
+              <option value="encontrado">Encontrado</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-gray-800 text-sm mb-2 block">
+              Subir imagen
+            </label>
+            <input
+              type="file"
+              name="file"
+              accept="image/*"
+              onChange={handleChange}
+              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+            />
+          </div>
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              className="px-6 py-3 rounded-lg text-gray-800 text-sm border-none outline-none tracking-wide bg-gray-200 hover:bg-gray-300"
+              onClick={onClose} // También llama a onClose en el botón Cancelar
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
+            >
+              {loading ? "Cargando..." : "Publicar"}
             </button>
           </div>
-          <form className="space-y-4 mt-8" onSubmit={handleSubmit} noValidate>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">Título</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Ej: Osito Perdido"
-                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                  errors.title ? "border-red-500" : ""
-                }`}
-              />
-              {errors.title && (
-                <span className="text-red-500 text-sm">{errors.title}</span>
-              )}
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Descripción
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Escriba características del animal"
-                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                  errors.description ? "border-red-500" : ""
-                }`}
-              />
-              {errors.description && (
-                <span className="text-red-500 text-sm">
-                  {errors.description}
-                </span>
-              )}
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">Tipo</label>
-              <select
-                name="petType"
-                value={formData.petType}
-                onChange={handleChange}
-                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                  errors.petType ? "border-red-500" : ""
-                }`}
-              >
-                <option value="">Seleccione un tipo</option>
-                <option value="perro">Perro</option>
-                <option value="gato">Gato</option>
-                <option value="otro">Otro</option>
-              </select>
-              {errors.petType && (
-                <span className="text-red-500 text-sm">{errors.petType}</span>
-              )}
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Número de contacto
-              </label>
-              <input
-                type="text"
-                name="contactInfo"
-                value={formData.contactInfo}
-                onChange={handleChange}
-                placeholder="Ej: 123456789"
-                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                  errors.contactInfo ? "border-red-500" : ""
-                }`}
-              />
-              {errors.contactInfo && (
-                <span className="text-red-500 text-sm">
-                  {errors.contactInfo}
-                </span>
-              )}
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Fecha de pérdida/encontrado
-              </label>
-              <input
-                type="date"
-                name="dateLost"
-                value={formData.dateLost}
-                onChange={handleChange}
-                className={`px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg ${
-                  errors.dateLost ? "border-red-500" : ""
-                }`}
-              />
-              {errors.dateLost && (
-                <span className="text-red-500 text-sm">{errors.dateLost}</span>
-              )}
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Ubicación
-              </label>
-              <Autocomplete
-                onLoad={(autocomplete) => (placeRef.current = autocomplete)}
-                onPlaceChanged={handlePlaceChanged}
-              >
-                <input
-                  type="text"
-                  placeholder="Ingrese una dirección"
-                  className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-                />
-              </Autocomplete>
-            </div>
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Estado de la mascota
-              </label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-              >
-                <option value="perdido">Perdido</option>
-                <option value="encontrado">Encontrado</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="text-gray-800 text-sm mb-2 block">
-                Subir imagen
-              </label>
-              <input
-                type="file"
-                name="file"
-                accept="image/*"
-                onChange={handleChange}
-                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-              />
-            </div>
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                className="px-6 py-3 rounded-lg text-gray-800 text-sm border-none outline-none tracking-wide bg-gray-200 hover:bg-gray-300"
-                onClick={onClose} // También llama a onClose en el botón Cancelar
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
-              >
-                {loading ? "Cargando..." : "Publicar"}
-              </button>
-            </div>
-          </form>
-        </div>
+        </form>
       </div>
-    
+    </div>
   );
 };
 

@@ -6,9 +6,8 @@ import emptyProfile from "../../../public/images/emptyProfile.png";
 import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
-import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import { deletePet, getPetsByUser } from "../api/petAPI";
+import { getPetsByUser } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
@@ -53,14 +52,14 @@ const Dashboard = () => {
   //   }
   // };
 
-  const handleDeletePet = async (value: string | null) => {
-    if (value) {
-      await deletePet(value);
-      setRefresh((prev) => !prev);
-    } else {
-      return;
-    }
-  };
+  // const handleDeletePet = async (value: string | null) => {
+  //   if (value) {
+  //     await deletePet(value);
+  //     setRefresh((prev) => !prev);
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -68,6 +67,7 @@ const Dashboard = () => {
         if (userId) {
           const userPets = await getPetsByUser(userId);
           setPets(userPets);
+          setRefresh((prev) => !prev);
         } else {
           console.error("No se encontraron las mascotas");
         }
@@ -167,7 +167,6 @@ const Dashboard = () => {
                     <p>Tipo: {animal.type}</p>
                     <p>{animal.genero}</p>
                     <p>{animal.description}</p>
-                    <p>{animal.status}</p>
                   </div>
 
                   {animal.status === "none" ? (
@@ -184,14 +183,14 @@ const Dashboard = () => {
                       Perdida
                     </p>
                   )}
-
+                  {/* 
                   <button
                     onClick={() => handleDeletePet(animal.id)}
                     className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                   >
                     <TiDeleteOutline className="text-lg" />
                     Eliminar mascota
-                  </button>
+                  </button> */}
                 </div>
               );
             })}
