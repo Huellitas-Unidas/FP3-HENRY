@@ -59,6 +59,7 @@ export interface ISignUpData {
   password: string;
   confirm?: string;
   phone: string;
+  role?: string; //!
 } //! register
 
 export type TSignUpErrors = Partial<ISignUpData>;

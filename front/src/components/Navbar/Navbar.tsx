@@ -10,7 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { getUserById } from "@/app/api/userAPI";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const userId = getUserId();
@@ -33,9 +33,9 @@ const Navbar = () => {
             "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
         },
       });
-      localStorage.removeItem("userData");
-      // localStorage.removeItem("userId");  //!
-      // Cookies.remove("token"); //!
+      localStorage.removeItem("userData"); //!
+      localStorage.removeItem("userId"); //!
+      Cookies.remove("token"); //!
       await signOut({ redirect: false });
       setUserSession(null);
       router.push("/");
@@ -43,7 +43,8 @@ const Navbar = () => {
       console.error("Error al cerrar sesión:", error);
     }
   };
-  /////Se añade un listener detecte cambios en las cookies de sesión o el estado de autenticación //
+
+  // Se añade un listener detecte cambios en las cookies de sesión o el estado de autenticación //
   useEffect(() => {
     const handleStorageEvent = (event: StorageEvent) => {
       if (event.key === "next-auth.session-token" && !event.newValue) {

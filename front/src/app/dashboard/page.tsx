@@ -105,13 +105,15 @@ const Dashboard = () => {
             height={500}
             className="w-full h-full object-cover"
           />
-          <button
-            onClick={() => openModal("profilePicModal")}
-            className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
-            aria-label="changeProfilePic"
-          >
-            <CiEdit />
-          </button>
+          {session?.data?.user?.image ? null : (
+            <button
+              onClick={() => openModal("profilePicModal")}
+              className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              aria-label="changeProfilePic"
+            >
+              <CiEdit />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-col h-full gap-3 mr-28">
