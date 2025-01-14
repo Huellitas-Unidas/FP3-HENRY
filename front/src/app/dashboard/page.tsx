@@ -204,7 +204,7 @@ const Dashboard = () => {
         <ModalDashboardPic
           isOpen={activeModal}
           onClose={closeModal}
-          onRefresh={() => setRefresh((prev) => !prev)}
+          //onRefresh={() => setRefresh((prev) => !prev)}
         />
       )}
 

@@ -1,36 +1,58 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+function decodeToken(token: string) {
+  try {
+    const payload = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString("utf-8")
+    );
+    return payload;
+  } catch (error) {
+    console.error("Error decodificando el token:", error);
+    return null;
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
-
-  // Obtén el token de las cookies
   const userToken = request.cookies.get("token")?.value;
 
-  // Si intenta acceder a "/lostandfound" sin estar logueado, redirige a "/login"
-  if (pathname.startsWith("/lostandfound") && !userToken) {
-    const loginURL = new URL("/login", origin);
-    return NextResponse.redirect(loginURL);
+  // Decodificar el token para obtener el rol del usuario
+  const userData = userToken ? decodeToken(userToken) : null;
+
+  // No logueado: manejo de rutas protegidas
+  if (!userToken) {
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/login", origin));
+    }
+
+    if (pathname.startsWith("/lostandfound")) {
+      return NextResponse.redirect(new URL("/protectedRoute", origin));
+    }
   }
 
-  // Si intenta acceder a "/admin" sin estar logueado, redirige a "/login"
-  if (pathname.startsWith("/admin") && !userToken) {
-    const loginURL = new URL("/login", origin);
-    return NextResponse.redirect(loginURL);
+  // Validación para Admin
+  if (pathname.startsWith("/admin") && (!userData || userData.role !== "admin")) {
+    return NextResponse.redirect(new URL("/", origin));
   }
 
-  // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
-  if ((pathname.includes("/login") || pathname.includes("/signup")) && userToken) {
-    const homeURL = new URL("/", origin);
-    return NextResponse.redirect(homeURL);
+  // Usuarios logueados no pueden acceder a /login o /register
+  if (
+    (pathname.startsWith("/login") || pathname.startsWith("/register")) &&
+    userToken
+  ) {
+    return NextResponse.redirect(new URL("/", origin));
   }
 
-  // Si ninguna condición aplica, deja continuar
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/signup"],
+  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
+
+
+
+
 
 
