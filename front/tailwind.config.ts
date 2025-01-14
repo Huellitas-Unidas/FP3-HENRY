@@ -39,10 +39,34 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(100px)" },
         },
+        spin: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        'spin-reverse': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(-360deg)' },
+        },
+        'spin-slow-reverse': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(-360deg)' },
+        },
+
+        
       },
       animation: {
         jump: "jump 1s ease-in-out infinite",
         run: "run 1s linear infinite",
+        spinSlow: 'spin-slow 40s linear infinite',
+        spinSlowC: 'spin-slow 20s linear infinite', 
+        spinSlowReverse: 'spin-slow-reverse 20s linear infinite',
+        spinReverse: 'spin-reverse 10s linear infinite',
+        spin: 'spin 10s linear infinite', 
+
       },
 
       transitionProperty: {
