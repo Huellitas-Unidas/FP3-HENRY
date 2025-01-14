@@ -5,57 +5,47 @@ import Swal from "sweetalert2";
 import { createCheckoutSession } from "@/app/api/donationsAPI";
 import { IUserSessionDt } from "@/interfaces/types";
 import DonationsCarousel from "./DonationsCarousel";
+import { validateEmail, validateAmount } from "@/helpers/validateDonations";
 
 const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => {
-  const [amount, setAmount] = useState<number | undefined>(undefined); // Cambiado para usar placeholder
+  const [amount, setAmount] = useState<string>(""); 
   const [email, setEmail] = useState<string>("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [amountError, setAmountError] = useState<string | null>(null);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
+    const value = e.target.value;
     setAmount(value);
-
-    if (value < 1) {
-      setAmountError("El monto debe ser al menos $1.");
-    } else {
-      setAmountError(null); // Limpia el error si el valor es válido
-    }
+    const error = validateAmount(value);
+    setAmountError(error);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      setEmailError("Por favor, ingresa un correo electrónico válido.");
-    } else {
-      setEmailError(null); // Limpia el error si el correo es válido
-    }
+    const error = validateEmail(value);
+    setEmailError(error);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (amount === undefined || amount < 1) {
-      Swal.fire({
-        icon: "error",
-        title: "Monto inválido",
-        text: "El monto debe ser al menos $1.",
-        customClass: {
-          confirmButton:
-            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-        },
-      });
-      return;
+    const emailValidationError = validateEmail(email);
+    const amountValidationError = validateAmount(amount);
+
+    if (emailValidationError) {
+      setEmailError(emailValidationError);
     }
 
-    if (!userSession && (!email || emailError)) {
+    if (amountValidationError) {
+      setAmountError(amountValidationError);
+    }
+
+    if (emailValidationError || amountValidationError) {
       Swal.fire({
         icon: "error",
-        title: "Correo requerido",
-        text: "Por favor, ingresa un correo electrónico válido para continuar.",
+        title: "Formulario inválido",
+        text: "Por favor, corrige los errores en el formulario.",
         customClass: {
           confirmButton:
             "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
@@ -67,7 +57,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
     try {
       const emailToSend = userSession?.email || email;
       const checkoutUrl = await createCheckoutSession({
-        amount: (amount || 0) * 100,
+        amount: Number(amount) * 100,
         email: emailToSend,
       });
 
@@ -82,7 +72,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
               "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
           },
         }).then(() => {
-          window.location.href = checkoutUrl; // Redireccionamiento automático
+          window.location.href = checkoutUrl; 
         });
       }
     } catch (error) {
@@ -124,14 +114,14 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
                 Monto a donar (USD):
               </label>
               <input
-                type="number"
+                type="text"
                 id="amount"
-                value={amount === undefined ? "" : amount} // Mostrar placeholder
+                value={amount}
                 onChange={handleAmountChange}
-                placeholder="25" // Placeholder en tono claro
+                placeholder="25"
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:outline-none text-gray-800 text-sm lg:text-base ${
                   amountError
-                    ? "border-red-500 focus:ring-red-500"
+                    ? "border-red-300 focus:ring-red-300"
                     : "border-gray-300 focus:ring-customGreen-400"
                 }`}
               />
@@ -154,7 +144,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
                   id="email"
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:outline-none text-gray-800 text-sm lg:text-base ${
                     emailError
-                      ? "border-red-500 focus:ring-red-500"
+                      ? "border-red-300 focus:ring-red-300"
                       : "border-gray-300 focus:ring-customGreen-400"
                   }`}
                   value={email}
@@ -173,7 +163,7 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
               type="submit"
               className="w-full bg-customGreen-500 text-white py-2 px-4 rounded-lg text-sm lg:text-base font-semibold hover:bg-customGreen-600 transition duration-300 shadow-md hover:shadow-lg"
             >
-              Donar ${amount || 25} {/* Mostrar 25 si amount no está definido */}
+              Donar ${amount || "25"}
             </button>
           </form>
 
@@ -188,6 +178,8 @@ const Donations = ({ userSession }: { userSession?: IUserSessionDt | null }) => 
 };
 
 export default Donations;
+
+
 
 
 

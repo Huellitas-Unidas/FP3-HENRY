@@ -43,10 +43,12 @@ const Login: React.FC = () => {
         });
         router.push("/");
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Error desconocido";
         Swal.fire({
           icon: "error",
           iconColor: "red",
           title: "Credenciales incorrectas",
+          text: errorMessage,
           customClass: {
             confirmButton:
               "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",

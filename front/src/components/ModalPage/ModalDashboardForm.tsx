@@ -1,8 +1,10 @@
 import { getUserId } from "@/helpers/userId";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { IpetForm, IUserBack } from "@/interfaces/types";
+import { useRouter } from "next/navigation";
+import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,11 +24,51 @@ const ModalDashboardForm = ({
     contactInfo: `${userData.phone}`,
     dateLost: "",
     dateLostISO: "",
-    direction: "",
+    location: { address: "", latitude: 0, longitude: 0 },
     file: `${animal.imgUrl}`,
     status: "perdido",
-    userId: getUserId(),
+    userId: "",
   });
+
+  const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+    if (storedUserId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        userId: storedUserId, // Actualiza el userId dinámicamente
+      }));
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error de autenticación",
+        text: "No estás autenticado. Por favor, inicia sesión para continuar.",
+        customClass: {
+          confirmButton:
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
+      }).then(() => {
+        onClose();
+        router.push("/login");
+      });
+    }
+  }, [onClose, router]);
+
+  const handlePlaceChanged = () => {
+    const place = placeRef.current?.getPlace();
+    if (place?.geometry?.location) {
+      const latitude = place.geometry.location.lat();
+      const longitude = place.geometry.location.lng();
+      const address = place.formatted_address || "";
+
+      setFormData((prevState) => ({
+        ...prevState,
+        location: { address, latitude, longitude },
+      }));
+    }
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -64,7 +106,7 @@ const ModalDashboardForm = ({
         throw new Error("Debe adjuntar una imagen");
       }
 
-      if (!formData.direction) {
+      if (!formData.location) {
         throw new Error("La ubicación es obligatoria y debe ser válida.");
       }
 
@@ -169,6 +211,18 @@ const ModalDashboardForm = ({
             />
           </label>
 
+          <label className="text-gray-800 text-sm mb-2 block">Ubicación</label>
+          <Autocomplete
+            onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+            onPlaceChanged={handlePlaceChanged}
+          >
+            <input
+              type="text"
+              placeholder="Ingrese una dirección"
+              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+            />
+          </Autocomplete>
+
           <label>
             Foto:
             <input
@@ -189,7 +243,7 @@ const ModalDashboardForm = ({
             />
           </label> */}
 
-          <label>
+          {/* <label>
             Dirección:
             <input
               type="text"
@@ -198,7 +252,7 @@ const ModalDashboardForm = ({
               onChange={handleChange}
               required
             />
-          </label>
+          </label> */}
 
           <div className="mt-4 flex justify-end space-x-2">
             <button
