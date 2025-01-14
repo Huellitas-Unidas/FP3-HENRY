@@ -109,13 +109,6 @@ const Navbar = () => {
             className="ml-4"
           ></Image>
         </Link>
-<<<<<<< HEAD
-        <div className="hidden w-3/5 items-center justify-evenly font-semibold md:flex">
-          <Link href="/lostandfound">Buscados / Encontrados</Link>
-          <Link href="donations">Ayudanos donando</Link>
-          <Link href="/aboutUs">Sobre Huellas Unidas</Link>
-          <Link href="/recommendation">🐾Recomendaciones</Link>
-=======
         <div className="hidden w-3/5 items-center justify-evenly md:flex">
           <Link
             className={`transition-opacity-transform duration-300 ${
@@ -157,7 +150,6 @@ const Navbar = () => {
           >
             🐾Recomendaciones
           </Link>
->>>>>>> 145c6d417d7524a6c97cf547dea0dd2173f4a554
         </div>
 
         {userSession !== null || session?.data?.user ? (
