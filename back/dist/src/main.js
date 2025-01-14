@@ -28,11 +28,17 @@ async function bootstrap() {
     swagger_1.SwaggerModule.setup('api', app, document, {
         customSiteTitle: 'Proyecto Huellas Unidas',
     });
-    new pg_1.default.Pool({
+    const pool = new pg_1.Pool({
         connectionString: process.env.DATABASE_URL,
     });
+    pool.connect()
+        .then(() => console.log('✅ Conexión exitosa a la base de datos'))
+        .catch((error) => console.error('❌ Error al conectar a la base de datos:', error));
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: [
+            'http://localhost:3000',
+            'https://huellasunidas.netlify.app',
+        ],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         allowedHeaders: 'Authorization, Content-Type',
         credentials: true,

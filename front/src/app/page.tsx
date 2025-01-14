@@ -55,7 +55,7 @@ export default function Home() {
               </h3>
               <p className="text-gray-600 text-sm">
                 Conéctate instantáneamente con dueños de mascotas y otros
-                miembros de la comunidad. ????a través del ChatBot????
+                miembros de la comunidad.
               </p>
             </div>
           </div>
