@@ -69,6 +69,7 @@ export type TSignUpErrors = Partial<ISignUpData>;
 // } //! es igual a IUserData
 
 export interface IpqrProps {
+  id?:string,
   fullname: string;
   email: string;
   type: string;
@@ -104,4 +105,11 @@ export interface IUserSessionDt {
 
 export interface IProfilePic {
   profilePic: string;
+}
+
+
+export interface IDonation {
+  amount: number; 
+  email: string;  
+  currency: string; 
 }
