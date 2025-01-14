@@ -1,15 +1,15 @@
-import { NextURL } from "next/dist/server/web/next-url";
+//import { NextURL } from "next/dist/server/web/next-url";
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-const { pathname, origin } = request.nextUrl;
+/* const { pathname, origin } = request.nextUrl;
 
-  if ((pathname === "/lostandfound") && !request.cookies.get("userData")?.value) {
+  if ((pathname === "/lostandfound") && !request.cookies.get("userId")?.value) {
     const routeURL = new NextURL("/protectedRoute", origin);
     return NextResponse.redirect(routeURL);
-  }
-else {
-    return NextResponse.next();
 } 
+else {
+  return NextResponse.next()
+} */
 } 
  

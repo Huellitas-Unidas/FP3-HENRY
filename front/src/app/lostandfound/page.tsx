@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 
 import ButtonLostAndFound from '@/components/Buttons/ButtonLostAndFound';
@@ -7,15 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { IPost } from '@/interfaces/types';
 import ModalPage from '@/components/ModalPage/ModalPAge';
 import Link from 'next/link';
-=======
-"use client";
-import ButtonLostAndFound from "@/components/Buttons/ButtonLostAndFound";
-import CardList from "@/components/CardList/CardList";
-import React, { useState, useEffect } from "react";
-import { IPost } from "@/interfaces/types";
-import ModalPage from "@/components/ModalPage/ModalPAge";
 import { useRouter } from "next/navigation";
->>>>>>> 145c6d417d7524a6c97cf547dea0dd2173f4a554
 
 const LostAndFound: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,23 +51,23 @@ const LostAndFound: React.FC = () => {
 
   return (
     <div className="p-8">
-<<<<<<< HEAD
       <div className='flex justify-between mb-4'>
-    <Link href='/maps' className='px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md'>Ver Mapa</Link>
-    {/*   </div>
-  {/* Contenedor del botón alineado a la derecha */}
-  {/*</div><div className="flex justify-end mb-4"> */}
-    <button
-      onClick={handleOpenModal}
-      className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
-    >
-      Publicar Mascota
-    </button>
-  </div>
+        {/* <Link href="/maps">
+          <button className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md">Ver Mapa</button>
+        </Link> */}
+        {/* </div> */}
+        {/* Contenedor del botón alineado a la derecha */}
+        {/*</div><div className="flex justify-end mb-4"> */}
+        <button
+          onClick={handleOpenModal}
+          className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
+        >
+          Publicar Mascota
+        </button>
+      </div>
 
 
       {/* Otro botón adicional */}
-=======
       <div className="flex flex-row justify-between">
         <div className="mb-4">
           <button
@@ -87,17 +78,16 @@ const LostAndFound: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex justify-start mb-4">
+        {/* <div className="flex justify-start mb-4">
           <button
             onClick={handleOpenModal}
             className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
           >
             Publicar Mascota
           </button>
-        </div>
+        </div> */}
       </div>
 
->>>>>>> 145c6d417d7524a6c97cf547dea0dd2173f4a554
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
       {/* Lista de Tarjetas */}
