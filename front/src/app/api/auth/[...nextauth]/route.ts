@@ -1,9 +1,19 @@
-import { ISignUpData } from "@/interfaces/types";
-import NextAuth, { Account, NextAuthOptions, Session } from "next-auth";
+// import { ISignUpDataGoogle } from "@/interfaces/types";
+import NextAuth, { DefaultUser, NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+interface ISignUpDataGoogle {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  confirm?: string;
+  phone: string;
+  role?: string; //!
+}
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -17,12 +27,13 @@ const authOptions: NextAuthOptions = {
       if (account?.provider === "google") {
         try {
           // Registrar al usuario
-          const userData: ISignUpData = {
+          const userData: ISignUpDataGoogle = {
+            id: user.id || "",
             name: user.name || "",
             email: user.email || "",
             password: "defaultPassword123", // Contraseña por defecto para usuarios de terceros
             phone: "",
-            role: "user",
+            // role: "user",
           };
 
           const registerResponse = await fetch(`${API_URL}/user/register`, {
@@ -32,12 +43,7 @@ const authOptions: NextAuthOptions = {
             },
             body: JSON.stringify(userData),
           });
-
-          if (typeof window !== "undefined" && localStorage) {
-            const jsonResponse = await registerResponse.json();
-            const localStorageUserId = jsonResponse.user.id;
-            localStorage.setItem("userId", localStorageUserId);
-          }
+          console.log("id de google:", user.id);
 
           if (!registerResponse.ok) {
             const errorData = await registerResponse.json();
@@ -103,46 +109,23 @@ const authOptions: NextAuthOptions = {
       }
       return true; // Permite el inicio de sesión para otros proveedores
     },
-    // Callback para manejar el token JWT
-    async jwt({
-      token,
-      account,
-    }: {
-      token: JWT;
-      account?: Account | null;
-    }): Promise<JWT> {
-      if (account) {
-        // Almacena el accessToken de Google en el token
-        token.accessToken = account.access_token;
+
+    async jwt({ token, user }: { token: JWT; user?: DefaultUser }) {
+      if (user) {
+        token.userId = user.id;
       }
       return token;
     },
-    // Callback para agregar el token a la sesión
-    async session({
-      session,
-      token,
-    }: {
-      session: Session;
-      token: JWT;
-    }): Promise<Session> {
-      session.user.accessToken = token.accessToken as string; // Agrega el accessToken a la sesión
+
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.user.accessToken = token.accessToken as string;
+      session.user.id = token.userId as string;
       return session;
     },
   },
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true, // Protege contra acceso del cliente
-        sameSite: "lax", // Protege contra ataques CSRF
-        path: "/",
-        secure: process.env.NODE_ENV === "production", // Solo HTTPS en producción
-      },
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET, // Secreto para firmar los tokens
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt", // Manejo de sesión con JWT
+    strategy: "jwt",
   },
 };
 

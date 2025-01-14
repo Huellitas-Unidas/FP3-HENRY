@@ -16,7 +16,7 @@ export default function Home() {
           <h2>Mirá lo que nos caracteriza</h2>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 max-md:max-w-lg mx-auto gap-12">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 max-md:max-w-lg mx-auto mb-6 gap-12">
           <div className="p-4 flex gap-6 rounded-lg hover:shadow-md hover:scale-105 transition-all duration-300">
             <HiOutlineLocationMarker size={60} className="text-[#1e1612]" />
 
