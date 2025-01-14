@@ -19,7 +19,13 @@ const EditPost: React.FC = () => {
 
     try {
       const updatedPost = await updatePostStatus(post.id, newStatus);
-      setPost(updatedPost);
+      setPost((prevPost) => {
+      if (!prevPost) return null; 
+      return {
+        ...prevPost, 
+        status: updatedPost.status, 
+      };
+    });
 
       const toastMessage =
       updatedPost.status === 'encontrado'

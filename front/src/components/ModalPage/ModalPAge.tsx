@@ -5,12 +5,12 @@ import { validatePost } from "@/helpers/validatePost";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
-import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
+import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+//const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
 
-const libraries: Libraries = ["places"];
+//const libraries: Libraries = ["places"];
 
 interface ModalPageProps {
   onClose: () => void;
@@ -39,11 +39,11 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   // Verificar el userId del almacenamiento local
 
   useEffect(() => {
-    const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+    const storedUserId = getUserId(); 
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId, // Actualiza el userId dinámicamente
+        userId: storedUserId, 
       }));
     } else {
       Swal.fire({
@@ -129,7 +129,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
     setLoading(true);
 
     try {
-      const token = Cookies.get("token"); // Recupera el token desde las cookies
+      const token = Cookies.get("token"); 
       if (!token) {
         console.error("Token no encontrado.");
         return;
@@ -212,7 +212,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         contactInfo: "",
         dateLost: "",
         dateLostISO: "",
-        location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
+        location: { address: "", latitude: 0, longitude: 0 }, 
         file: null,
         status: "",
         userId: formData.userId,
@@ -231,7 +231,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   };
 
   return (
-    <LoadScript googleMapsApiKey={GOOGLE_API_KEY!} libraries={libraries}>
+  
       <div className="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
         <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 relative">
           <div className="flex items-center">
@@ -239,7 +239,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
               Publicar una mascota perdida o encontrada
             </h3>
             <button
-              onClick={onClose} // Llama a la función onClose al hacer clic
+              onClick={onClose} 
               className="text-gray-400 hover:text-red-500"
               aria-label="Cerrar modal"
             >
@@ -399,7 +399,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
           </form>
         </div>
       </div>
-    </LoadScript>
+    
   );
 };
 
