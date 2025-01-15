@@ -120,15 +120,15 @@ const PetRegister: React.FC = () => {
               name="type"
               value={formik.values.type}
               onChange={formik.handleChange}
-              className="w-full sm:w-1/2 py-2 pl-4 border-2 rounded-xl bg-transparent text-gray-400 focus:outline-none"
+              className={`w-full sm:w-1/2 py-2 px-4 border-2 rounded-xl bg-white focus:outline-none ${
+                formik.values.type ? "text-gray-900" : "text-gray-400"
+              }`}
             >
-              <option value="" disabled>
+              <option value="" disabled hidden>
                 Tipo
               </option>
               <option value="Gato">Gato</option>
               <option value="Perro">Perro</option>
-              <option value="Ave">Ave</option>
-              <option value="Roedor">Roedor</option>
               <option value="Otro">Otro</option>
             </select>
 
@@ -136,9 +136,11 @@ const PetRegister: React.FC = () => {
               name="genero"
               value={formik.values.genero}
               onChange={formik.handleChange}
-              className="w-full sm:w-1/2 py-2 pl-4 border-2 rounded-xl bg-transparent text-gray-400 focus:outline-none"
+              className={`w-full sm:w-1/2 py-2 px-4 border-2 rounded-xl bg-white focus:outline-none ${
+                formik.values.genero ? "text-gray-900" : "text-gray-400"
+              }`}
             >
-              <option value="" disabled>
+              <option value="" disabled hidden>
                 Género
               </option>
               <option value="Hembra">Hembra</option>

@@ -80,6 +80,18 @@ export class PostsService {
       },
     });
 
+    const emailData = {
+      userName: userFound.name,
+      title: post.title,
+    };
+    
+    await this.emailService.sendMailWithTemplate(
+      userFound.email,
+      '¡Tu Post Fue Creado!',
+      emailData,
+      'postCreation'
+    );
+
     return post;
   }
 
