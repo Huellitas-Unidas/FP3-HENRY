@@ -31,7 +31,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/pqr" className="hover:underline">
+              <Link href="/contact" className="hover:underline">
                 Contacto
               </Link>
             </li>

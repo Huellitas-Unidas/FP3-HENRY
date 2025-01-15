@@ -1,5 +1,5 @@
 import { getUserId } from "@/helpers/userId";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { IpetForm, IUserBack } from "@/interfaces/types";
@@ -8,14 +8,17 @@ import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const ModalDashboardForm = ({
+interface ModalDashboardPageProps {
+  onClose: () => void;
+  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  animal: IpetForm;
+  userData: IUserBack;
+}
+
+const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
   animal,
   userData,
   onClose,
-}: {
-  animal: IpetForm;
-  userData: IUserBack;
-  onClose: () => void;
 }) => {
   const [formData, setFormData] = useState({
     title: `${animal.name}`,
@@ -34,11 +37,11 @@ const ModalDashboardForm = ({
   const router = useRouter();
 
   useEffect(() => {
-    const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
+    const storedUserId = getUserId();
     if (storedUserId) {
       setFormData((prevState) => ({
         ...prevState,
-        userId: storedUserId, // Actualiza el userId dinámicamente
+        userId: storedUserId,
       }));
     } else {
       Swal.fire({
@@ -58,7 +61,12 @@ const ModalDashboardForm = ({
 
   const handlePlaceChanged = () => {
     const place = placeRef.current?.getPlace();
-    if (place?.geometry?.location) {
+    if (!place) {
+      console.error("No place selected or insufficient data.");
+      return;
+    }
+
+    if (place.geometry?.location) {
       const latitude = place.geometry.location.lat();
       const longitude = place.geometry.location.lng();
       const address = place.formatted_address || "";
@@ -67,14 +75,45 @@ const ModalDashboardForm = ({
         ...prevState,
         location: { address, latitude, longitude },
       }));
+    } else {
+      console.error("Place does not have geometry or location information.");
     }
   };
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    if (name === "file") {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData((prevState) => ({
+            ...prevState,
+            file: reader.result as string,
+          }));
+        };
+        reader.readAsDataURL(file); // Convierte a base64
+      }
+    } else if (name === "dateLost") {
+      const selectedDate = new Date(value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      const isoDate = selectedDate.toISOString();
+
+      setFormData((prevState) => ({
+        ...prevState,
+        dateLost: value,
+        dateLostISO: isoDate,
+      }));
+    } else {
+      setFormData((prevState) => ({ ...prevState, [name]: value }));
+    }
   };
 
   const convertUrlToFile = async (url: string, fileName: string) => {
@@ -83,7 +122,9 @@ const ModalDashboardForm = ({
     return new File([blob], fileName, { type: blob.type });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     try {
       const token = Cookies.get("token"); // Recupera el token desde las cookies
       if (!token) {
@@ -115,9 +156,10 @@ const ModalDashboardForm = ({
       data.append("description", formData.description);
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
-      data.append("dateLost", formData.dateLostISO);
+      data.append("dateLost", formData.dateLostISO); // Asegúrate de pasar la fecha en formato ISO
       data.append("status", formData.status);
       data.append("userId", formData.userId);
+      data.append("location", JSON.stringify(formData.location));
       if (animal.imgUrl) {
         const file = await convertUrlToFile(
           animal.imgUrl,
@@ -141,7 +183,7 @@ const ModalDashboardForm = ({
         throw new Error(errorMessage);
       }
       const result = await response.json();
-      console.log(result);
+      console.log("Mascota marcada como perdida:", result);
 
       Swal.fire({
         icon: "success",
@@ -151,6 +193,8 @@ const ModalDashboardForm = ({
             "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
         },
       });
+      //updatePetStatus(animal.id); //!!!!
+      router.push("/misposteos"); // redirige a mis posteos luego de ser marcada como perdida
     } catch (error) {
       Swal.fire(
         "Error",
@@ -166,10 +210,11 @@ const ModalDashboardForm = ({
         <h2 className="text-2xl font-semibold mb-4">
           Publicar mascota perdida
         </h2>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
           <label>
             Título:
             <input
+              className="ml-2"
               type="text"
               name="title"
               value={formData.title}
@@ -181,6 +226,7 @@ const ModalDashboardForm = ({
           <label>
             Descripción:
             <input
+              className="ml-2"
               type="text"
               name="title"
               value={formData.description}
@@ -192,6 +238,7 @@ const ModalDashboardForm = ({
           <label>
             Teléfono:
             <input
+              className="ml-2"
               type="text"
               name="title"
               value={formData.contactInfo}
@@ -201,58 +248,29 @@ const ModalDashboardForm = ({
           </label>
 
           <label>
-            DATE:
+            Fecha:
             <input
-              type="text"
-              name="title"
-              value={formData.title}
+              className="ml-2"
+              type="date"
+              name="dateLost"
+              value={formData.dateLost}
               onChange={handleChange}
-              disabled
             />
           </label>
-
-          <label className="text-gray-800 text-sm mb-2 block">Ubicación</label>
-          <Autocomplete
-            onLoad={(autocomplete) => (placeRef.current = autocomplete)}
-            onPlaceChanged={handlePlaceChanged}
-          >
-            <input
-              type="text"
-              placeholder="Ingrese una dirección"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </Autocomplete>
 
           <label>
-            Foto:
-            <input
-              type="text"
-              name="title"
-              value={formData.file}
-              onChange={handleChange}
-              disabled
-            />
+            Ubicación:
+            <Autocomplete
+              onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+              onPlaceChanged={handlePlaceChanged}
+            >
+              <input
+                type="text"
+                placeholder="Ingrese una dirección"
+                className="mt-2 px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              />
+            </Autocomplete>
           </label>
-
-          {/* <label>
-            Foto:
-            <input
-              type="file"
-              accept="image/*"
-              className="block w-full text-lg text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-green-500"
-            />
-          </label> */}
-
-          {/* <label>
-            Dirección:
-            <input
-              type="text"
-              name="direction"
-              value={formData.direction}
-              onChange={handleChange}
-              required
-            />
-          </label> */}
 
           <div className="mt-4 flex justify-end space-x-2">
             <button
@@ -262,6 +280,7 @@ const ModalDashboardForm = ({
               Cancelar
             </button>
             <button
+              onClick={handleSubmit}
               type="submit"
               className="bg-green500 text-white p-2 rounded-lg hover:bg-green600 hover:bg-white hover:text-green500"
             >

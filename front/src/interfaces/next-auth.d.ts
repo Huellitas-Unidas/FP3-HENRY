@@ -27,8 +27,3 @@ declare module "next-auth/jwt" {
     token?: string; // Añade la propiedad token
   }
 }
-
-
-
-
-

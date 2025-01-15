@@ -38,7 +38,6 @@ CREATE TABLE "Donations" (
     "amount" DOUBLE PRECISION NOT NULL,
     "email" TEXT NOT NULL,
     "paymentIntent" TEXT NOT NULL,
-    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Donations_pkey" PRIMARY KEY ("id")
@@ -99,16 +98,10 @@ CREATE TABLE "Location" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Donations_paymentIntent_key" ON "Donations"("paymentIntent");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Location_postId_key" ON "Location"("postId");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Donations" ADD CONSTRAINT "Donations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Notifications" ADD CONSTRAINT "Notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
