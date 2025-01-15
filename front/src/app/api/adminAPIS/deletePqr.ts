@@ -1,7 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const deleteUser = async (userId: string, token: string) => {
-  const response = await fetch(`${API_URL}/user/${userId}`, {
+  const response = await fetch(`${API_URL}/admin/user/${userId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
