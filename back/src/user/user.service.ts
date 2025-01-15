@@ -66,32 +66,31 @@ export class UserService {
         role: true,
       },
     });
-  
+
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
-  
+
     const isPasswordValid = await this.authService.validatePassword(
       password,
       user.password,
     );
-  
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
-  
+
     const payload = { email: user.email, sub: user.id, role: user.role };
-  
+
     const token = this.authService.generateToken(payload);
-  
+
     return {
       message: 'Te has logueado exitosamente.',
       token,
-      userId: user.id, 
+      userId: user.id,
     };
   }
-  
-  
+
   async findAll() {
     const users = await this.prisma.user.findMany();
     return users.map(({ password, ...user }) => user);
@@ -103,7 +102,6 @@ export class UserService {
       include: {
         posts: true,
         pets: true,
-        donations: true,
         pqr: true,
       },
     });
@@ -161,7 +159,11 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        posts: true,
+        posts: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
     if (!user) {
