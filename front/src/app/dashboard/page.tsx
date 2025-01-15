@@ -6,9 +6,8 @@ import emptyProfile from "../../../public/images/emptyProfile.png";
 import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 import { RiEmotionSadLine } from "react-icons/ri";
-import { TiDeleteOutline } from "react-icons/ti";
 import { IpetForm } from "@/interfaces/types";
-import { deletePet, getPetsByUser } from "../api/petAPI";
+import { getPetsByUser } from "../api/petAPI";
 import { useSession } from "next-auth/react";
 import { getUserId } from "@/helpers/userId";
 import { IUserBack } from "@/interfaces/types";
@@ -53,14 +52,14 @@ const Dashboard = () => {
   //   }
   // };
 
-  const handleDeletePet = async (value: string | null) => {
-    if (value) {
-      await deletePet(value);
-      setRefresh((prev) => !prev);
-    } else {
-      return;
-    }
-  };
+  // const handleDeletePet = async (value: string | null) => {
+  //   if (value) {
+  //     await deletePet(value);
+  //     setRefresh((prev) => !prev);
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -68,6 +67,7 @@ const Dashboard = () => {
         if (userId) {
           const userPets = await getPetsByUser(userId);
           setPets(userPets);
+          setRefresh((prev) => !prev);
         } else {
           console.error("No se encontraron las mascotas");
         }
@@ -95,8 +95,8 @@ const Dashboard = () => {
   }, [userId, refresh]);
 
   return (
-    <div className="font-sans text-lg flex flex-row my-6">
-      <div className="flex flex-row gap-6 w-1/2 h-1/2 justify-start">
+    <div className="font-sans text-lg flex flex-col md:flex-row my-6">
+      <div className="flex flex-row gap-6 w-full md:w-1/2 h-1/2 justify-start">
         <div className="w-1/4 h-1/4 p-4 relative border border-green500 rounded-lg">
           <Image
             src={profilePhoto}
@@ -105,13 +105,15 @@ const Dashboard = () => {
             height={500}
             className="w-full h-full object-cover"
           />
-          <button
-            onClick={() => openModal("profilePicModal")}
-            className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
-            aria-label="changeProfilePic"
-          >
-            <CiEdit />
-          </button>
+          {session?.data?.user?.image ? null : (
+            <button
+              onClick={() => openModal("profilePicModal")}
+              className="absolute top-0 left-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+              aria-label="changeProfilePic"
+            >
+              <CiEdit />
+            </button>
+          )}
         </div>
 
         <div className="flex flex-col h-full gap-3 mr-28">
@@ -128,25 +130,25 @@ const Dashboard = () => {
           <p className="font-semibold">Teléfono:</p>
           <p className="inline-flex gap-2">
             {userData?.phone}
-            <button className="text-lg">
+            {/* <button className="text-lg">
               <CiEdit />
-            </button>
+            </button> */}
           </p>
           <br />
-          <p className="underline text-sm hover:no-underline">
+          {/* <p className="underline text-sm hover:no-underline">
             Modificar contraseña
-          </p>
+          </p> */}
           <Link href={"/petregister"}>
             <GreenButton props="Añadir mascota" />
           </Link>
         </div>
       </div>
 
-      <div className="flex flex-col p-4 gap-4 w-1/2 border rounded-lg shadow-2xl">
+      <div className="flex flex-col p-4 gap-4 w-full md:w-1/2 mt-4 md:mt-0 border rounded-lg shadow-2xl">
         <p className="text-green500 font-semibold">Mis mascotas:</p>
 
         {pets?.length !== 0 ? (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-4">
             {pets.map((animal) => {
               return (
                 <div
@@ -165,7 +167,6 @@ const Dashboard = () => {
                     <p>Tipo: {animal.type}</p>
                     <p>{animal.genero}</p>
                     <p>{animal.description}</p>
-                    <p>{animal.status}</p>
                   </div>
 
                   {animal.status === "none" ? (
@@ -182,14 +183,14 @@ const Dashboard = () => {
                       Perdida
                     </p>
                   )}
-
+                  {/* 
                   <button
                     onClick={() => handleDeletePet(animal.id)}
                     className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
                   >
                     <TiDeleteOutline className="text-lg" />
                     Eliminar mascota
-                  </button>
+                  </button> */}
                 </div>
               );
             })}
@@ -201,11 +202,7 @@ const Dashboard = () => {
 
       {/* Modales */}
       {activeModal === "profilePicModal" && (
-        <ModalDashboardPic
-          isOpen={activeModal}
-          onClose={closeModal}
-          onRefresh={() => setRefresh((prev) => !prev)}
-        />
+        <ModalDashboardPic isOpen={activeModal} onClose={closeModal} />
       )}
 
       {activeModal === "petFormModal" && selectedPet && userData && (

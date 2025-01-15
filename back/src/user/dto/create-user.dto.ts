@@ -30,6 +30,7 @@ export class CreateUserDto {
   @IsString()
   phone: string;
 
+
   @IsOptional()
   @IsString()
   googleId?: string; // Google ID se usará si el registro es con Google
@@ -38,4 +39,5 @@ export class CreateUserDto {
   @IsEnum(Role)
   @Transform(({ value }) => value?.toLowerCase())
   role?: Role;
+
 }
