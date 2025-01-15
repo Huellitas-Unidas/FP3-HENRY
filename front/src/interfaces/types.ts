@@ -105,6 +105,7 @@ export interface IUserBack {
   phone?: string | number;
   profilePicture: string | null;
   createdAt: string;
+  role: "admin" | "user";
 }
 
 export interface IUserSessionDt {
