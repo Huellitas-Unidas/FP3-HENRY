@@ -2,7 +2,7 @@
 import { getPqrs } from "@/app/api/adminAPIS/getPqrs";
 import { IpqrProps } from "@/interfaces/types";
 import React, { useEffect, useState } from "react";
-import BackToAdmin from "./BackToAdmin";
+
 
 
 
