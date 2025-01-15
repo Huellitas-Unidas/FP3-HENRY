@@ -1,11 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import { signOut, useSession } from "next-auth/react";
 import logoFondoVerdeSinLetras from "../../../public/images/logoFondoVerdeSinLetras.png";
 import emptyProfile from "../../../public/images/emptyProfile.png";
 import Image from "next/image";
@@ -19,10 +14,6 @@ import Cookies from "js-cookie";
 const Navbar = () => {
   const userId = getUserId();
   const [userPic, setUserPic] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const session = useSession();
@@ -35,9 +26,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await Swal.fire({
-        toast: true,
-        position: "top-right",
-        icon: "success",
         title: "Sesión cerrada",
         text: "Hasta la próxima!",
         icon: "success",
@@ -47,9 +35,6 @@ const Navbar = () => {
             "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
         },
       });
-
-      Cookies.remove("token");
-      Cookies.remove("userId");
       localStorage.removeItem("userData");
       localStorage.removeItem("userId");
       Cookies.remove("token");
@@ -64,30 +49,17 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUser = async () => {
       try {
-        const token = Cookies.get("token") || null;
-        const storedUserId = Cookies.get("userId") || null;
-
-        if (!token || !storedUserId || isTokenExpired(token)) {
-          setIsLoggedIn(false);
-          setIsAdmin(false);
-          setUserPic(null);
-          setLoading(false);
-          return;
-        }
-
-        const user = await getUserById(storedUserId);
-
-        if (user) {
-          setUserPic(user.profilePicture || null);
-          setIsAdmin(user.role.toUpperCase() === "ADMIN");
-          setIsLoggedIn(true);
-        } else {
-          setUserPic(null);
-          setIsAdmin(false);
-          setIsLoggedIn(false);
-        }
+        if (userId) {
+          const user = await getUserById(userId);
+          if (user) setUserPic(user.profilePicture);
+          else {
+            setUserPic(null);
+          }
+        } //else {
+        //console.error("No se encontró el usuario");
+        //}
       } catch (error) {
         console.error(error);
       }
@@ -98,7 +70,6 @@ const Navbar = () => {
   return (
     <nav className="font-sans font-semibold text-lg flex shadow-lg rounded-lg justify-between md:max-h-16 border border-[#3c9083] bg-[#d7f0e9]">
       <div className="flex w-full justify-between">
-        {/* Logo */}
         <Link href="/">
           <Image
             src={logoFondoVerdeSinLetras}
@@ -106,12 +77,20 @@ const Navbar = () => {
             width={60}
             height={60}
             className="ml-4"
-          />
+          ></Image>
         </Link>
-
-        {/* Rutas visibles */}
         <div className="hidden w-3/5 items-center justify-evenly md:flex">
-          <Link
+                 <Link
+                  className={`relative -top-2 text-sm transition-opacity-transform duration-300 ${
+                    pathname === "/admin"
+                      ? "opacity-80 -translate-y-1"
+                      : "hover:opacity-80 hover:-translate-y-1"
+                  }`}
+                  href="/admin"
+                >
+                  Admin
+                </Link>
+             <Link
             className={`transition-opacity-transform duration-300 ${
               pathname === "/lostandfound"
                 ? "opacity-80 -translate-y-1"
@@ -127,9 +106,9 @@ const Navbar = () => {
                 ? "opacity-80 -translate-y-1"
                 : "hover:opacity-80 hover:-translate-y-1"
             }`}
-            href="/donations"
+            href="donations"
           >
-            Ayúdanos Donando
+            Ayudanos donando
           </Link>
           <Link
             className={`transition-opacity-transform duration-300 ${
@@ -179,24 +158,14 @@ const Navbar = () => {
                 className="hover:opacity-80 hover:-translate-y-1 transition-opacity-transform duration-300"
                 onClick={handleLogout}
               >
-                Cerrar Sesión
+                Cerrar sesión
               </button>
-              {isAdmin && (
-                <Link
-                  className={`relative -top-2 text-sm transition-opacity-transform duration-300 ${
-                    pathname === "/admin"
-                      ? "opacity-80 -translate-y-1"
-                      : "hover:opacity-80 hover:-translate-y-1"
-                  }`}
-                  href="/admin"
-                >
-                  Admin
-                </Link>
-              )}
-            </>
-          ) : (
-            <>
-              <Link
+            </div>
+          </div>
+        ) : (
+          <div className="hidden w-1/5 items-center justify-evenly md:flex">
+            <div>
+            <Link
                 className={`transition-opacity-transform duration-300 ${
                   pathname === "/adminRegister"
                     ? "opacity-80 -translate-y-1"
@@ -206,31 +175,33 @@ const Navbar = () => {
               >
                 Admin+
               </Link>
+            </div>
+            <div>
               <Link
                 className={`transition-opacity-transform duration-300 ${
                   pathname === "/register"
                     ? "opacity-80 -translate-y-1"
                     : "hover:opacity-80 hover:-translate-y-1"
                 }`}
-                href="/register"
+                href={"/register"}
               >
                 Registrarme
               </Link>
+            </div>
+            <div>
               <Link
                 className={`transition-opacity-transform duration-300 ${
                   pathname === "/login"
                     ? "opacity-80 -translate-y-1"
                     : "hover:opacity-80 hover:-translate-y-1"
                 }`}
-                href="/login"
+                href={"/login"}
               >
                 Iniciar Sesión
               </Link>
-              
-            </>
-          )}
-
-        </div>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
