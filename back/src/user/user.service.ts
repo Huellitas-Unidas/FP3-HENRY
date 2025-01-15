@@ -19,8 +19,9 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password, name, phone, role } = createUserDto;
+    const { email, password, name, phone, googleId, role } = createUserDto;
 
+    // Verifica si ya existe un usuario con ese correo electrónico
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -29,27 +30,36 @@ export class UserService {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
 
-    const hashedPassword = await this.authService.hashPassword(password);
+    // Si el usuario se registra con Google, el googleId se usará. Si no, genera un UUID
+    const finalId = googleId || undefined; // Si no tiene googleId, Prisma generará un ID automáticamente
 
+    let hashedPassword = undefined;
+    if (password) {
+      hashedPassword = await this.authService.hashPassword(password); // Solo se ejecuta si se proporciona una contraseña
+    }
+
+    // Crea el nuevo usuario
     const user = await this.prisma.user.create({
       data: {
+        id: finalId, // Usa googleId o permite que Prisma genere un ID
         email,
-        password: hashedPassword,
+        password: hashedPassword, // Solo aplica si no es un usuario de Google
         phone: String(phone),
         name,
-        role: (role ? role.toUpperCase() : 'USER') as Role,
+        googleId, // Solo asigna googleId si está presente
+        role: (role ? role.toUpperCase() : 'USER') as Role, // Asegúrate de que el role sea en mayúsculas
       },
     });
 
+    // Enviar correo de bienvenida
     await this.emailService.sendMailWithTemplate(
       user.email,
       'register',
-      {
-        name: user.name,
-      },
+      { name: user.name },
       'register',
     );
 
+    // Responde con éxito
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
@@ -66,32 +76,31 @@ export class UserService {
         role: true,
       },
     });
-  
+
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
-  
+
     const isPasswordValid = await this.authService.validatePassword(
       password,
       user.password,
     );
-  
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
-  
+
     const payload = { email: user.email, sub: user.id, role: user.role };
-  
+
     const token = this.authService.generateToken(payload);
-  
+
     return {
       message: 'Te has logueado exitosamente.',
       token,
-      userId: user.id, 
+      userId: user.id,
     };
   }
-  
-  
+
   async findAll() {
     const users = await this.prisma.user.findMany();
     return users.map(({ password, ...user }) => user);
@@ -161,7 +170,11 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        posts: true,
+        posts: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
     if (!user) {
