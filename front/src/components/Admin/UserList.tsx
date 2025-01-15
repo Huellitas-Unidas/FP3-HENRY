@@ -27,13 +27,14 @@ const UserList: React.FC = () => {
   // Manejar la eliminación de un usuario
   const handleDeleteUser = async (userId: string) => {
     try {
-      const token = Cookies.get("token"); // Obtener el token
+      const token = Cookies.get("token"); 
       if (!token) {
         throw new Error("Token no encontrado");
       }
 
-      await deleteUser(userId, token); // Pasa el token como segundo argumento
+      await deleteUser(userId, token); 
       Swal.fire("Éxito", "Usuario eliminado correctamente", "success");
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !==userId));
     } catch (error) {
       Swal.fire("Error", "No se pudo eliminar el usuario", "error");
       console.error(error);

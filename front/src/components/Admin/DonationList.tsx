@@ -38,13 +38,13 @@ const DonationList: React.FC = () => {
         </thead>
         <tbody></tbody>
       </table>
-      <div className="h-64 w-64 overflow-hidden flex justify-center items-center align-middle mt-10 ml-96">
+      <div className="h-96 w-96 overflow-hidden flex justify-center items-center mx-auto mt-10">
         <Image
           src="/images/DonationList.jpg"
           alt="Donaciones"
-          className="h-full w-full object-cover rounded-lg"
-          width={400}
-          height={400}
+          className="h-full w-full object-cover rounded-lg object-center"
+          width={800}
+          height={800}
           style={{ objectFit: "contain", width: "100%", height: "100%" }}
           priority
         />
