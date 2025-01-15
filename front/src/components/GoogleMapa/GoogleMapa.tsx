@@ -98,3 +98,10 @@ const GoogleMapa: React.FC<GoogleMapaProps> = ({ posts }) => {
 };
 
 export default GoogleMapa;
+
+
+
+
+
+
+
