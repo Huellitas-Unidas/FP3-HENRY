@@ -2,9 +2,11 @@
 
 import React from "react";
 import { IPost } from "@/interfaces/types";
-import Link from "next/link";
+//import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Card: React.FC<IPost> = ({
+  id,
   title,
   photoUrl,
   description,
@@ -13,8 +15,13 @@ const Card: React.FC<IPost> = ({
   location,
   status,
 }) => {
+  const router = useRouter();
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 max-w-xs w-full">
+    <div
+      className="bg-white shadow-md rounded-lg p-4 max-w-xs w-full cursor-pointer"
+      onClick={() => router.push(`/post/${id}`)}
+    >
       <div className="relative">
         <img
           src={photoUrl}
@@ -43,11 +50,13 @@ const Card: React.FC<IPost> = ({
       <div className="mt-4">
         <p className="text-xs text-gray-500">
           Fecha: {new Date(dateLost).toLocaleDateString()}
-        </p>{" "}
+        </p>
         <div>
-          <Link href="/maps" className="text-xs text-gray-500">
+          {/*<Link href="/maps">*/}
+          <span className="text-xs text-gray-500">
             Ubicación: {location?.address || "No especificada"}
-          </Link>
+          </span>
+          {/* </Link>*/}
         </div>
       </div>
     </div>

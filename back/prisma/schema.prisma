@@ -6,6 +6,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum Role {
+  USER
+  ADMIN
+}
 
 model User {
   id            String          @id @default(uuid()) @db.Uuid
@@ -13,16 +17,17 @@ model User {
   phone         String
   email         String          @unique
   password      String
+  profilePicture String? 
   createdAt     DateTime        @default(now())
-  posts         Post[]
-  donations     Donations[]
+  role          Role            @default(USER)   
   notifications Notifications[]
   pets          Pets[]
+  posts         Post[]
   pqr           Pqr[]
 }
 
 model Post {
-  id          String    @id @default(uuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   title       String
   description String
   petType     String
@@ -31,21 +36,19 @@ model Post {
   location    Location? @relation
   photoUrl    String
   status      String
-  userId      String    @db.Uuid
-  user        User      @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  userId      String   @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
 }
-
 
 model Donations {
   id        String   @id @default(uuid()) @db.Uuid
   amount    Float
   email     String
-  paymentIntent String @unique
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
+  paymentIntent String   
   createdAt DateTime @default(now())
+ 
 }
 
 model Notifications {
@@ -54,8 +57,8 @@ model Notifications {
   type      String
   isRead    Boolean  @default(false)
   userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Pets {

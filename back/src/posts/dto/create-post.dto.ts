@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, ValidateNested, IsDate } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, ValidateNested, IsDate, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateLocationDto } from 'src/map/dto/create-location.dto';
 
@@ -34,5 +34,6 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsUUID()
   userId: string;
 }

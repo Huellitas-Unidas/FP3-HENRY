@@ -1,17 +1,18 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { validatePost } from "@/helpers/validatePost";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserId } from "@/helpers/userId";
-
+import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+//const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
+
+//const libraries: Libraries = ["places"];
 
 interface ModalPageProps {
-
   onClose: () => void;
   onRefreshList: () => void;
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,32 +34,46 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   // Verificar el userId del almacenamiento local
 
-useEffect(() => {
-  const storedUserId = getUserId(); // Usa la función centralizada para obtener el userId
-  if (storedUserId) {
-    setFormData((prevState) => ({
-      ...prevState,
-      userId: storedUserId, // Actualiza el userId dinámicamente
-    }));
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Error de autenticación",
-      text: "No estás autenticado. Por favor, inicia sesión para continuar.",
-      customClass: {
-        confirmButton:
-          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-    }).then(() => {
-      onClose();
-      router.push("/login");
-    });
-  }
-}, [onClose, router]);
+  useEffect(() => {
+    const storedUserId = getUserId();
+    if (storedUserId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        userId: storedUserId,
+      }));
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error de autenticación",
+        text: "No estás autenticado. Por favor, inicia sesión para continuar.",
+        customClass: {
+          confirmButton:
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
+      }).then(() => {
+        onClose();
+        router.push("/login");
+      });
+    }
+  }, [onClose, router]);
 
+  const handlePlaceChanged = () => {
+    const place = placeRef.current?.getPlace();
+    if (place?.geometry?.location) {
+      const latitude = place.geometry.location.lat();
+      const longitude = place.geometry.location.lng();
+      const address = place.formatted_address || "";
+
+      setFormData((prevState) => ({
+        ...prevState,
+        location: { address, latitude, longitude },
+      }));
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -71,22 +86,26 @@ useEffect(() => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0] || null;
       setFormData((prevState) => ({ ...prevState, file }));
-    } else if (name.startsWith("location")) {
-      const field = name.split(".")[1];
-      setFormData((prevState) => ({
-        ...prevState,
-        location: {
-          ...prevState.location,
-          [field]: value,           // Mantén el valor como string para permitir el signo negativo
-        },
-      }));
+      //}
+      //else if (name.startsWith("location")) {
+      //const field = name.split(".")[1];
+      //setFormData((prevState) => ({
+      //  ...prevState,
+      //  location: {
+      //    ...prevState.location,
+      //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
+      //  },
+      //}));
     } else if (name === "dateLost") {
-      const isoDate = new Date(value).toISOString(); // Convertir a formato ISO
+      const selectedDate = new Date(value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+      const isoDate = selectedDate.toISOString();
+
       setFormData((prevState) => ({
         ...prevState,
         dateLost: value,
-        dateLostISO: isoDate
-      })); // Actualizar ambos
+        dateLostISO: isoDate,
+      }));
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: value }));
     }
@@ -110,21 +129,28 @@ useEffect(() => {
     setLoading(true);
 
     try {
-      const token = Cookies.get("token"); // Recupera el token desde las cookies
+      const token = Cookies.get("token");
       if (!token) {
         console.error("Token no encontrado.");
         return;
       }
       // Validar userId antes de enviar el formulario
-      if (!formData.userId || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(formData.userId)) {
-        throw new Error("El ID de usuario no es válido o no fue proporcionado.");
+      if (
+        !formData.userId ||
+        !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+          formData.userId
+        )
+      ) {
+        throw new Error(
+          "El ID de usuario no es válido o no fue proporcionado."
+        );
       }
- 
+
       if (!formData.file) {
         throw new Error("Debe adjuntar una imagen");
       }
 
-      if (
+      /* if (
         !formData.location.address ||
         !formData.location.latitude ||
         !formData.location.longitude
@@ -138,7 +164,7 @@ useEffect(() => {
         latitude: parseFloat(String(formData.location.latitude)) || 0, // Asegurar número flotante
         longitude: parseFloat(String(formData.location.longitude)) || 0, // Asegurar número flotante
       };
-      
+      */
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -146,7 +172,7 @@ useEffect(() => {
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
       data.append("dateLost", formData.dateLostISO);
-      data.append("location", JSON.stringify(locationData));
+      data.append("location", JSON.stringify(formData.location));
       data.append("file", formData.file as File);
       data.append("status", formData.status);
       data.append("userId", formData.userId);
@@ -172,8 +198,8 @@ useEffect(() => {
         title: "El post se creó exitosamente",
         customClass: {
           confirmButton:
-            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded"
-        }
+            "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
+        },
       });
 
       onRefreshList();
@@ -186,10 +212,10 @@ useEffect(() => {
         contactInfo: "",
         dateLost: "",
         dateLostISO: "",
-        location: { address: "", latitude: 0, longitude: 0 }, // <- Resetear campos
+        location: { address: "", latitude: 0, longitude: 0 },
         file: null,
         status: "",
-        userId: formData.userId
+        userId: formData.userId,
       });
 
       onClose();
@@ -212,7 +238,7 @@ useEffect(() => {
             Publicar una mascota perdida o encontrada
           </h3>
           <button
-            onClick={onClose} // Llama a la función onClose al hacer clic
+            onClick={onClose}
             className="text-gray-400 hover:text-red-500"
             aria-label="Cerrar modal"
           >
@@ -311,43 +337,32 @@ useEffect(() => {
             <label className="text-gray-800 text-sm mb-2 block">
               Ubicación
             </label>
-            <input
-              type="text"
-              name="location.address"
-              value={formData.location.address}
-              onChange={handleChange}
-              placeholder="Ej: La Plata"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
+            <Autocomplete
+              onLoad={(autocomplete) => (placeRef.current = autocomplete)}
+              onPlaceChanged={handlePlaceChanged}
+            >
+              <input
+                type="text"
+                placeholder="Ingrese una dirección"
+                className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
+              />
+            </Autocomplete>
           </div>
           <div>
-            <label className="text-gray-800 text-sm mb-2 block">Latitud</label>
-            <input
-              type="text"
-              name="location.latitude"
-              value={formData.location.latitude}
+            <label className="text-gray-800 text-sm mb-2 block">
+              Estado de la mascota
+            </label>
+            <select
+              name="status"
+              value={formData.status}
               onChange={handleChange}
-              placeholder="Ej: 30.71"
-              min="-90"
-              max="90"
-              step="0.0001"
               className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
+            >
+              <option value="perdido">Perdido</option>
+              <option value="encontrado">Encontrado</option>
+            </select>
           </div>
-          <div>
-            <label className="text-gray-800 text-sm mb-2 block">Longitud</label>
-            <input
-              type="text"
-              name="location.longitude"
-              value={formData.location.longitude}
-              onChange={handleChange}
-              placeholder="Ej: -34.060"
-              min="-180"
-              max="180"
-              step="0.0001"
-              className="px-4 py-3 bg-gray-100 w-full text-gray-800 text-sm border-none focus:outline-[#2e736b] focus:bg-transparent rounded-lg"
-            />
-          </div>
+
           <div>
             <label className="text-gray-800 text-sm mb-2 block">
               Subir imagen
@@ -371,7 +386,7 @@ useEffect(() => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-green-500"
+              className="px-6 py-3 rounded-lg text-white text-sm border-none outline-none tracking-wide bg-[#2e736b] hover:bg-white hover:text-green500"
             >
               {loading ? "Cargando..." : "Publicar"}
             </button>
@@ -383,7 +398,6 @@ useEffect(() => {
 };
 
 export default ModalPage;
-
 {
   /*
   'use client'

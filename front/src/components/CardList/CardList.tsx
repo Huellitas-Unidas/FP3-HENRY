@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Card from '../Card/Card';
-import Link from 'next/link';
+//import Link from 'next/link';
 import { IPost } from '@/interfaces/types';
 
 interface CardListProps {
@@ -13,9 +13,9 @@ const CardList: React.FC<CardListProps> = ({ posts }) => {
   return (
     <div className="flex flex-wrap gap-8 p-8 justify-center">
       {posts.map((post) => (
-        <Link key={post.id} href={`/post/${post.id}`}>
-          <Card {...post} />
-        </Link>
+       // <Link  href={`/post/${post.id}`}>
+          <Card key={post.id} {...post} />
+       // </Link>
       ))}
     </div>
   );
