@@ -83,6 +83,12 @@ export class StripeService {
         }
 
         try {
+            await this.emailService.sendMailWithTemplate(
+                session.customer_email,
+                'Pago de donación exitoso',
+                { amount: session.amount_total / 100 },
+                'donationSuccess',
+              );
           const usuerCheckout = await this.prisma.donations.create({
             data: {
               amount: session.amount_total / 100,
@@ -93,12 +99,7 @@ export class StripeService {
           });
           console.log('esto es usuerCheckout', usuerCheckout);
 
-          await this.emailService.sendMailWithTemplate(
-            session.customer_email,
-            'Pago de donación exitoso',
-            { amount: session.amount_total / 100 },
-            'donationSuccess',
-          );
+        
         } catch (error) {
           console.error('Error al crear donacion', error);
         }
