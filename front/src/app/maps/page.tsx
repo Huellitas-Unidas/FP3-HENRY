@@ -4,6 +4,7 @@ import GoogleMapa from "@/components/GoogleMapa/GoogleMapa";
 import { IPost } from "@/interfaces/types";
 import React, { useEffect, useState } from "react";
 
+
 const Maps = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [filter, setFilter] = useState<string>("todos");
