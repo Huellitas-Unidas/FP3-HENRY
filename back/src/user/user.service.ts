@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { id, email, password, name, phone, role, googleId } = createUserDto;
+    const { id, email, password, name, phone, role} = createUserDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -42,24 +42,13 @@ export class UserService {
       phone: String(phone),
       name,
       role: role ? (role.toUpperCase() as Role) : 'USER',
-      googleId: googleId || undefined,
     };
 
     const user = await this.prisma.user.create({
       data: userData,
     });
 
-    if (!id && !googleId) {
-      await this.emailService.sendMailWithTemplate(
-        user.email,
-        'register',
-        {
-          name: user.name,
-        },
-        'register',
-      );
-    }
-
+   ;
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
