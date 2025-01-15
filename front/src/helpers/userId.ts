@@ -24,3 +24,7 @@ export function getUserId(): string | null {
   // Si no estamos en el cliente, devolver null
   return null;
 }
+
+// Si no estamos en el cliente, devolver null
+return null;
+}
