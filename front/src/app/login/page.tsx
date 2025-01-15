@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useFormik } from "formik";
 import React from "react";
@@ -23,53 +24,38 @@ const Login: React.FC = () => {
       password: "",
     },
     validate,
-    validateOnChange: true,
-    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const response = await login(values); // Llama a la API para autenticar al usuario
+        const response = await login(values); // Llama a la API para autenticar
         const token = response.token;
 
-        // Decodificar el token para obtener el rol del usuario
+        // Decodificar token y extraer rol
         const decodedToken = jwtDecode<{ sub: string; role: string }>(token);
         const role = decodedToken?.role?.toUpperCase();
 
-        // Almacenar el token y el ID del usuario
+        // Guardar token y rol en cookies/localStorage
         Cookies.set("token", token, { expires: 1 });
+        localStorage.setItem("role", role || "");
         localStorage.setItem("userId", decodedToken.sub);
 
-        // Mostrar mensaje de éxito
-        Swal.fire({
-          icon: "success",
-          iconColor: "green",
-          title: "¡Inicio de sesión exitoso!",
-          text: `Bienvenido, ${role === "ADMIN" ? "administrador" : "usuario"}!`,
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
-        });
-
-        // Redirigir en función del rol
+        // Redirigir según el rol
         if (role === "ADMIN") {
           router.push("/admin");
+        } else if (role === "USER") {
+          router.push("/");
         } else {
-          router.push("/dashboard");
+          Swal.fire({
+            icon: "error",
+            title: "Rol no reconocido",
+            text: "No tienes permisos para acceder.",
+          });
         }
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Error desconocido";
         Swal.fire({
           icon: "error",
-          iconColor: "red",
-          title: "Credenciales incorrectas",
-          text: errorMessage,
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
+          title: "Error de autenticación",
+          text: "Verifica tus credenciales.",
         });
-        console.error("Error en el login:", error);
       }
     },
   });

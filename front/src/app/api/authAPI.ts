@@ -119,7 +119,7 @@ export async function login(userData: IUserData) {
         Swal.fire({
           icon: "success",
           iconColor: "green",
-          text: "Bienvenido de nuevo.",
+          text: "Bienvenido.",
           title: "¡Inicio de sesión exitoso!",
           customClass: {
             confirmButton:

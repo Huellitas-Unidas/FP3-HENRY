@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password, name, phone, googleId, role } = createUserDto;
+    const { id, email, password, name, phone, role } = createUserDto;
 
     // Verifica si ya existe un usuario con ese correo electrónico
     const existingUser = await this.prisma.user.findUnique({
@@ -30,8 +30,20 @@ export class UserService {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
 
-    // Si el usuario se registra con Google, el googleId se usará. Si no, genera un UUID
-    const finalId = googleId || undefined; // Si no tiene googleId, Prisma generará un ID automáticamente
+    let hashedPassword = null;
+
+    if (password) {
+      hashedPassword = await this.authService.hashPassword(password);
+    }
+
+    const userData = {
+      id: id || undefined,
+      email,
+      password: hashedPassword,
+      phone: String(phone),
+      name,
+      role: role ? (role.toUpperCase() as Role) : 'USER',
+    };
 
     let hashedPassword = undefined;
     if (password) {
@@ -40,26 +52,9 @@ export class UserService {
 
     // Crea el nuevo usuario
     const user = await this.prisma.user.create({
-      data: {
-        id: finalId, // Usa googleId o permite que Prisma genere un ID
-        email,
-        password: hashedPassword, // Solo aplica si no es un usuario de Google
-        phone: String(phone),
-        name,
-        googleId, // Solo asigna googleId si está presente
-        role: (role ? role.toUpperCase() : 'USER') as Role, // Asegúrate de que el role sea en mayúsculas
-      },
+      data: userData,
     });
 
-    // Enviar correo de bienvenida
-    await this.emailService.sendMailWithTemplate(
-      user.email,
-      'register',
-      { name: user.name },
-      'register',
-    );
-
-    // Responde con éxito
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',

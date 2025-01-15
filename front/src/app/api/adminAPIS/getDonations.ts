@@ -1,4 +1,4 @@
-import { Toast } from "@/helpers";
+/*import { Toast } from "@/helpers";
 import { IDonation } from "@/interfaces/types";
 
 
@@ -44,3 +44,4 @@ export const getDonations = async (): Promise<IDonation[]> => {
   }
 };
 
+*/

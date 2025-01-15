@@ -1,9 +1,11 @@
 import {
   IsEmail,
+  IsNumber,
   IsString,
   MinLength,
   IsOptional,
   IsEnum,
+  IsUUID,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -14,7 +16,8 @@ enum Role {
 
 export class CreateUserDto {
   @IsOptional()
-  id?: string; // El ID es opcional. Si el usuario se registra con Google, usará el googleId
+  @IsUUID()
+  id?: string;
 
   @IsEmail()
   email: string;
@@ -30,7 +33,6 @@ export class CreateUserDto {
   @IsString()
   phone: string;
 
-
   @IsOptional()
   @IsString()
   googleId?: string; // Google ID se usará si el registro es con Google
@@ -39,5 +41,4 @@ export class CreateUserDto {
   @IsEnum(Role)
   @Transform(({ value }) => value?.toLowerCase())
   role?: Role;
-
 }
