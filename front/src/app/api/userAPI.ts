@@ -1,19 +1,24 @@
 import { IUserBack } from "@/interfaces/types";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // get user by id
-export async function getUserById(id: string): Promise<IUserBack | null> {
+export async function getUserById(id: string | number): Promise<IUserBack | null> {
   try {
     const response = await fetch(`${API_URL}/user/${id}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token") || ""}`, // Aquí se agrega el token
+      },
     });
 
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
+    //if (!response.ok) {
+      //throw new Error(`Error ${response.status}: ${response.statusText}`);
+    //}
 
     const data = await response.json();
     return data || null;
@@ -32,6 +37,6 @@ export async function getUserById(id: string): Promise<IUserBack | null> {
       },
     });
     console.error("Error al obtener el usuario:", errorMessage);
-    throw error;
+    return null;
   }
 }
