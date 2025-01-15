@@ -57,8 +57,11 @@ export class StripeController {
     @Headers('stripe-signature') signature: string,
     @Req() req: Request,
   ) {
-    // const payload = Buffer.from(req.body as any);
-    const payload = req.rawBody
+    console.log('ESTO ES SIGNATURE', signature);
+    
+    const payload = Buffer.from(req.body as any);
+    console.log('ESTO ES PAYLOAD', payload);
+    
     
 
     try {
