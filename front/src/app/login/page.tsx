@@ -11,6 +11,8 @@ import { IUserData } from "@/interfaces/types";
 import validate from "@/helpers/validateLogin";
 import { login } from "@/app/api/authAPI";
 import { signIn } from "next-auth/react";
+import { jwtDecode } from "jwt-decode";
+
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -25,25 +27,38 @@ const Login: React.FC = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const response = await login(values);
-        Cookies.set("token", response.token, { expires: 1 });
-        localStorage.setItem(
-          "userData",
-          JSON.stringify({ token: response.token })
-        );
-        window.dispatchEvent(new Event("storageChange")); // Dispara un evento personalizado para actualizar el estado global/local
+        const response = await login(values); // Llama a la API para autenticar al usuario
+        const token = response.token;
+
+        // Decodificar el token para obtener el rol del usuario
+        const decodedToken = jwtDecode<{ sub: string; role: string }>(token);
+        const role = decodedToken?.role?.toUpperCase();
+
+        // Almacenar el token y el ID del usuario
+        Cookies.set("token", token, { expires: 1 });
+        localStorage.setItem("userId", decodedToken.sub);
+
+        // Mostrar mensaje de éxito
         Swal.fire({
           icon: "success",
           iconColor: "green",
           title: "¡Inicio de sesión exitoso!",
+          text: `Bienvenido, ${role === "ADMIN" ? "administrador" : "usuario"}!`,
           customClass: {
             confirmButton:
               "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
           },
         });
-        router.push("/");
+
+        // Redirigir en función del rol
+        if (role === "ADMIN") {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+        const errorMessage =
+          error instanceof Error ? error.message : "Error desconocido";
         Swal.fire({
           icon: "error",
           iconColor: "red",
