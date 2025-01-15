@@ -112,11 +112,11 @@ const Navbar = () => {
           </Link>
           <Link
             className={`transition-opacity-transform duration-300 ${
-              pathname === "/not-found"
+              pathname === "/recommendation"
                 ? "opacity-80 -translate-y-1"
                 : "hover:opacity-80 hover:-translate-y-1"
             }`}
-            href="not-found"
+            href="recommendation"
           >
             🐾Recomendaciones
           </Link>
