@@ -46,7 +46,7 @@ model Donations {
   id        String   @id @default(uuid()) @db.Uuid
   amount    Float
   email     String
-  paymentIntent String @unique  
+  paymentIntent String   
   createdAt DateTime @default(now())
  
 }
