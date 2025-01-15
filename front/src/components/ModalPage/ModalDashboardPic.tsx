@@ -6,11 +6,9 @@ import Swal from "sweetalert2";
 const ModalDashboardPic = ({
   isOpen,
   onClose,
-  onRefresh,
 }: {
   isOpen: string;
   onClose: () => void;
-  onRefresh: () => void;
 }) => {
   const userId = getUserId();
   const [isDeleted, setisDeleted] = useState(false);
@@ -21,7 +19,6 @@ const ModalDashboardPic = ({
       try {
         await deletePic(userId);
         onClose();
-        onRefresh();
       } catch (error) {
         console.error("Error al eliminar la foto de perfil:", error);
       }
@@ -50,7 +47,6 @@ const ModalDashboardPic = ({
     try {
       await patchPic(formData);
       onClose();
-      onRefresh();
     } catch (error) {
       console.error("Error al subir la foto de perfil:", error);
     }

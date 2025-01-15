@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-//import { IPost } from "@/interfaces/types";
->>>>>>> 145c6d417d7524a6c97cf547dea0dd2173f4a554
-
 // Función para obtener los post de la API
 export const FetchPosts = async () => {
   try {
