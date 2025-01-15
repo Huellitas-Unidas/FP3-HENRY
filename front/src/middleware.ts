@@ -22,6 +22,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginURL);
   }
 
+  if (pathname.startsWith("/admin") && !userToken ) {
+    const loginURL = new URL("/login", origin);
+    return NextResponse.redirect(loginURL);
+  }
+
+  if (pathname.startsWith("/user") && !userToken) {
+    const loginURL = new URL("/register", origin);
+    return NextResponse.redirect(loginURL);
+  }
+
+
   // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
   // if (
   //   (pathname.includes("/login") || pathname.includes("/register")) &&
