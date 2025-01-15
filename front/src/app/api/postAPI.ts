@@ -46,15 +46,16 @@ if (!API_URL) {
 
 export async function updatePostStatus(id: string, status: string) {
   const token = Cookies.get("token");
-  if(!token){
+  if (!token) {
     throw new Error("Token de auth no encontrado");
   }
   try {
     const response = await fetch(`${API_URL}/posts/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json",
+      headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-       },
+      },
       body: JSON.stringify({ status }),
     });
 
@@ -65,20 +66,20 @@ export async function updatePostStatus(id: string, status: string) {
       );
     }
 
-  const result = await response.json(); 
-  return result.updatedPost;
+    const result = await response.json();
+    return result.updatedPost;
 
     //return await response.json();
   } catch (error) {
     console.error("Error actualizando el post por status:", error);
     throw error;
   }
-
-  
 }
 
 // read - obtener los posteos relacionadas al usuario
-export async function getPostsByUser(id: string): Promise<IPost[] | []> {
+export async function getPostsByUser(
+  id: string | number
+): Promise<IPost[] | []> {
   try {
     const response = await fetch(`${API_URL}/user/${id}/posts`, {
       method: "GET",
@@ -111,7 +112,6 @@ export async function getPostsByUser(id: string): Promise<IPost[] | []> {
     throw error;
   }
 }
-
 
 // DELETE: Eliminar un post por ID
 /*export async function DELETE(req: Request, { params }: { params: { id: string } }) {

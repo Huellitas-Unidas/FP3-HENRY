@@ -1,9 +1,11 @@
-"use client";
-import ButtonLostAndFound from "@/components/Buttons/ButtonLostAndFound";
-import CardList from "@/components/CardList/CardList";
-import React, { useState, useEffect } from "react";
-import { IPost } from "@/interfaces/types";
-import ModalPage from "@/components/ModalPage/ModalPAge";
+'use client';
+
+import ButtonLostAndFound from '@/components/Buttons/ButtonLostAndFound';
+import CardList from '@/components/CardList/CardList';
+import React, { useState, useEffect } from 'react';
+import { IPost } from '@/interfaces/types';
+import ModalPage from '@/components/ModalPage/ModalPAge';
+import Link from 'next/link';
 import { useRouter } from "next/navigation";
 
 const LostAndFound: React.FC = () => {
@@ -49,7 +51,33 @@ const LostAndFound: React.FC = () => {
 
   return (
     <div className="p-8">
-      <div className="flex flex-row justify-between">
+      <div className='flex justify-start gap-4 mb-8 mt-1'>
+
+        <Link href="/maps">
+          <button className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md">Ver Mapa</button>
+        </Link>
+        {/* </div> */}
+        {/* Contenedor del botón alineado a la derecha */}
+        {/*</div><div className="flex justify-end mb-4"> */}
+
+        <button
+          onClick={handleOpenModal}
+          className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
+        >
+          Publicar Mascota
+        </button>
+
+        <button
+          onClick={() => router.push("/misposteos")}
+          className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
+        >
+          Mis posteos
+        </button>
+      </div>
+
+
+      {/* Otro botón adicional */}
+      {/* <div className="flex flex-row justify-between">
         <div className="mb-4">
           <button
             onClick={() => router.push("/misposteos")}
@@ -57,17 +85,17 @@ const LostAndFound: React.FC = () => {
           >
             Mis posteos
           </button>
-        </div>
+        </div> */}
 
-        <div className="flex justify-start mb-4">
+      {/* <div className="flex justify-start mb-4">
           <button
             onClick={handleOpenModal}
             className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
           >
             Publicar Mascota
           </button>
-        </div>
-      </div>
+        </div> */}
+      {/*  </div> */}
 
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
@@ -83,50 +111,3 @@ const LostAndFound: React.FC = () => {
 };
 
 export default LostAndFound;
-
-{
-  /*'use client';
-
-import React from 'react';
-import ButtonCreatePost from '@/components/Buttons/ButtonCreatePost';
-import ButtonLostAndFound from '@/components/Buttons/ButtonLostAndFound';
-import CardList from '@/components/CardList/CardList';
-
-const LostAndFound: React.FC = () => {
-  return (
-    <div className="p-8">
-      <ButtonCreatePost />
-      <ButtonLostAndFound />
-      <CardList />
-      
-    </div>
-  );
-};
-
-export default LostAndFound;*/
-}
-
-//
-
-{
-  /*
-
-import ButtonCreatePost from '@/components/Buttons/ButtonCreatePost';
-import ButtonLostAndFound from '@/components/Buttons/ButtonLostAndFound';
-import CardList from '@/components/CardList/CardList'
-import React from 'react'
-
-const LostAndFound = () => {
-  
-  return (
-    <div>
-       <ButtonCreatePost/>
-      <ButtonLostAndFound/>  
-      <CardList />
-    </div>
-  );
-};
-
-export default LostAndFound;
-*/
-}

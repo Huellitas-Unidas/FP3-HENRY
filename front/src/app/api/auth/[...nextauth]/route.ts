@@ -1,19 +1,9 @@
-// import { ISignUpDataGoogle } from "@/interfaces/types";
+import { ISignUpData } from "@/interfaces/types";
 import NextAuth, { DefaultUser, NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-interface ISignUpDataGoogle {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  confirm?: string;
-  phone: string;
-  role?: string; //!
-}
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -27,13 +17,12 @@ const authOptions: NextAuthOptions = {
       if (account?.provider === "google") {
         try {
           // Registrar al usuario
-          const userData: ISignUpDataGoogle = {
-            id: user.id || "",
+          const userData: ISignUpData = {
             name: user.name || "",
             email: user.email || "",
             password: "defaultPassword123", // Contraseña por defecto para usuarios de terceros
             phone: "",
-            // role: "user",
+            role: "USER",
           };
 
           const registerResponse = await fetch(`${API_URL}/user/register`, {
@@ -44,6 +33,8 @@ const authOptions: NextAuthOptions = {
             body: JSON.stringify(userData),
           });
           console.log("id de google:", user.id);
+          console.log("userData:", userData);
+          console.log("register response:", registerResponse);
 
           if (!registerResponse.ok) {
             const errorData = await registerResponse.json();

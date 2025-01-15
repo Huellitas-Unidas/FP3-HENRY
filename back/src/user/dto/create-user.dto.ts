@@ -24,12 +24,10 @@ export class CreateUserDto {
   @IsString()
   phone: string;
 
+
   @IsOptional()
   @IsEnum(Role)
   @Transform(({ value }) => value?.toLowerCase())
   role?: Role;
 
-  @IsOptional()
-  @IsString()
-  googleId?: string; 
 }

@@ -169,7 +169,11 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        posts: true,
+        posts: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
     if (!user) {
