@@ -20,17 +20,18 @@ export function middleware(request: NextRequest) {
   }
 
   // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
-  if ((pathname.includes("/login") || pathname.includes("/signup")) && userToken) {
-    const homeURL = new URL("/", origin);
-    return NextResponse.redirect(homeURL);
-  }
+  // if (
+  //   (pathname.includes("/login") || pathname.includes("/register")) &&
+  //   userToken
+  // ) {
+  //   const homeURL = new URL("/", origin);
+  //   return NextResponse.redirect(homeURL);
+  // }
 
   // Si ninguna condición aplica, deja continuar
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/signup"],
+  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
-
-
