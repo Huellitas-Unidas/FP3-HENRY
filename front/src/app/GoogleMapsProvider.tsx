@@ -9,7 +9,9 @@ interface GoogleMapsProviderProps {
   children: React.ReactNode;
 }
 
-const GoogleMapsProvider: React.FC<GoogleMapsProviderProps> = ({ children }) => {
+const GoogleMapsProvider: React.FC<GoogleMapsProviderProps> = ({
+  children,
+}) => {
   return (
     <LoadScript googleMapsApiKey={GOOGLE_API_KEY} libraries={["places"]}>
       {children}

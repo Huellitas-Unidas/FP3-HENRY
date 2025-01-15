@@ -8,9 +8,16 @@ import Swal from "sweetalert2";
 import { signOut, useSession } from "next-auth/react";
 import logoFondoVerdeSinLetras from "../../../public/images/logoFondoVerdeSinLetras.png";
 import emptyProfile from "../../../public/images/emptyProfile.png";
+import Image from "next/image";
+import Swal from "sweetalert2";
+import { useRouter, usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { getUserId } from "@/helpers/userId";
 import { getUserById } from "@/app/api/userAPI";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
+  const userId = getUserId();
   const [userPic, setUserPic] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -18,6 +25,12 @@ const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const session = useSession();
+  const profilePhoto = session.data?.user?.image || userPic || emptyProfile;
+
+  // const handleRefresh = () => {
+  //   window.location.reload();
+  // };
 
   const handleLogout = async () => {
     try {
@@ -27,38 +40,26 @@ const Navbar = () => {
         icon: "success",
         title: "Sesión cerrada",
         text: "Hasta la próxima!",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        iconColor: "#f6ad55",
+        icon: "success",
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton:
+            "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+        },
       });
 
       Cookies.remove("token");
       Cookies.remove("userId");
       localStorage.removeItem("userData");
       localStorage.removeItem("userId");
-
+      Cookies.remove("token");
       await signOut({ redirect: false });
-
-      setIsLoggedIn(false);
-      setIsAdmin(false);
-
-      setTimeout(() => {
-        window.location.reload();
-        router.replace("/");
-      }, 3000);
+      router.push("/");
+      // setTimeout(() => {
+      //   handleRefresh();
+      // }, 500);
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
-    }
-  };
-
-  const isTokenExpired = (token: string): boolean => {
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const now = Math.floor(Date.now() / 1000);
-      return payload.exp ? payload.exp < now : true;
-    } catch {
-      return true;
     }
   };
 
@@ -88,24 +89,11 @@ const Navbar = () => {
           setIsLoggedIn(false);
         }
       } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
-        setUserPic(null);
-        setIsAdmin(false);
-        setIsLoggedIn(false);
-      } finally {
-        setLoading(false);
+        console.error(error);
       }
-      if (isLoggedIn && pathname !== "/") {
-        router.push("/"); // Redirige a la página principal
-    }
-};
-
-   fetchUserData();
-}, [isLoggedIn, pathname, router, session?.user?.image]);
-
-  if (loading) {
-    return null; // Mientras carga, no renderiza nada
-  }
+    };
+    fetchUser();
+  }, [userId, session.data?.user?.image, userPic, profilePhoto]); // useEffect que maneja el renderizado de la profilePic
 
   return (
     <nav className="font-sans font-semibold text-lg flex shadow-lg rounded-lg justify-between md:max-h-16 border border-[#3c9083] bg-[#d7f0e9]">
@@ -155,39 +143,38 @@ const Navbar = () => {
           </Link>
           <Link
             className={`transition-opacity-transform duration-300 ${
-              pathname === "/not-found"
+              pathname === "/recommendation"
                 ? "opacity-80 -translate-y-1"
                 : "hover:opacity-80 hover:-translate-y-1"
             }`}
-            href="/not-found"
+            href="recommendation"
           >
             🐾Recomendaciones
           </Link>
         </div>
 
-        {/* Controles de usuario */}
-        <div className="hidden w-1/5 items-center justify-evenly md:flex">
-          {isLoggedIn ? (
-            <>
-              <div className="flex items-center">
-                <Image
-                  src={userPic || emptyProfile}
-                  alt="ProfilePic"
-                  className="rounded-full object-cover w-10 h-10 mr-3 border border-gray-300 shadow-sm"
-                  width={40}
-                  height={40}
-                />
-                <Link
-                  href="/"
-                  className={`transition-opacity-transform duration-300 ${
-                    pathname === "/"
-                      ? "opacity-80 -translate-y-1"
-                      : "hover:opacity-80 hover:-translate-y-1"
-                  }`}
-                >
-                  Inicio
-                </Link>
-              </div>
+        {userId || session?.data?.user ? (
+          <div className="hidden w-1/5 items-center justify-evenly md:flex">
+            <div className="flex items-center">
+              <Image
+                src={profilePhoto || emptyProfile}
+                alt="ProfilePic"
+                className="rounded-full object-cover w-10 h-10 mr-3 border border-gray-300 shadow-sm"
+                width={40}
+                height={40}
+              />
+              <Link
+                href="/dashboard"
+                className={`transition-opacity-transform duration-300 ${
+                  pathname === "/dashboard"
+                    ? "opacity-80 -translate-y-1"
+                    : "hover:opacity-80 hover:-translate-y-1"
+                }`}
+              >
+                Mi perfil
+              </Link>
+            </div>
+            <div>
               <button
                 className="hover:opacity-80 hover:-translate-y-1 transition-opacity-transform duration-300"
                 onClick={handleLogout}

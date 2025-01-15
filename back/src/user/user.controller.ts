@@ -35,6 +35,8 @@ export class UserController {
   }
 
   @Get()
+  @Roles('admin') 
+  @UseGuards(RolesGuard)
   async findAll() {
     return await this.userService.findAll();
   }
@@ -46,7 +48,7 @@ export class UserController {
 
   @Put(':id')
   @UseGuards(RolesGuard)
-  @Roles('admin', 'user')
+  @Roles('admin', 'user') 
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -54,9 +56,10 @@ export class UserController {
     return await this.userService.update(id, updateUserDto);
   }
 
+ 
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles('admin')
+  @Roles('admin') 
   async remove(@Param('id', ParseUUIDPipe) id: string, @Req() req) {
     console.log('Encabezado Authorization:', req.headers.authorization);
     return await this.userService.remove(id);

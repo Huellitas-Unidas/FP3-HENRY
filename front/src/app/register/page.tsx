@@ -208,6 +208,18 @@ const Register: React.FC<RegisterProps> = ({ role = "user" }) => { // Valor por 
               )}
             </div>
 
+          <input
+            placeholder="Teléfono"
+            type="text"
+            name="phone"
+            value={formik.values.phone} 
+            onChange={formik.handleChange}
+            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
+          />
+          {isSubmitted && formik.errors.phone && (
+            <span className="text-red-500 text-sm">{formik.errors.phone}</span>
+          )}
+
             <div className="relative w-full">
               <input
                 placeholder="Teléfono"

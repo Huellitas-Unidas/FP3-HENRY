@@ -10,19 +10,26 @@ function isTokenPresent(token: string | undefined): boolean {
 export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
 
-  // Obtén el token de las cookies
   const userToken = request.cookies.get("token")?.value;
 
-  // Verifica si el token está presente
-  const isAuthenticated = isTokenPresent(userToken);
-
-  // Rutas protegidas: Requieren autenticación
-  if (pathname.startsWith("/lostandfound") || pathname.startsWith("/admin")) {
-    if (!isAuthenticated) {
-      const loginURL = new URL("/login", origin);
-      return NextResponse.redirect(loginURL);
-    }
+  if (pathname.startsWith("/lostandfound") && !userToken) {
+    const loginURL = new URL("/protectedRoute", origin);
+    return NextResponse.redirect(loginURL);
   }
+
+  if (pathname.startsWith("/admin") && !userToken) {
+    const loginURL = new URL("/login", origin);
+    return NextResponse.redirect(loginURL);
+  }
+
+  // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
+  // if (
+  //   (pathname.includes("/login") || pathname.includes("/register")) &&
+  //   userToken
+  // ) {
+  //   const homeURL = new URL("/", origin);
+  //   return NextResponse.redirect(homeURL);
+  // }
 
   // Si ninguna condición aplica, deja continuar
   return NextResponse.next();
@@ -31,14 +38,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
-
-
-
-
-
-
-
-
-
-
-

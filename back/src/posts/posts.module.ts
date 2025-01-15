@@ -10,5 +10,6 @@ import { AuthModule } from 'src/auth/auth.module';
   imports: [FilesUploadModule, EmailModule, AuthModule],
   controllers: [PostsController],
   providers: [PostsService, PrismaService],
+  exports: [PostsService],
 })
 export class PostsModule {}
