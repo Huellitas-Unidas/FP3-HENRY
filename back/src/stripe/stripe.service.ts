@@ -48,6 +48,7 @@ export class StripeService {
 
   async verifyWebhoock(payload: Buffer, signature: string) {
     const endPointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    
 
     let event: Stripe.Event;
 
@@ -70,6 +71,8 @@ export class StripeService {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session;
         console.log('esto ES SESSION', session);
+        console.log('ESTO ES EMAIL', session.customer_email);
+        
 
         const existingDonation = await this.prisma.donations.findFirst({
           where: { paymentIntent: session.payment_intent as string },
@@ -106,7 +109,7 @@ export class StripeService {
         break;
       case 'charge.succeeded':
         const charge = event.data.object as Stripe.Charge;
-        console.log('esto ES SESSION1', charge);
+        console.log('esto ES charge', charge);
 
         const existingChargeDonation = await this.prisma.donations.findFirst({
           where: { paymentIntent: charge.payment_intent as string },
@@ -159,7 +162,7 @@ export class StripeService {
           const donation = await this.prisma.donations.create({
             data: {
               amount: paymentIntent.amount_received / 100, // El monto del pago exitoso
-              email: paymentIntent.receipt_email, // El correo del cliente, si está disponible
+              email: session.customer_email, // El correo del cliente, si está disponible
               id: uuidv4(),
               paymentIntent: paymentIntent.id, // Guardamos el PaymentIntent ID
             },
@@ -168,7 +171,7 @@ export class StripeService {
 
           // Enviar correo de éxito de la donación
           await this.emailService.sendMailWithTemplate(
-            paymentIntent.receipt_email, // Usamos el correo del PaymentIntent
+            paymentIntent.receipt_email, // Usamos el correo del PaymentIntent ARREGLAR
             'Pago de donación exitoso',
             { amount: paymentIntent.amount_received / 100 },
             'donationSuccess',
