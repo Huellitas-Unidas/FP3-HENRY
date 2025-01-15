@@ -19,4 +19,3 @@ export const deleteUser = async (id: string, token: string): Promise<void> => {
     throw error;
   }
 };
-
