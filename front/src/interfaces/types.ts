@@ -59,17 +59,17 @@ export interface ISignUpData {
   password: string;
   confirm?: string;
   phone: string;
+  role?: string;
 } // register
 
-// export interface ISignUpDataGoogle {
-//   id: string;
-//   name: string;
-//   email: string;
-//   password: string;
-//   confirm?: string;
-//   phone: string;
-//   role?: string; //!
-// } // register con Google
+export interface ISignUpDataGoogle {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  role?: string;
+} // register con Google, no usada
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
