@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
+// Función básica para verificar si el token existe
+function isTokenPresent(token: string | undefined): boolean {
+  return !!token; // Solo verifica que el token exista
+}
 
 export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
@@ -15,6 +21,17 @@ export function middleware(request: NextRequest) {
     const loginURL = new URL("/login", origin);
     return NextResponse.redirect(loginURL);
   }
+
+  if (pathname.startsWith("/admin") && !userToken ) {
+    const loginURL = new URL("/login", origin);
+    return NextResponse.redirect(loginURL);
+  }
+
+  if (pathname.startsWith("/user") && !userToken) {
+    const loginURL = new URL("/register", origin);
+    return NextResponse.redirect(loginURL);
+  }
+
 
   // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
   // if (

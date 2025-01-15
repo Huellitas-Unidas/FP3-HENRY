@@ -11,7 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const isFormSignUpFull = (data: ISignUpData): boolean =>
   Object.values(data).every(Boolean);
 
-export async function register(userData: Omit<ISignUpData, "confirm">) {
+export async function register(userData: Omit<ISignUpData, "confirm"> & { role?: string }) {
   try {
     if (!isFormSignUpFull(userData)) {
       Swal.fire({
@@ -25,7 +25,7 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
       });
       return;
     }
-
+  
     const res = await fetch(`${API_URL}/user/register`, {
       method: "POST",
       headers: {
@@ -69,7 +69,8 @@ export async function register(userData: Omit<ISignUpData, "confirm">) {
     console.error("Error en el registro:", errorMessage);
     throw error;
   }
-}
+}  
+
 
 export async function login(userData: IUserData) {
   interface DecodedToken {
