@@ -7,7 +7,6 @@ const AdminUsers: React.FC = () => {
     <div className="p-4 bg-pearl min-h-screen">
         <BackToAdmin />
       <h1 className="text-2xl text-center mt-10 font-bold text-customGreen-900 mb-4">Gestión de Usuarios</h1>
-      <p className="text-customGreen-700">Aquí puedes gestionar los usuarios registrados.</p>
       <UserList />
     </div>
   );
