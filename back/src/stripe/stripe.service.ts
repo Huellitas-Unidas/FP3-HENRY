@@ -36,7 +36,7 @@ export class StripeService {
         await this.emailService.sendMailWithTemplate(
           email,
           'Donación en proceso',
-          { email, amount: amount / 100 },
+          { email, amount: `$ ${amount / 100}` },
           'donationCreation',
         );
 
