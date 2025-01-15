@@ -9,3 +9,4 @@ export const getUsers = async (): Promise<IUserBack[]> => {
   }
   return response.json();
 };
+
