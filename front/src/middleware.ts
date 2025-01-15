@@ -1,56 +1,37 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-function decodeToken(token: string) {
-  try {
-    const payload = JSON.parse(
-      Buffer.from(token.split(".")[1], "base64").toString("utf-8")
-    );
-    return payload;
-  } catch (error) {
-    console.error("Error decodificando el token:", error);
-    return null;
-  }
+// Función básica para verificar si el token existe
+function isTokenPresent(token: string | undefined): boolean {
+  return !!token; // Solo verifica que el token exista
 }
 
 export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
+
+  // Obtén el token de las cookies
   const userToken = request.cookies.get("token")?.value;
 
-  const userData = userToken ? decodeToken(userToken) : null;
+  // Verifica si el token está presente
+  const isAuthenticated = isTokenPresent(userToken);
 
-  // Permitir acceso sin restricciones a /adminRegister
-  if (pathname.startsWith("/adminRegister")) {
-    return NextResponse.next();
-  }
-
-  // Ruta protegida para /admin
-  if (pathname.startsWith("/admin")) {
-    if (!userToken) {
-      return NextResponse.redirect(new URL("/login", origin));
-    }
-    if (!userData || userData.role.toUpperCase() !== "ADMIN") {
-      return NextResponse.redirect(new URL("/", origin));
+  // Rutas protegidas: Requieren autenticación
+  if (pathname.startsWith("/lostandfound") || pathname.startsWith("/admin")) {
+    if (!isAuthenticated) {
+      const loginURL = new URL("/login", origin);
+      return NextResponse.redirect(loginURL);
     }
   }
 
-  // Rutas protegidas para /lostandfound
-  if (pathname.startsWith("/lostandfound") && !userToken) {
-    return NextResponse.redirect(new URL("/protectedRoute", origin));
-  }
-
+  // Si ninguna condición aplica, deja continuar
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/admin/:path*",
-    "/lostandfound/:path*",
-    "/register",
-    "/login",
-    "/adminRegister",
-  ],
+  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
+
 
 
 

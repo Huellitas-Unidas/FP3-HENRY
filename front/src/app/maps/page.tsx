@@ -31,6 +31,13 @@ const Maps = () => {
           <h2 className="text-2xl font-semibold">
             Mapa de Mascotas Perdidas y Encontradas
           </h2>
+          <p className="text-gray-800 mt-2">
+            Selecciona un filtro para ver detalles específicos.
+          </p>
+          <p className="text-gray-800 mt-2">
+            Además puedes seleccionar en el mapa si encontraste o perdiste una
+            mascota
+          </p>
         </section>
       </main>
 
