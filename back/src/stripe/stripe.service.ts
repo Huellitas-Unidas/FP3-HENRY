@@ -158,11 +158,10 @@ export class StripeService {
         }
 
         try {
-          // Guardamos la donación usando la información del paymentIntent
           const donation = await this.prisma.donations.create({
             data: {
               amount: paymentIntent.amount_received / 100, // El monto del pago exitoso
-              email: session.customer_email, // El correo del cliente, si está disponible
+              email: "pf3shhuellasunidas@gmail.com", // El correo del cliente, si está disponible
               id: uuidv4(),
               paymentIntent: paymentIntent.id, // Guardamos el PaymentIntent ID
             },
@@ -171,7 +170,7 @@ export class StripeService {
 
           // Enviar correo de éxito de la donación
           await this.emailService.sendMailWithTemplate(
-            paymentIntent.receipt_email, // Usamos el correo del PaymentIntent ARREGLAR
+            'pf3shhuellasunidas@gmail.com', // Usamos el correo del PaymentIntent ARREGLAR
             'Pago de donación exitoso',
             { amount: paymentIntent.amount_received / 100 },
             'donationSuccess',
