@@ -10,8 +10,12 @@ import {ISignUpData} from "@/interfaces/types";
 import validate, {validationGuide} from "@/helpers/validate";
 import {register} from "../api/authAPI";
 
-const Register: React.FC = () => {
-    const router = useRouter();
+interface RegisterProps {
+  role?: string;  
+}
+
+const Register: React.FC<RegisterProps> = ({ role = "user" }) => { // Valor por defecto "user"
+  const router = useRouter();
     //const [isSubmitted, setIsSubmitted] = useState(false);
 
     const formik = useFormik<ISignUpData>({
@@ -23,28 +27,26 @@ const Register: React.FC = () => {
             phone: "",
         },
         validate: validate,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         onSubmit: async ({confirm, ...userData}, {resetForm}) => {
             try {
-               // const formattedUserData = {
-               //     ...userData,
-                    //phone: Number(phone),
-               // };
-
-                const registrationResult = await register(userData);
+               // Agregar el rol de administrador al objeto que se envía al backend
+        const registrationResult = await register({
+          ...userData,
+          role: "admin", 
+      });
 
                 if (registrationResult) {
-                    Swal.fire({
-                        icon: "success",
-                        iconColor: "green",
-                        title: "Usuario registrado con éxito",
-                        text: "Ya puedes iniciar sesión.",
-                        customClass: {
-                            confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-                        },
-                    });
-                    resetForm();
-                    router.push("/login");
+                  Swal.fire({
+                    icon: "success",
+                    iconColor: "green",
+                    title: `Usuario ${role === "admin" ? "Administrador" : ""} registrado con éxito`,
+                    text: "Ya puedes iniciar sesión.",
+                    customClass: {
+                      confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+                    },
+                  });
+                  resetForm();
+                  router.push("/login");
                 }
             } catch (error: unknown) {
                 let errorMessage = "No se pudo completar el registro";
@@ -205,18 +207,6 @@ const Register: React.FC = () => {
                 </div>
               )}
             </div>
-
-          <input
-            placeholder="Teléfono"
-            type="text"
-            name="phone"
-            value={formik.values.phone} 
-            onChange={formik.handleChange}
-            className="py-2 pl-4 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full"
-          />
-          {isSubmitted && formik.errors.phone && (
-            <span className="text-red-500 text-sm">{formik.errors.phone}</span>
-          )}
 
             <div className="relative w-full">
               <input

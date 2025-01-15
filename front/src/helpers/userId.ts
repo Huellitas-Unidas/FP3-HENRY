@@ -15,16 +15,9 @@ export function getUserId(): string | null {
     return null;
   }
 
-  // si no hay nada en LocalStorage:
-  // aqui iria la logica que envia el session.data.user.email al back y retorna el id
-
-  // Si no estamos en el cliente, devolver null
-  return null;
-
+  
   // Si no estamos en el cliente, devolver null
   return null;
 }
 
-// Si no estamos en el cliente, devolver null
-return null;
-}
+
