@@ -23,9 +23,10 @@ export const getUsers = async (): Promise<IUserBack[]> => {
         `Error al obtener usuarios: ${response.status} ${response.statusText}`
       );
     }
+
     return await response.json();
   } catch (error) {
     console.error("Error en getUsers:", error);
-    throw error;
-  }
+    throw error;
+  }
 };
