@@ -17,39 +17,44 @@ export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
   const userToken = request.cookies.get("token")?.value;
 
-  // Decodificar el token para obtener el rol del usuario
   const userData = userToken ? decodeToken(userToken) : null;
 
-  // No logueado: manejo de rutas protegidas
-  if (!userToken) {
-    if (pathname.startsWith("/admin")) {
+  // Permitir acceso sin restricciones a /adminRegister
+  if (pathname.startsWith("/adminRegister")) {
+    return NextResponse.next();
+  }
+
+  // Ruta protegida para /admin
+  if (pathname.startsWith("/admin")) {
+    if (!userToken) {
       return NextResponse.redirect(new URL("/login", origin));
     }
-
-    if (pathname.startsWith("/lostandfound")) {
-      return NextResponse.redirect(new URL("/protectedRoute", origin));
+    if (!userData || userData.role.toUpperCase() !== "ADMIN") {
+      return NextResponse.redirect(new URL("/", origin));
     }
   }
 
-  // Validación para Admin
-  if (pathname.startsWith("/admin") && (!userData || userData.role !== "admin")) {
-    return NextResponse.redirect(new URL("/", origin));
-  }
-
-  // Usuarios logueados no pueden acceder a /login o /register
-  if (
-    (pathname.startsWith("/login") || pathname.startsWith("/register")) &&
-    userToken
-  ) {
-    return NextResponse.redirect(new URL("/", origin));
+  // Rutas protegidas para /lostandfound
+  if (pathname.startsWith("/lostandfound") && !userToken) {
+    return NextResponse.redirect(new URL("/protectedRoute", origin));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
+  matcher: [
+    "/admin/:path*",
+    "/lostandfound/:path*",
+    "/register",
+    "/login",
+    "/adminRegister",
+  ],
 };
+
+
+
+
 
 
 

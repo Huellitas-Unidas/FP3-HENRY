@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import { signOut } from "next-auth/react";
 import logoFondoVerdeSinLetras from "../../../public/images/logoFondoVerdeSinLetras.png";
 import emptyProfile from "../../../public/images/emptyProfile.png";
 import { getUserById } from "@/app/api/userAPI";
@@ -15,8 +16,8 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-  const userId = Cookies.get("userId");
 
+  // Manejo de cierre de sesión
   const handleLogout = async () => {
     try {
       await Swal.fire({
@@ -26,32 +27,36 @@ const Navbar = () => {
         confirmButtonText: "Ok",
       });
 
-      localStorage.removeItem("userData");
       Cookies.remove("token");
-      Cookies.remove("userId");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("userId");
+      await signOut({ redirect: false });
 
       setIsLoggedIn(false);
       setIsAdmin(false);
-
       router.replace("/");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
   };
 
+  // Obtiene los datos del usuario logueado
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = Cookies.get("token");
+        const userId = Cookies.get("userId");
+
         if (!token || !userId) {
           setIsLoggedIn(false);
           return;
         }
 
         const user = await getUserById(userId);
+
         if (user) {
           setUserPic(user.profilePicture || null);
-          setIsAdmin(user.role === "admin");
+          setIsAdmin(user.role.toUpperCase() === "ADMIN");
           setIsLoggedIn(true);
         }
       } catch (error) {
@@ -60,11 +65,12 @@ const Navbar = () => {
     };
 
     fetchUserData();
-  }, [userId, isLoggedIn]);
+  }, []);
 
   return (
     <nav className="font-sans font-semibold text-lg flex shadow-lg rounded-lg justify-between md:max-h-16 border border-[#3c9083] bg-[#d7f0e9]">
       <div className="flex w-full justify-between">
+        {/* Logo */}
         <Link href="/">
           <Image
             src={logoFondoVerdeSinLetras}
@@ -75,19 +81,15 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* Rutas visibles para todos */}
+        {/* Rutas visibles */}
         <div className="hidden w-3/5 items-center justify-evenly md:flex">
           <Link
             className={`transition-opacity-transform duration-300 ${
-              isLoggedIn
-                ? pathname === "/lostandfound"
-                  ? "opacity-80 -translate-y-1"
-                  : "hover:opacity-80 hover:-translate-y-1"
-                : pathname === "/protectedRoute"
+              pathname === "/lostandfound"
                 ? "opacity-80 -translate-y-1"
                 : "hover:opacity-80 hover:-translate-y-1"
             }`}
-            href={isLoggedIn ? "/lostandfound" : "/protectedRoute"}
+            href="/lostandfound"
           >
             Buscados / Encontrados
           </Link>
@@ -123,7 +125,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Controles según el estado */}
+        {/* Controles de usuario */}
         <div className="hidden w-1/5 items-center justify-evenly md:flex">
           {isLoggedIn ? (
             <>
@@ -188,7 +190,7 @@ const Navbar = () => {
                 Iniciar Sesión
               </Link>
               <Link
-                className={`mt-6 transition-opacity-transform duration-300 ${
+                className={`transition-opacity-transform duration-300 ${
                   pathname === "/adminRegister"
                     ? "opacity-80 -translate-y-1"
                     : "hover:opacity-80 hover:-translate-y-1"
@@ -206,6 +208,10 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
 
 
 

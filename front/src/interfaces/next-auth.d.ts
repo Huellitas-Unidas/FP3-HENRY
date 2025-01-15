@@ -5,20 +5,30 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth" {
   interface Session {
     user: DefaultUser & {
-      accessToken?: string;
+      id?: string; // Añade la propiedad id
+      role?: string; // Añade la propiedad role
+      accessToken?: string; // Mantén accessToken si es necesario
+      token?: string; // Añade la propiedad token
     };
   }
 
   interface User extends DefaultUser {
-    accessToken?: string;
+    id?: string; // Añade la propiedad id
+    role?: string; // Añade la propiedad role
+    accessToken?: string; // Mantén accessToken
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    accessToken?: string;
+    id?: string; // Añade la propiedad id
+    role?: string; // Añade la propiedad role
+    accessToken?: string; // Mantén accessToken
+    token?: string; // Añade la propiedad token
   }
 }
+
+
 
 
 
