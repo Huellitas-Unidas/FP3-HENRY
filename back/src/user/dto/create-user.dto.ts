@@ -20,8 +20,10 @@ export class CreateUserDto {
   @IsString()
   phone: string;
 
+
   @IsOptional()
   @IsEnum(Role)
   @Transform(({ value }) => value?.toLowerCase())
   role?: Role;
+
 }

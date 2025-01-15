@@ -16,10 +16,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginURL);
   }
 
- /*  if ((pathname.includes("/login") || pathname.includes("/register")) && userToken) {
-    const homeURL = new URL("/", origin);
-    return NextResponse.redirect(homeURL);
-  } */
+  // Si el usuario logueado intenta acceder a "login" o "signup", redirige al home
+  // if (
+  //   (pathname.includes("/login") || pathname.includes("/register")) &&
+  //   userToken
+  // ) {
+  //   const homeURL = new URL("/", origin);
+  //   return NextResponse.redirect(homeURL);
+  // }
+
+  // Si ninguna condición aplica, deja continuar
   return NextResponse.next();
 }
 

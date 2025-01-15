@@ -13,6 +13,7 @@ import {
 import { StripeService } from './stripe.service';
 import { CreateCheckoutSessionDto } from './dto/create.checkoutSession.dto';
 import { log } from 'console';
+import e from 'express';
 
 @Controller('stripe')
 export class StripeController {
@@ -56,9 +57,12 @@ export class StripeController {
     @Req() req: Request,
   ) {
     const payload = Buffer.from(req.body as any);
+    
 
     try {
       const event = await this.stripeService.verifyWebhoock(payload, signature);
+      console.log('esto es EVENT', event);
+      
       await this.stripeService.processEvent(event);
       return { received: true };
     } catch (err) {
