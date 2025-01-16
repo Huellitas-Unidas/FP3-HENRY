@@ -46,8 +46,13 @@ export class StripeService {
     }
   }
 
-  async verifyWebhoock(payload: Buffer, signature: string) {
+  async verifyWebhook(payload: Buffer, signature: string) {
     const endPointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    console.log('ESTO ES PAYLOAD', payload);
+    console.log('ESTO ES SIGNATURE', signature);
+    console.log('ESTO ES ENDPOINTSECRET', endPointSecret);
+    
+    
     
 
     let event: Stripe.Event;
@@ -70,8 +75,6 @@ export class StripeService {
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log('esto ES SESSION', session);
-        console.log('ESTO ES EMAIL', session.customer_email);
         
 
         const existingDonation = await this.prisma.donations.findFirst({
@@ -107,77 +110,75 @@ export class StripeService {
           console.error('Error al crear donacion', error);
         }
         break;
-      case 'charge.succeeded':
-        const charge = event.data.object as Stripe.Charge;
-        console.log('esto ES charge', charge);
+    //   case 'charge.succeeded':
+    //     const charge = event.data.object as Stripe.Charge;
 
-        const existingChargeDonation = await this.prisma.donations.findFirst({
-          where: { paymentIntent: charge.payment_intent as string },
-        });
+    //     const existingChargeDonation = await this.prisma.donations.findFirst({
+    //       where: { paymentIntent: charge.payment_intent as string },
+    //     });
 
-        if (existingChargeDonation) {
-          console.log(
-            `El pago con intent ${charge.payment_intent} ya fue procesado.`,
-          );
-          return;
-        }
+    //     if (existingChargeDonation) {
+    //       console.log(
+    //         `El pago con intent ${charge.payment_intent} ya fue procesado.`,
+    //       );
+    //       return;
+    //     }
 
-        try {
-            await this.prisma.donations.create({
-                data: {
-                  amount: charge.amount / 100,
-                  email: charge.billing_details.email,
-                  id: uuidv4(),
-                  paymentIntent: charge.payment_intent as string, // Corregí para usar `charge.payment_intent`
-                },
-              });
-          await this.emailService.sendMailWithTemplate(
-            charge.billing_details.email,
-            'Pago de donación exitoso',
-            { amount: charge.amount / 100 },
-            'donationSuccess',
-          );
-        } catch (error) {
-          console.error(
-            'Error al registrar la donacion en charge-sussecced',
-            error,
-          );
-        }
-        break;
-        case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log('esto es paymentIntent', paymentIntent);
+    //     try {
+    //         await this.prisma.donations.create({
+    //             data: {
+    //               amount: charge.amount / 100,
+    //               email: charge.billing_details.email,
+    //               id: uuidv4(),
+    //               paymentIntent: charge.payment_intent as string, // Corregí para usar `charge.payment_intent`
+    //             },
+    //           });
+    //       await this.emailService.sendMailWithTemplate(
+    //         charge.billing_details.email,
+    //         'Pago de donación exitoso',
+    //         { amount: charge.amount / 100 },
+    //         'donationSuccess',
+    //       );
+    //     } catch (error) {
+    //       console.error(
+    //         'Error al registrar la donacion en charge-sussecced',
+    //         error,
+    //       );
+    //     }
+    //     break;
+    //     case 'payment_intent.succeeded':
+    //     const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
-        const existingPaymentIntentDonation = await this.prisma.donations.findFirst({
-          where: { paymentIntent: paymentIntent.id }, // Aquí usas el ID del PaymentIntent
-        });
+    //     const existingPaymentIntentDonation = await this.prisma.donations.findFirst({
+    //       where: { paymentIntent: paymentIntent.id }, // Aquí usas el ID del PaymentIntent
+    //     });
 
-        if (existingPaymentIntentDonation) {
-          console.log(`El pago con intent ${paymentIntent.id} ya fue procesado.`);
-          return;
-        }
+    //     if (existingPaymentIntentDonation) {
+    //       console.log(`El pago con intent ${paymentIntent.id} ya fue procesado.`);
+    //       return;
+    //     }
 
-        try {
-          const donation = await this.prisma.donations.create({
-            data: {
-              amount: paymentIntent.amount_received / 100, // El monto del pago exitoso
-              email: "pf3shhuellasunidas@gmail.com", // El correo del cliente, si está disponible
-              id: uuidv4(),
-              paymentIntent: paymentIntent.id, // Guardamos el PaymentIntent ID
-            },
-          });
-          console.log('Donación registrada', donation);
+    //     try {
+    //       const donation = await this.prisma.donations.create({
+    //         data: {
+    //           amount: paymentIntent.amount_received / 100, // El monto del pago exitoso
+    //           email: "pf3shhuellasunidas@gmail.com", // El correo del cliente, si está disponible
+    //           id: uuidv4(),
+    //           paymentIntent: paymentIntent.id, // Guardamos el PaymentIntent ID
+    //         },
+    //       });
+    //       console.log('Donación registrada', donation);
 
-          // Enviar correo de éxito de la donación
-          await this.emailService.sendMailWithTemplate(
-            'pf3shhuellasunidas@gmail.com', // Usamos el correo del PaymentIntent ARREGLAR
-            'Pago de donación exitoso',
-            { amount: paymentIntent.amount_received / 100 },
-            'donationSuccess',
-          );
-        } catch (error) {
-          console.error('Error al registrar donación en payment_intent.succeeded', error);
-        }
+    //       // Enviar correo de éxito de la donación
+    //       await this.emailService.sendMailWithTemplate(
+    //         'pf3shhuellasunidas@gmail.com', // Usamos el correo del PaymentIntent ARREGLAR
+    //         'Pago de donación exitoso',
+    //         { amount: paymentIntent.amount_received / 100 },
+    //         'donationSuccess',
+    //       );
+    //     } catch (error) {
+    //       console.error('Error al registrar donación en payment_intent.succeeded', error);
+    //     }
         break;
 
       case 'payment_intent.payment_failed':

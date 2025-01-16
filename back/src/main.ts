@@ -12,8 +12,9 @@ async function bootstrap() {
 
   app.use(
     '/stripe/webhook',
-    express.raw({ type: 'application/json' }),
+    express.raw({type: 'application/json'}),
   );
+
 
   app.useGlobalPipes(
     new ValidationPipe({
