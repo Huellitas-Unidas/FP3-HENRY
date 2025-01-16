@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
   try {
     // Si no hay token, redirige a login para rutas protegidas
     if (!userToken && (pathname.startsWith("/admin") || pathname.startsWith("/lostandfound"))) {
-      const loginURL = new URL("/login", origin);
+      const loginURL = new URL("/protectedRoute", origin);
       return NextResponse.redirect(loginURL);
     }
 
@@ -33,6 +33,8 @@ export function middleware(request: NextRequest) {
         const forbiddenURL = new URL("/dashboard", origin); // Redirige al dashboard del usuario
         return NextResponse.redirect(forbiddenURL);
       }
+
+      
 
       // Evitar acceso a login o register si el usuario ya está autenticado
       if ((pathname === "/login" || pathname === "/register") && userToken) {

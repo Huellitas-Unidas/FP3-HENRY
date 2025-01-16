@@ -101,8 +101,14 @@ const authOptions: NextAuthOptions = {
       return true; // Permite el inicio de sesión para otros proveedores
     },
 
-    async jwt({ token, user }: { token: JWT; user?: DefaultUser }) {
-      if (user) {
+    async jwt({
+      token,
+      user,
+    }: {
+      token: JWT;
+      user?: DefaultUser | (Partial<DefaultUser> & { id?: string });
+    }) {
+      if (user?.id) {
         token.userId = user.id;
       }
       return token;

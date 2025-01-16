@@ -23,14 +23,13 @@ const Pqr = () => {
     description: "",
   });
 
-  useEffect(() => {
-    const userId = getUserId();
-    if (userId) {
-      setPqrData((prev) => ({ ...prev, userId }));
-    } else {
-      console.error("No se encontró el userId");
-    }
-  }, []);
+ useEffect(() => {
+  const userId = getUserId();
+  setPqrData((prev) => ({
+    ...prev,
+    ...(userId ? { userId } : {}), // Solo agrega el userId si está presente
+  }));
+}, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -125,7 +124,7 @@ const Pqr = () => {
             <input
               type="text"
               placeholder="Lulu Alvarado"
-              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+              className={`py-2 pl-4 text-customGreen-950 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
                 errors.fullname ? "border-red-300" : "border-gray-300"
               }`}
               name="fullname"
@@ -143,7 +142,7 @@ const Pqr = () => {
             <input
               type="email"
               placeholder="lulu.alvarado@mail.com"
-              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+              className={`py-2 pl-4 text-customGreen-950 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
                 errors.email ? "border-red-300" : "border-gray-300"
               }`}
               name="email"
@@ -159,7 +158,7 @@ const Pqr = () => {
 
           <div className="relative w-full">
             <select
-              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+              className={`py-2 pl-4 text-customGreen-950 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
                 errors.type ? "border-red-300" : "border-gray-300"
               }`}
               name="type"
@@ -183,7 +182,7 @@ const Pqr = () => {
           <div className="relative w-full">
             <textarea
               placeholder="En este espacio puedes escribir y detallar tu solicitud."
-              className={`py-2 pl-4 text-gray-400 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
+              className={`py-2 pl-4 text-customGreen-950 border-2 rounded-xl focus:shadow-lg focus:outline-none w-full ${
                 errors.description ? "border-red-300" : "border-gray-300"
               }`}
               rows={3}
