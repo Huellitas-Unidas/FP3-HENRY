@@ -57,4 +57,3 @@ export const config = {
   matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
 
-
