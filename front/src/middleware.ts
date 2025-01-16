@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
   try {
     // Si no hay token, redirige a login para rutas protegidas
     if (!userToken && (pathname.startsWith("/admin") || pathname.startsWith("/lostandfound"))) {
-      const loginURL = new URL("/protectedRoute", origin);
+      const loginURL = new URL("/login", origin);
       return NextResponse.redirect(loginURL);
     }
 
@@ -24,13 +24,13 @@ export function middleware(request: NextRequest) {
 
       // Verificar acceso al panel de administración
       if (pathname.startsWith("/admin") && userRole !== "ADMIN") {
-        const forbiddenURL = new URL("/dashboard", origin); // Redirige al dashboard del usuario
+        const forbiddenURL = new URL("/login", origin); // Redirige al dashboard del usuario
         return NextResponse.redirect(forbiddenURL);
       }
 
       // Verificar acceso a rutas de usuarios (como lostandfound)
       if (pathname.startsWith("/lostandfound") && userRole !== "USER") {
-        const forbiddenURL = new URL("/dashboard", origin); // Redirige al dashboard del usuario
+        const forbiddenURL = new URL("/protectedRoute", origin); // Redirige al dashboard del usuario
         return NextResponse.redirect(forbiddenURL);
       }
 
@@ -38,7 +38,7 @@ export function middleware(request: NextRequest) {
 
       // Evitar acceso a login o register si el usuario ya está autenticado
       if ((pathname === "/login" || pathname === "/register") && userToken) {
-        const dashboardURL = userRole === "ADMIN" ? "/admin" : "/dashboard"; // Redirige según el rol
+        const dashboardURL = userRole === "ADMIN" ? "/admin" : "/"; // Redirige según el rol
         return NextResponse.redirect(new URL(dashboardURL, origin));
       }
     }
