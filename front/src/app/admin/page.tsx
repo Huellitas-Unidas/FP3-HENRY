@@ -1,12 +1,36 @@
+'use client'
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+//import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
-import React from "react";
 
 const Admin = () => {
+  const router = useRouter(); 
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+
+    if (!token) {
+      // Si no hay token, redirige al login
+      router.push("/login");
+    }
+
+    // Aquí puedes agregar validaciones adicionales según sea necesario
+  }, [router]);
+  
   return (
-    <div className="bg-pearl min-h-screen flex flex-col justify-center items-center py-6 px-6">
-      <h1 className="text-5xl font-extrabold text-customGreen-900 mb-52 text-center">
+    <div className="bg-pearl min-h-screen flex flex-col justify-center items-center py-6 px-6 mt-10">
+      <h1 className="text-5xl font-extrabold text-customGreen-900 mb-44 text-center">
         Panel de Administración
       </h1>
+      <div className="text-center py-10 px-10">
+        <Link href="/admin/adminRegister">
+          <button className="bg-customGreen-700 text-white py-2 px-4 rounded hover:bg-customGreen-300">
+            Registrar Nuevo Administrador
+          </button>
+        </Link>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl px-4 mb-40">
         <Link

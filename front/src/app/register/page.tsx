@@ -10,61 +10,67 @@ import {ISignUpData} from "@/interfaces/types";
 import validate, {validationGuide} from "@/helpers/validate";
 import {register} from "../api/authAPI";
 
-const Register: React.FC = () => {
-    const router = useRouter();
-    //const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const formik = useFormik<ISignUpData>({
-        initialValues: {
-            name: "",
-            email: "",
-            password: "",
-            confirm: "",
-            phone: "",
-        },
-        validate: validate,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        onSubmit: async ({confirm, ...userData}, {resetForm}) => {
-            try {
-               // const formattedUserData = {
-               //     ...userData,
-                    //phone: Number(phone),
-               // };
+interface RegisterProps {
+  role?: string; // Propiedad opcional para definir el rol del usuario
+}
 
-                const registrationResult = await register(userData);
+const Register: React.FC<RegisterProps> = ({ role = "user" }) => {
+  const router = useRouter();
 
-                if (registrationResult) {
-                    Swal.fire({
-                        icon: "success",
-                        iconColor: "green",
-                        title: "Usuario registrado con éxito",
-                        text: "Ya puedes iniciar sesión.",
-                        customClass: {
-                            confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-                        },
-                    });
-                    resetForm();
-                    router.push("/login");
-                }
-            } catch (error: unknown) {
-                let errorMessage = "No se pudo completar el registro";
+  const formik = useFormik<ISignUpData>({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirm: "",
+      phone: "",
+    },
+    validate, 
+    onSubmit: async ({ confirm, ...userData }, { resetForm }) => {
+      try {
+        
+        const registrationResult = await register({
+          ...userData,
+          role: role?.toUpperCase() || "USER", 
+        });
 
-                if (error instanceof Error && error.message.includes("409")) {
-                    errorMessage = "El correo electrónico ya está en uso";
-                }
+        if (registrationResult) {
+          Swal.fire({
+            icon: "success",
+            iconColor: "green",
+            title: `Usuario ${
+              role === "admin" ? "Administrador" : "Usuario"
+            } registrado con éxito`,
+            text: "Ya puedes iniciar sesión.",
+            customClass: {
+              confirmButton:
+                "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+            },
+          });
+          resetForm(); 
+          router.push("/login"); 
+        }
+      } catch (error: unknown) {
+        let errorMessage = "No se pudo completar el registro";
 
-                Swal.fire({
-                    icon: "error",
-                    iconColor: "red",
-                    title: "Error en el registro",
-                    text: errorMessage,
-                    customClass: {
-                        confirmButton: "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-                    },
-                });
-            }
-        },
-    });
+        if (error instanceof Error && error.message.includes("409")) {
+          errorMessage = "El correo electrónico ya está en uso";
+        }
+
+        Swal.fire({
+          icon: "error",
+          iconColor: "red",
+          title: "Error en el registro",
+          text: errorMessage,
+          customClass: {
+            confirmButton:
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
+          },
+        });
+      }
+    },
+  });
 
     return (
       <div className="flex flex-col place-items-center my-8 px-4">
