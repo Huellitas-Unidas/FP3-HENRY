@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtDecode } from "jwt-decode"; // Decodifica el token JWT
+import{jwtDecode} from "jwt-decode"; // Decodifica el token JWT
 
 // Middleware principal
 export function middleware(request: NextRequest) {
@@ -11,10 +10,14 @@ export function middleware(request: NextRequest) {
   const userToken = request.cookies.get("token")?.value;
 
   try {
-    // Si no hay token, redirige a login para rutas protegidas
-    if (!userToken && (pathname.startsWith("/admin") || pathname.startsWith("/lostandfound"))) {
-      const loginURL = new URL("/login", origin);
-      return NextResponse.redirect(loginURL);
+    // Si no hay token, redirige a login o protectedRoute para rutas específicas
+    if (!userToken) {
+      if (pathname.startsWith("/admin")) {
+        return NextResponse.redirect(new URL("/login", origin));
+      }
+      if (pathname.startsWith("/lostandfound")) {
+        return NextResponse.redirect(new URL("/protectedRoute", origin));
+      }
     }
 
     // Si hay un token, decodificarlo para obtener el rol
@@ -22,21 +25,19 @@ export function middleware(request: NextRequest) {
       const decodedToken = jwtDecode<{ role: string }>(userToken);
       const userRole = decodedToken?.role?.toUpperCase();
 
-      // Verificar acceso al panel de administración
+      // Redirige a login si un usuario intenta acceder a rutas de admin
       if (pathname.startsWith("/admin") && userRole !== "ADMIN") {
-        const forbiddenURL = new URL("/login", origin); // Redirige al dashboard del usuario
-        return NextResponse.redirect(forbiddenURL);
+        return NextResponse.redirect(new URL("/login", origin));
       }
 
-      // Verificar acceso a rutas de usuarios (como lostandfound)
-      if (pathname.startsWith("/lostandfound") && userRole !== "USER") {
-        const forbiddenURL = new URL("/protectedRoute", origin); // Redirige al dashboard del usuario
-        return NextResponse.redirect(forbiddenURL);
+      // Redirige a protectedRoute si un usuario que no es admin intenta acceder a lostandfound
+      if (pathname.startsWith("/lostandfound") && userRole !== "USER" && userRole !== "ADMIN") {
+        return NextResponse.redirect(new URL("/protectedRoute", origin));
       }
 
-      // Evitar acceso a login o register si el usuario ya está autenticado
+      // Evita que usuarios logueados accedan a login o register
       if ((pathname === "/login" || pathname === "/register") && userToken) {
-        const dashboardURL = userRole === "ADMIN" ? "/admin" : "/"; // Redirige según el rol
+        const dashboardURL = userRole === "ADMIN" ? "/admin" : "/";
         return NextResponse.redirect(new URL(dashboardURL, origin));
       }
     }
@@ -44,8 +45,7 @@ export function middleware(request: NextRequest) {
     console.error("Error en el middleware:", error);
 
     // Si ocurre un error, redirige al login
-    const loginURL = new URL("/login", origin);
-    return NextResponse.redirect(loginURL);
+    return NextResponse.redirect(new URL("/login", origin));
   }
 
   // Si ninguna condición aplica, deja continuar
