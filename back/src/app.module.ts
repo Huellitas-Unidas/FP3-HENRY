@@ -14,10 +14,12 @@ import { ConfigModule } from '@nestjs/config';
 import { PqrModule } from './pqr/pqr.module';
 import { ProfileModule } from './profile/profile.module';
 import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     UserModule,
+    AuthModule,
     PostsModule,
     PetsModule,
     AdminModule,

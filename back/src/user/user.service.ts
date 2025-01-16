@@ -62,7 +62,6 @@ export class UserService {
         500
       );
     }
-  
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
