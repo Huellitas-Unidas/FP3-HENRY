@@ -112,7 +112,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       return;
     }
 
-    setLoading(true);
+    //setLoading(true);
 
     try {
       const token = Cookies.get("token");
