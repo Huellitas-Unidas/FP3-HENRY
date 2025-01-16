@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password, name, phone, role } = createUserDto;
+    const { id, email, password, name, phone, role} = createUserDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -29,27 +29,26 @@ export class UserService {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
 
-    const hashedPassword = await this.authService.hashPassword(password);
+    let hashedPassword = null;
+
+    if (password) {
+      hashedPassword = await this.authService.hashPassword(password);
+    }
+
+    const userData = {
+      id: id || undefined,
+      email,
+      password: hashedPassword,
+      phone: String(phone),
+      name,
+      role: role ? (role.toUpperCase() as Role) : 'USER',
+    };
 
     const user = await this.prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        phone: String(phone),
-        name,
-        role: (role ? role.toUpperCase() : 'USER') as Role,
-      },
+      data: userData,
     });
 
-    await this.emailService.sendMailWithTemplate(
-      user.email,
-      'register',
-      {
-        name: user.name,
-      },
-      'register',
-    );
-
+   ;
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
@@ -66,32 +65,31 @@ export class UserService {
         role: true,
       },
     });
-  
+
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
-  
+
     const isPasswordValid = await this.authService.validatePassword(
       password,
       user.password,
     );
-  
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('Contraseña incorrecta');
     }
-  
+
     const payload = { email: user.email, sub: user.id, role: user.role };
-  
+
     const token = this.authService.generateToken(payload);
-  
+
     return {
       message: 'Te has logueado exitosamente.',
       token,
-      userId: user.id, 
+      userId: user.id,
     };
   }
-  
-  
+
   async findAll() {
     const users = await this.prisma.user.findMany();
     return users.map(({ password, ...user }) => user);
@@ -160,7 +158,11 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        posts: true,
+        posts: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
     if (!user) {

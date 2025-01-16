@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useFormik } from "formik";
 import React from "react";
@@ -11,6 +12,8 @@ import { IUserData } from "@/interfaces/types";
 import validate from "@/helpers/validateLogin";
 import { login } from "@/app/api/authAPI";
 import { signIn } from "next-auth/react";
+import { jwtDecode } from "jwt-decode";
+
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -21,40 +24,38 @@ const Login: React.FC = () => {
       password: "",
     },
     validate,
-    validateOnChange: true,
-    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const response = await login(values);
-        Cookies.set("token", response.token, { expires: 1 });
-        localStorage.setItem(
-          "userData",
-          JSON.stringify({ token: response.token })
-        );
-        window.dispatchEvent(new Event("storageChange")); // Dispara un evento personalizado para actualizar el estado global/local
-        Swal.fire({
-          icon: "success",
-          iconColor: "green",
-          title: "¡Inicio de sesión exitoso!",
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
-        });
-        router.push("/");
+        const response = await login(values); // Llama a la API para autenticar
+        const token = response.token;
+
+        // Decodificar token y extraer rol
+        const decodedToken = jwtDecode<{ sub: string; role: string }>(token);
+        const role = decodedToken?.role?.toUpperCase();
+
+        // Guardar token y rol en cookies/localStorage
+        Cookies.set("token", token, { expires: 1 });
+        localStorage.setItem("role", role || "");
+        localStorage.setItem("userId", decodedToken.sub);
+
+        // Redirigir según el rol
+        if (role === "ADMIN") {
+          router.push("/admin");
+        } else if (role === "USER") {
+          router.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Rol no reconocido",
+            text: "No tienes permisos para acceder.",
+          });
+        }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Error desconocido";
         Swal.fire({
           icon: "error",
-          iconColor: "red",
-          title: "Credenciales incorrectas",
-          text: errorMessage,
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
+          title: "Error de autenticación",
+          text: "Verifica tus credenciales.",
         });
-        console.error("Error en el login:", error);
       }
     },
   });
