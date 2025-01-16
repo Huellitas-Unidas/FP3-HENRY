@@ -28,11 +28,9 @@ let AuthService = class AuthService {
             sub: user.id || user.sub,
             role: user.role,
         };
-<<<<<<< HEAD
         console.log('Payload del token:', payload);
-=======
-        console.log("Payload del token:", payload);
->>>>>>> 34dfcdb61b0565aa9dd75fb4099c8e4b11fb5b10
+        return this.jwtService.sign(payload);
+        console.log('Payload del token:', payload);
         return this.jwtService.sign(payload);
     }
     async validatePassword(plainPassword, hashedPassword) {
