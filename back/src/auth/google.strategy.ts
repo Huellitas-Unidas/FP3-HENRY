@@ -10,7 +10,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, // Usa variables de entorno
       callbackURL:
-        'https://71xgr47m-4000.brs.devtunnels.ms/auth/google/callback', // Redirección
+        'https://huellasunidas.onrender.com/auth/google/callback', // Redirección
       scope: ['email', 'profile'], // Permisos solicitados
     });
   }
