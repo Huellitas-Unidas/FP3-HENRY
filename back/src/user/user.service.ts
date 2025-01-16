@@ -19,16 +19,16 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { id, email, password, name, phone, role} = createUserDto;
+    const { id, email, password, name, phone, role } = createUserDto;
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
-
+  
     if (existingUser) {
       throw new HttpException('El correo electrónico ya está en uso', 409);
     }
-
+  
     let hashedPassword = null;
 
     if (password) {
@@ -48,13 +48,27 @@ export class UserService {
       data: userData,
     });
 
-   ;
+    try {
+      await this.emailService.sendMailWithTemplate(
+        email,
+        'Bienvenido a Huellas Unidas',
+        { name },
+        'register'
+      );
+    } catch (error) {
+      console.error('Error al enviar correo de bienvenida:', error);
+      throw new HttpException(
+        'Usuario creado, pero ocurrió un error al enviar el correo.',
+        500
+      );
+    }
+  
     return {
       user,
       message: 'Usuario creado exitosamente y correo enviado.',
     };
   }
-
+  
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
