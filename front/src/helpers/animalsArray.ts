@@ -39,4 +39,8 @@ const animalsArray: IPost[] = [
   }
 ];
 
+
+
 export default animalsArray;*/}
+
+{/* */}
