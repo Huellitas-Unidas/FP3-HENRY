@@ -59,7 +59,17 @@ export interface ISignUpData {
   password: string;
   confirm?: string;
   phone: string;
-} //! register
+  role?: string;
+} // register
+
+export interface ISignUpDataGoogle {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  role?: string;
+} // register con Google, no usada
 
 export type TSignUpErrors = Partial<ISignUpData>;
 
@@ -69,7 +79,7 @@ export type TSignUpErrors = Partial<ISignUpData>;
 // } //! es igual a IUserData
 
 export interface IpqrProps {
-  id?:string,
+  id?: string;
   fullname: string;
   email: string;
   type: string;
@@ -95,6 +105,7 @@ export interface IUserBack {
   phone?: string | number;
   profilePicture: string | null;
   createdAt: string;
+  role: "admin" | "user";
 }
 
 export interface IUserSessionDt {
@@ -107,9 +118,8 @@ export interface IProfilePic {
   profilePic: string;
 }
 
-
 export interface IDonation {
-  amount: number; 
-  email: string;  
-  currency: string; 
+  amount: number;
+  email: string;
+  currency: string;
 }
