@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtDecode } from "jwt-decode"; 
-
+import{jwtDecode} from "jwt-decode"; // Decodifica el token JWT
 
 export function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
@@ -43,6 +42,7 @@ export function middleware(request: NextRequest) {
   } catch (error) {
     console.error("Error en el middleware:", error);
 
+    // Si ocurre un error, redirige al login
     return NextResponse.redirect(new URL("/login", origin));
   }
 
@@ -53,6 +53,4 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
-
-
 
