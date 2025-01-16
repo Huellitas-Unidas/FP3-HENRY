@@ -80,7 +80,7 @@ const Navbar = () => {
           ></Image>
         </Link>
         <div className="hidden w-3/5 items-center justify-evenly md:flex">
-          <Link
+            <Link
             className={`transition-opacity-transform duration-300 ${
               pathname === "/lostandfound"
                 ? "opacity-80 -translate-y-1"
@@ -112,11 +112,11 @@ const Navbar = () => {
           </Link>
           <Link
             className={`transition-opacity-transform duration-300 ${
-              pathname === "/not-found"
+              pathname === "/recommendation"
                 ? "opacity-80 -translate-y-1"
                 : "hover:opacity-80 hover:-translate-y-1"
             }`}
-            href="not-found"
+            href="recommendation"
           >
             🐾Recomendaciones
           </Link>
@@ -155,16 +155,6 @@ const Navbar = () => {
         ) : (
           <div className="hidden w-1/5 items-center justify-evenly md:flex">
             <div>
-              <Link
-                className={`transition-opacity-transform duration-300 ${
-                  pathname === "/admin"
-                    ? "opacity-80 -translate-y-1"
-                    : "hover:opacity-80 hover:-translate-y-1"
-                }`}
-                href="/admin"
-              >
-                Admin
-              </Link>
             </div>
             <div>
               <Link

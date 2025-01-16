@@ -8,9 +8,6 @@ import { getUserId } from "@/helpers/userId";
 import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-//const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
-
-//const libraries: Libraries = ["places"];
 
 
 
@@ -19,6 +16,7 @@ interface ModalPageProps {
   onRefreshList: () => void;
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -37,8 +35,6 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
-
-  // Verificar el userId del almacenamiento local
 
   useEffect(() => {
     const storedUserId = getUserId();
@@ -88,16 +84,6 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0] || null;
       setFormData((prevState) => ({ ...prevState, file }));
-      //}
-      //else if (name.startsWith("location")) {
-      //const field = name.split(".")[1];
-      //setFormData((prevState) => ({
-      //  ...prevState,
-      //  location: {
-      //    ...prevState.location,
-      //    [field]: value,           // Mantén el valor como string para permitir el signo negativo
-      //  },
-      //}));
     } else if (name === "dateLost") {
       const selectedDate = new Date(value);
       selectedDate.setDate(selectedDate.getDate() + 1);
@@ -136,37 +122,14 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         console.error("Token no encontrado.");
         return;
       }
-      // Validar userId antes de enviar el formulario
-      if (
-        !formData.userId ||
-        !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
-          formData.userId
-        )
-      ) {
-        throw new Error(
-          "El ID de usuario no es válido o no fue proporcionado."
-        );
+
+      if (!formData.userId) {
+        throw new Error("El ID de usuario no es válido o no fue proporcionado.");
       }
 
       if (!formData.file) {
         throw new Error("Debe adjuntar una imagen");
       }
-
-      /* if (
-        !formData.location.address ||
-        !formData.location.latitude ||
-        !formData.location.longitude
-      ) {
-        throw new Error("La ubicación es obligatoria y debe ser válida.");
-      }
-  
-      // Convertir la latitud y longitud a números flotantes y enviarlos como strings
-      const locationData = {
-        address: formData.location.address,
-        latitude: parseFloat(String(formData.location.latitude)) || 0, // Asegurar número flotante
-        longitude: parseFloat(String(formData.location.longitude)) || 0, // Asegurar número flotante
-      };
-      */
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -193,6 +156,7 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
           errorData?.message || "Error al crear el post en el backend";
         throw new Error(errorMessage);
       }
+
       const result = await response.json();
       console.log("Post creado:", result);
       Swal.fire({
@@ -216,11 +180,9 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
         dateLostISO: "",
         location: { address: "", latitude: 0, longitude: 0 },
         file: null,
-        status: "",
+        status: "perdido",
         userId: formData.userId,
       });
-
-      onClose();
     } catch (error) {
       Swal.fire(
         "Error",
