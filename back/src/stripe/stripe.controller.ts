@@ -14,6 +14,7 @@ import { StripeService } from './stripe.service';
 import { CreateCheckoutSessionDto } from './dto/create.checkoutSession.dto';
 import { log } from 'console';
 import e from 'express';
+import { pairwise } from 'rxjs';
 
 @Controller('stripe')
 export class StripeController {
@@ -56,15 +57,19 @@ export class StripeController {
     @Headers('stripe-signature') signature: string,
     @Req() req: Request,
   ) {
-    const payload = Buffer.from(req.body as any);
     
+    const payload = req.body  //esto me envia Stripe y  lo transformo en binario 
+    
+    if (!Buffer.isBuffer(payload)) {
+        throw new HttpException('El cuerpo no es un Buffer crudo', HttpStatus.BAD_REQUEST);
+      }
 
     try {
-      const event = await this.stripeService.verifyWebhoock(payload, signature);
-      console.log('esto es EVENT', event);
+      const event = await this.stripeService.verifyWebhook(payload, signature);
       
       await this.stripeService.processEvent(event);
       return { received: true };
+      
     } catch (err) {
       throw new HttpException(`Error ${err}`, HttpStatus.BAD_REQUEST);
     }
