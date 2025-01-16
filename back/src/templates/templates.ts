@@ -88,7 +88,7 @@ export const templates = {
             Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. 
             ¡Estamos aquí para ti y para nuestras queridas mascotas! 🐶🐱
           </p>
-          <a href="*" class="button">Visita nuestro sitio web</a>
+          <a href="https://huellasunidas.netlify.app/" class="button">Visita nuestro sitio web</a>
           <p>Gracias por formar parte de nuestra misión. Juntos hacemos la diferencia.</p>
         </div>
         <div class="footer">
@@ -197,7 +197,7 @@ export const templates = {
         <p>
           Si necesitas editar o eliminar el post, puedes hacerlo desde tu perfil. Gracias por ser parte de la misión de Huellas Unidas.
         </p>
-        <a href="#" class="button">Ver tu post</a>
+        <a href="https://huellasunidas.netlify.app/lostandfound" class="button">Ver tu post</a>
       </div>
       <div class="footer">
         <p>
@@ -294,7 +294,7 @@ export const templates = {
         Hemos recibido tu donación de <strong>{{amount}}</strong>. 
         Gracias por apoyar nuestra causa y ayudar a más animales a encontrar un hogar.
       </p>
-      <a href="*" class="button">Ver más sobre nuestra misión</a>
+      <a href="https://huellasunidas.netlify.app/aboutUs" class="button">Ver más sobre nuestra misión</a>
       <p>Gracias nuevamente por tu generosidad.</p>
     </div>
     <div class="footer">
@@ -495,7 +495,7 @@ petCreation: `<!DOCTYPE html>
       <p>
         Si necesitas editar o eliminar la mascota, puedes hacerlo desde tu perfil. Gracias por ser parte de la misión de Huellas Unidas.
       </p>
-      <a href="#" class="button">Ver tu mascota</a>
+      <a href="https://huellasunidas.netlify.app/lostandfound" class="button">Ver tu mascota</a>
     </div>
     <div class="footer">
       <p>

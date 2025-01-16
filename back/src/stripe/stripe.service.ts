@@ -33,19 +33,23 @@ export class StripeService {
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
       });
-        await this.emailService.sendMailWithTemplate(
+
+      await this.emailService.sendMailWithTemplate(
+        email,
+        'Donación en proceso',
+        {
           email,
-          'Donación en proceso',
-          { email, amount: `$ ${amount / 100}` },
-          'donationCreation',
-        );
+          amount: `$ ${amount / 100}`,
+          currency,
+        },
+        'donationCreation',
+      );
 
       return session;
     } catch (error) {
       throw new Error('Stripe error');
     }
   }
-
   async verifyWebhook(payload: Buffer, signature: string) {
     const endPointSecret = process.env.STRIPE_WEBHOOK_SECRET;
     console.log('ESTO ES PAYLOAD', payload);
@@ -92,7 +96,10 @@ export class StripeService {
             await this.emailService.sendMailWithTemplate(
                 session.customer_email,
                 'Pago de donación exitoso',
-                { amount: session.amount_total / 100 },
+                { 
+                  amount: session.amount_total / 100,
+                  currency: session.currency,
+                },
                 'donationSuccess',
               );
           const usuerCheckout = await this.prisma.donations.create({
