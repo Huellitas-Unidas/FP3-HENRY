@@ -19,9 +19,9 @@ const Navbar = () => {
   const session = useSession();
   const profilePhoto = session.data?.user?.image || userPic || emptyProfile;
 
-  // const handleRefresh = () => {
-  //   window.location.reload();
-  // };
+  const handleRefresh = () => {
+    window.location.reload();
+   };
 
   const handleLogout = async () => {
     try {
@@ -40,9 +40,9 @@ const Navbar = () => {
       Cookies.remove("token");
       await signOut({ redirect: false });
       router.push("/");
-      // setTimeout(() => {
-      //   handleRefresh();
-      // }, 500);
+      setTimeout(() => {
+       handleRefresh();
+      }, 500);
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -57,13 +57,15 @@ const Navbar = () => {
           else {
             setUserPic(null);
           }
-        } 
+        } //else {
+        //console.error("No se encontró el usuario");
+        //}
       } catch (error) {
         console.error(error);
       }
     };
     fetchUser();
-  }, [userId, session.data?.user?.image, userPic, profilePhoto]); 
+  }, [userId, session.data?.user?.image, userPic, profilePhoto]); // useEffect que maneja el renderizado de la profilePic
 
   return (
     <nav className="font-sans font-semibold text-lg flex shadow-lg rounded-lg justify-between md:max-h-16 border border-[#3c9083] bg-[#d7f0e9]">
