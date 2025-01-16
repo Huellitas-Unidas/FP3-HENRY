@@ -21,7 +21,6 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const { id, email, password, name, phone, role } = createUserDto;
 
-    // Verifica si ya existe un usuario con ese correo electrónico
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -45,12 +44,6 @@ export class UserService {
       role: role ? (role.toUpperCase() as Role) : 'USER',
     };
 
-    let hashedPassword = undefined;
-    if (password) {
-      hashedPassword = await this.authService.hashPassword(password); // Solo se ejecuta si se proporciona una contraseña
-    }
-
-    // Crea el nuevo usuario
     const user = await this.prisma.user.create({
       data: userData,
     });

@@ -12,7 +12,10 @@ export function middleware(request: NextRequest) {
 
   try {
     // Si no hay token, redirige a login para rutas protegidas
-    if (!userToken && (pathname.startsWith("/admin") || pathname.startsWith("/lostandfound"))) {
+    if (
+      !userToken &&
+      (pathname.startsWith("/admin") || pathname.startsWith("/lostandfound"))
+    ) {
       const loginURL = new URL("/login", origin);
       return NextResponse.redirect(loginURL);
     }
@@ -56,5 +59,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/admin/:path*", "/lostandfound/:path*", "/login", "/register"],
 };
-
-

@@ -11,7 +11,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const isFormSignUpFull = (data: ISignUpData): boolean =>
   Object.values(data).every(Boolean);
 
-export async function register(userData: Omit<ISignUpData, "confirm"> & { role?: string }) {
+export async function register(
+  userData: Omit<ISignUpData, "confirm"> & { role?: string }
+) {
   try {
     if (!isFormSignUpFull(userData)) {
       Swal.fire({
@@ -25,7 +27,7 @@ export async function register(userData: Omit<ISignUpData, "confirm"> & { role?:
       });
       return;
     }
-  
+
     const res = await fetch(`${API_URL}/user/register`, {
       method: "POST",
       headers: {
@@ -69,16 +71,9 @@ export async function register(userData: Omit<ISignUpData, "confirm"> & { role?:
     console.error("Error en el registro:", errorMessage);
     throw error;
   }
-}  
-
+}
 
 export async function login(userData: IUserData) {
-  interface DecodedToken {
-    sub: string;
-    email?: string;
-    exp?: number;
-  }
-
   try {
     const res = await fetch(`${API_URL}/user/login`, {
       method: "POST",
@@ -95,37 +90,11 @@ export async function login(userData: IUserData) {
         Cookies.set("token", data.token, { expires: 1 }); // Establecer token en la cookie
         console.log("Token recibido:", data.token);
 
-        try {
-          const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
-            data.token
-          ); // Decodificar token
-
-          if (decodedToken.exp && Date.now() >= decodedToken.exp * 1000) {
-            throw new Error("El token ha expirado.");
-          }
-
-          if (decodedToken.sub) {
-            localStorage.setItem("userId", decodedToken.sub); // Almacenar el ID de usuario
-          } else {
-            throw new Error(
-              "El token no contiene un ID de usuario válido (sub)."
-            );
-          }
-        } catch (decodeError) {
-          console.error("Error al decodificar el token:", decodeError);
-          throw new Error("Error al decodificar el token.");
-        }
-
-        Swal.fire({
-          icon: "success",
-          iconColor: "green",
-          text: "Bienvenido.",
-          title: "¡Inicio de sesión exitoso!",
-          customClass: {
-            confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
-        });
+        const decodedToken = jwtDecode<{ sub: string; role: string }>(
+          data.token
+        );
+        localStorage.setItem("userId", decodedToken.sub); // Almacenar el ID de usuario
+        localStorage.setItem("role", decodedToken.role); // Almacenar el rol del usuario
 
         return data;
       } else {
@@ -133,27 +102,10 @@ export async function login(userData: IUserData) {
       }
     } else {
       const errorResponse = await res.json();
-      Toast.fire({
-        icon: "error",
-        title: errorResponse.message || "Credenciales incorrectas.",
-      });
       throw new Error(errorResponse.message || "Credenciales incorrectas.");
     }
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error desconocido en el login";
-
-    Swal.fire({
-      icon: "error",
-      title: "Error en el login",
-      text: errorMessage,
-      customClass: {
-        confirmButton:
-          "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-      },
-    });
-
-    console.error("Error en el login:", errorMessage);
+    console.error("Error en el login:", error);
     throw error;
   }
 }
