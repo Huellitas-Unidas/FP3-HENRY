@@ -57,15 +57,15 @@ export class StripeController {
     @Headers('stripe-signature') signature: string,
     @Req() req: Request,
   ) {
-    console.log('ESTO ES SIGNATURE', signature);
     
-    const payload = Buffer.from(req.body as any);
-    console.log('ESTO ES PAYLOAD', payload);
+    const payload = req.body  //esto me envia Stripe y  lo transformo en binario 
     
-    
+    if (!Buffer.isBuffer(payload)) {
+        throw new HttpException('El cuerpo no es un Buffer crudo', HttpStatus.BAD_REQUEST);
+      }
 
     try {
-      const event = await this.stripeService.verifyWebhoock(payload, signature);
+      const event = await this.stripeService.verifyWebhook(payload, signature);
       
       await this.stripeService.processEvent(event);
       return { received: true };
