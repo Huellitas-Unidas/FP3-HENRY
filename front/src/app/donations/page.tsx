@@ -2,9 +2,10 @@
 
 import React from "react";
 import Donations from "@/components/Donations/Donations";
+import { IUserSessionDt } from "@/interfaces/types";
 
 const DonationsPage = () => {
-    const userSession = null; 
+    const userSession: IUserSessionDt = null; 
 
   return (
     
@@ -14,6 +15,7 @@ const DonationsPage = () => {
 };
 
 export default DonationsPage;
+
 
 
 

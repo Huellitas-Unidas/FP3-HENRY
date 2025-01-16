@@ -9,6 +9,8 @@ import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+
+
 interface ModalPageProps {
   onClose: () => void;
   onRefreshList: () => void;

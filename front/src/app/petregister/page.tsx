@@ -32,7 +32,7 @@ const PetRegister: React.FC = () => {
       status: "none",
       description: "",
       file: null,
-      userId: getUserId(),
+      userId: getUserId()
       //"042138bf-1613-4e96-8be0-e3467ab81fca", //! Hardcodeado por ahora
     },
     validate: (values) => {
@@ -82,12 +82,12 @@ const PetRegister: React.FC = () => {
           title: "Error al enviar el formulario...",
           customClass: {
             confirmButton:
-              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
-          },
+              "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          }
         });
         console.error("Error en el login:", error);
       }
-    },
+    }
   });
 
   return (
@@ -188,11 +188,13 @@ const PetRegister: React.FC = () => {
             />
           </div>
 
-          {isSubmitted && formik.errors.file && (
-            <span className="text-red-500 text-sm text-center">
-              {formik.errors.file}
-            </span>
-          )}
+          {isSubmitted &&
+            formik.errors.file &&
+            typeof formik.errors.file === "string" && (
+              <span className="text-red-500 text-sm text-center">
+                {formik.errors.file}
+              </span>
+            )}
 
           <GreenButton
             props={formik.isSubmitting ? "Añadiendo..." : "Añadir"}
