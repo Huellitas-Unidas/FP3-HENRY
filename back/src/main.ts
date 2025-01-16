@@ -5,14 +5,16 @@ import { NextFunction, Request, Response } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Pool } from 'pg';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(
     '/stripe/webhook',
-    bodyParser.raw({ type: 'application/json' }),
+    express.raw({type: 'application/json'}),
   );
+
 
   app.useGlobalPipes(
     new ValidationPipe({
