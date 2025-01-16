@@ -5,9 +5,12 @@ import { AuthService } from './auth.service';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { EmailModule } from 'src/email/email.module';
+import { AuthController } from './auth.controller';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
-  imports: [
+  imports: [PassportModule.register({defaultStrategy: 'google'}),
     ConfigModule.forRoot(),
     JwtModule.registerAsync({  
       imports: [ConfigModule],
@@ -19,7 +22,8 @@ import { EmailModule } from 'src/email/email.module';
     }),
     EmailModule,
   ],
-  providers: [AuthService, PrismaService, UserService],
+  providers: [AuthService, PrismaService, UserService, GoogleStrategy],
   exports: [AuthService, JwtModule],
+  controllers: [AuthController],
 })
 export class AuthModule {}

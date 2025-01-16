@@ -39,7 +39,7 @@ const Register: React.FC<RegisterProps> = ({ role = "user" }) => {
           Swal.fire({
             icon: "success",
             iconColor: "green",
-            title: `Usuario ${
+            title: ` ${
               role === "admin" ? "Administrador" : "Usuario"
             } registrado con éxito`,
             text: "Ya puedes iniciar sesión.",
