@@ -37,7 +37,7 @@ export const validatePost = (formData: Partial<IPost & { file?: File | null }>):
       errors["location.address"] = "La dirección es obligatoria.";
     }
   
-    // Valida que latitude y longitude sean números válidos
+   
     if (
       isNaN(Number(formData.location.latitude)) ||
       isNaN(Number(formData.location.longitude))

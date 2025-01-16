@@ -32,7 +32,7 @@ export const patchPic = async (formData: FormData): Promise<IProfilePic> => {
           "bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded",
       },
     }).then(() => {
-      // Ejecuta handleRefresh una vez que el usuario haga clic en "OK"
+      
       handleRefresh();
     });
     return data;

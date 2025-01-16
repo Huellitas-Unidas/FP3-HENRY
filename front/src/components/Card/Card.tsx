@@ -52,11 +52,11 @@ const Card: React.FC<IPost> = ({
           Fecha: {new Date(dateLost).toLocaleDateString()}
         </p>
         <div>
-          {/*<Link href="/maps">*/}
+         
           <span className="text-xs text-gray-500">
             Ubicación: {location?.address || "No especificada"}
           </span>
-          {/* </Link>*/}
+          
         </div>
       </div>
     </div>

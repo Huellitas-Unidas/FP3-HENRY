@@ -39,7 +39,7 @@ const Register: React.FC<RegisterProps> = ({ role = "user" }) => {
           Swal.fire({
             icon: "success",
             iconColor: "green",
-            title: `Usuario ${
+            title: `Hola ${
               role === "admin" ? "Administrador" : "Usuario"
             } registrado con éxito`,
             text: "Ya puedes iniciar sesión.",
@@ -79,7 +79,7 @@ const Register: React.FC<RegisterProps> = ({ role = "user" }) => {
             noValidate
             onSubmit={(e) => {
               formik.handleSubmit(e);
-              // setIsSubmitted(true);
+              
             }}
             className="flex flex-col gap-4 items-center text-lg"
           >

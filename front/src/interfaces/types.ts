@@ -11,7 +11,7 @@ export interface IPost {
     address: string;
     latitude: number;
     longitude: number;
-  } | null; // Permitir que sea null si no hay ubicación
+  } | null; 
   userId: string;
 }
 
@@ -34,7 +34,7 @@ export interface IPostDetailProps {
   };
 }
 
-// Las otras interfaces permanecen sin cambios, ya que no están directamente relacionadas con la respuesta de la API.
+
 export interface ICardAnimal {
   id: number;
   name: string;
@@ -51,7 +51,7 @@ export interface IButton {
 export interface IUserData {
   email?: string;
   password?: string;
-} //! es igual a IUserLogin
+} 
 
 export interface ISignUpData {
   name: string;
@@ -60,7 +60,7 @@ export interface ISignUpData {
   confirm?: string;
   phone: string;
   role?: string;
-} // register
+} 
 
 export interface ISignUpDataGoogle {
   id: string;
@@ -72,11 +72,6 @@ export interface ISignUpDataGoogle {
 } // register con Google, no usada
 
 export type TSignUpErrors = Partial<ISignUpData>;
-
-// export interface IUserLogin {
-//   email: string;
-//   password: string;
-// } //! es igual a IUserData
 
 export interface IpqrProps {
   id?: string;

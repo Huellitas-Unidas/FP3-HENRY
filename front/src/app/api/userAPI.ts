@@ -16,9 +16,7 @@ export async function getUserById(id: string | number): Promise<IUserBack | null
       },
     });
 
-    //if (!response.ok) {
-      //throw new Error(`Error ${response.status}: ${response.statusText}`);
-    //}
+    
 
     const data = await response.json();
     return data || null;

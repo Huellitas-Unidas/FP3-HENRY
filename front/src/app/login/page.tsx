@@ -26,19 +26,18 @@ const Login: React.FC = () => {
     validate,
     onSubmit: async (values) => {
       try {
-        const response = await login(values); // Llama a la API para autenticar
+        const response = await login(values); 
         const token = response.token;
 
-        // Decodificar token y extraer rol
         const decodedToken = jwtDecode<{ sub: string; role: string }>(token);
         const role = decodedToken?.role?.toUpperCase();
 
-        // Guardar token y rol en cookies/localStorage
+     
         Cookies.set("token", token, { expires: 1 });
         localStorage.setItem("role", role || "");
         localStorage.setItem("userId", decodedToken.sub);
 
-        // Redirigir según el rol
+       
         if (role === "ADMIN") {
           router.push("/admin");
         } else if (role === "USER") {
@@ -68,7 +67,7 @@ const Login: React.FC = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-4 items-center text-lg"
         >
-          {/* Email Field */}
+         
           <div className="relative w-full">
             <input
               placeholder="Correo electrónico"
@@ -95,7 +94,7 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* Password Field */}
+        
           <div className="relative w-full">
             <input
               placeholder="Contraseña"
@@ -129,7 +128,7 @@ const Login: React.FC = () => {
             </span>
           </label>
 
-          {/* Google Sign-In */}
+         
           <button
             onClick={() => signIn("google", { callbackUrl: "/" })}
             type="button"
@@ -145,7 +144,7 @@ const Login: React.FC = () => {
             Ingresar con Google
           </button>
 
-          {/* Submit Button */}
+         
           <GreenButton
             props={formik.isSubmitting ? "Logueando..." : "Loguearme"}
           />

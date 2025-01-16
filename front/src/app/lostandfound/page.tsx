@@ -11,14 +11,14 @@ import { useRouter } from "next/navigation";
 const LostAndFound: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [filter, setFilter] = useState<string>("todos"); // Estado para el filtro
-  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]); // Lista filtrada
+  const [filter, setFilter] = useState<string>("todos"); 
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]); 
   const router = useRouter();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // Función para obtener los post de la API
+
   const fetchPosts = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
@@ -33,7 +33,7 @@ const LostAndFound: React.FC = () => {
     }
   };
 
-  // Filtrar los posts según el estado seleccionado
+  
   useEffect(() => {
     if (filter === "todos") {
       setFilteredPosts(posts);
@@ -44,7 +44,7 @@ const LostAndFound: React.FC = () => {
     }
   }, [filter, posts]);
 
-  // Llamar a fetchPosts cuando el componente se monta
+ 
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -56,9 +56,7 @@ const LostAndFound: React.FC = () => {
         <Link href="/maps">
           <button className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md">Ver Mapa</button>
         </Link>
-        {/* </div> */}
-        {/* Contenedor del botón alineado a la derecha */}
-        {/*</div><div className="flex justify-end mb-4"> */}
+      
 
         <button
           onClick={handleOpenModal}
@@ -75,34 +73,11 @@ const LostAndFound: React.FC = () => {
         </button>
       </div>
 
-
-      {/* Otro botón adicional */}
-      {/* <div className="flex flex-row justify-between">
-        <div className="mb-4">
-          <button
-            onClick={() => router.push("/misposteos")}
-            className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
-          >
-            Mis posteos
-          </button>
-        </div> */}
-
-      {/* <div className="flex justify-start mb-4">
-          <button
-            onClick={handleOpenModal}
-            className="px-8 py-4 rounded-lg text-white text-sm font-bold border-none outline-none tracking-wide bg-[#2e736b] hover:bg-teal-950 shadow-md"
-          >
-            Publicar Mascota
-          </button>
-        </div> */}
-      {/*  </div> */}
-
       <ButtonLostAndFound filter={filter} setFilter={setFilter} />
 
-      {/* Lista de Tarjetas */}
+     
       <CardList posts={filteredPosts} />
 
-      {/* Modal (Renderizado condicional) */}
       {isModalOpen && (
         <ModalPage onClose={handleCloseModal} onRefreshList={fetchPosts} />
       )}

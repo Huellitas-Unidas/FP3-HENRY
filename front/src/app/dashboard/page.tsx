@@ -27,14 +27,14 @@ const Dashboard = () => {
   const [activeModal, setActiveModal] = useState<
     "profilePicModal" | "petFormModal" | null
   >(null);
-  const [selectedPet, setSelectedPet] = useState<IpetForm | null>(null); // Para almacenar la mascota seleccionada
+  const [selectedPet, setSelectedPet] = useState<IpetForm | null>(null); 
 
   const openModal = (
     modal: "profilePicModal" | "petFormModal",
     pet?: IpetForm
   ) => {
     setActiveModal(modal);
-    if (pet) setSelectedPet(pet); // Establecer la mascota seleccionada, si aplica
+    if (pet) setSelectedPet(pet); 
   };
 
   const closeModal = () => {
@@ -42,24 +42,7 @@ const Dashboard = () => {
     setSelectedPet(null);
   };
 
-  // const handleUpdateStatus = async (value: string | null) => {
-  //   if (value) {
-  //     await updatePetStatus(value);
-  //     setRefresh((prev) => !prev); // Cambiar el estado para forzar el refetch
-  //     router.push("/lostandfound");
-  //   } else {
-  //     return;
-  //   }
-  // };
-
-  // const handleDeletePet = async (value: string | null) => {
-  //   if (value) {
-  //     await deletePet(value);
-  //     setRefresh((prev) => !prev);
-  //   } else {
-  //     return;
-  //   }
-  // };
+  
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -130,14 +113,10 @@ const Dashboard = () => {
           <p className="font-semibold">Teléfono:</p>
           <p className="inline-flex gap-2">
             {userData?.phone}
-            {/* <button className="text-lg">
-              <CiEdit />
-            </button> */}
+            
           </p>
           <br />
-          {/* <p className="underline text-sm hover:no-underline">
-            Modificar contraseña
-          </p> */}
+          
           <Link href={"/petregister"}>
             <GreenButton props="Añadir mascota" />
           </Link>
@@ -183,14 +162,7 @@ const Dashboard = () => {
                       Perdida
                     </p>
                   )}
-                  {/* 
-                  <button
-                    onClick={() => handleDeletePet(animal.id)}
-                    className="mt-2 text-sm text-green500 hover:underline flex flex-row gap-1"
-                  >
-                    <TiDeleteOutline className="text-lg" />
-                    Eliminar mascota
-                  </button> */}
+                 
                 </div>
               );
             })}
@@ -200,7 +172,7 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Modales */}
+    
       {activeModal === "profilePicModal" && (
         <ModalDashboardPic isOpen={activeModal} onClose={closeModal} />
       )}

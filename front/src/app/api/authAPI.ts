@@ -92,18 +92,18 @@ export async function login(userData: IUserData) {
     if (res.ok) {
       const data = await res.json();
       if (data.token) {
-        Cookies.set("token", data.token, { expires: 1 });  // Establecer token en la cookie
+        Cookies.set("token", data.token, { expires: 1 });  
         console.log("Token recibido:", data.token);
     
         try {
-          const decodedToken: DecodedToken = jwtDecode<DecodedToken>(data.token); // Decodificar token
+          const decodedToken: DecodedToken = jwtDecode<DecodedToken>(data.token); 
     
           if (decodedToken.exp && Date.now() >= decodedToken.exp * 1000) {
             throw new Error("El token ha expirado.");
           }
     
           if (decodedToken.sub) {
-            localStorage.setItem("userId", decodedToken.sub);  // Almacenar el ID de usuario
+            localStorage.setItem("userId", decodedToken.sub);  
           } else {
             throw new Error("El token no contiene un ID de usuario válido (sub).");
           }

@@ -99,7 +99,7 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
             file: reader.result as string,
           }));
         };
-        reader.readAsDataURL(file); // Convierte a base64
+        reader.readAsDataURL(file); 
       }
     } else if (name === "dateLost") {
       const selectedDate = new Date(value);
@@ -126,12 +126,12 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
     e.preventDefault();
 
     try {
-      const token = Cookies.get("token"); // Recupera el token desde las cookies
+      const token = Cookies.get("token"); 
       if (!token) {
         console.error("Token no encontrado.");
         return;
       }
-      // Validar userId antes de enviar el formulario
+      
       if (
         !formData.userId ||
         !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
@@ -156,7 +156,7 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
       data.append("description", formData.description);
       data.append("petType", formData.petType);
       data.append("contactInfo", formData.contactInfo);
-      data.append("dateLost", formData.dateLostISO); // Asegúrate de pasar la fecha en formato ISO
+      data.append("dateLost", formData.dateLostISO); 
       data.append("status", formData.status);
       data.append("userId", formData.userId);
       data.append("location", JSON.stringify(formData.location));
@@ -193,8 +193,8 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
             "bg-green500 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded",
         },
       });
-      //updatePetStatus(animal.id); //!!!!
-      router.push("/misposteos"); // redirige a mis posteos luego de ser marcada como perdida
+      
+      router.push("/misposteos"); 
     } catch (error) {
       Swal.fire(
         "Error",
