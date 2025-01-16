@@ -37,7 +37,12 @@ const CardDetail: React.FC = () => {
       {/* Cabecera */}
       <div className="flex items-center gap-2 px-6">
         <h1 className="text-xl text-gray-800 font-bold flex-1">Usuario: {post.userId}</h1>
-        <ButtonCard post={post} />
+        <ButtonCard 
+          post={post} 
+          onStatusChange={(newStatus) =>
+            console.log(`Estado cambiado a: ${newStatus}`)
+          } 
+        />
       </div>
 
       {/* Título */}
