@@ -16,7 +16,7 @@ enum Role {
 
 export class CreateUserDto {
   @IsOptional()
-  @IsUUID()
+  @IsString()
   id?: string;
 
   @IsEmail()
