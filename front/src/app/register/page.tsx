@@ -10,6 +10,7 @@ import {ISignUpData} from "@/interfaces/types";
 import validate, {validationGuide} from "@/helpers/validate";
 import {register} from "../api/authAPI";
 
+
 interface RegisterProps {
   role?: string;  
 }

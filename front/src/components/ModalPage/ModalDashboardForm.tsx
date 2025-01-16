@@ -21,16 +21,17 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    title: `${animal.name}`,
-    description: `${animal.description}`,
-    petType: `${animal.type}`,
-    contactInfo: `${userData.phone}`,
-    dateLost: "",
-    dateLostISO: "",
-    location: { address: "", latitude: 0, longitude: 0 },
-    file: `${animal.imgUrl}`,
-    status: "perdido",
-    userId: "",
+    title: animal.name, // Eliminé las interpolaciones innecesarias
+    description: animal.description,
+    petType: animal.type,
+    contactInfo: userData.phone,
+    dateLost: '',
+    dateLostISO: '',
+    location: { address: '', latitude: 0, longitude: 0 },
+    file: animal.imgUrl,
+    status: 'perdido',
+    userId: '',
+
   });
 
   const placeRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -152,21 +153,30 @@ const ModalDashboardForm: React.FC<ModalDashboardPageProps> = ({
       }
 
       const data = new FormData();
-      data.append("title", formData.title);
-      data.append("description", formData.description);
-      data.append("petType", formData.petType);
-      data.append("contactInfo", formData.contactInfo);
-      data.append("dateLost", formData.dateLostISO); // Asegúrate de pasar la fecha en formato ISO
-      data.append("status", formData.status);
-      data.append("userId", formData.userId);
-      data.append("location", JSON.stringify(formData.location));
+      
+      // Función para manejar la adición de datos a FormData y evitar valores undefined
+      const appendFormData = (name: string, value: string | Blob | number | null | undefined) => {
+        if (value !== undefined && value !== null) {
+          data.append(name, value.toString()); // Convertir a string si no es Blob
+        }
+      };
+
+      appendFormData('title', formData.title);
+      appendFormData('description', formData.description);
+      appendFormData('petType', formData.petType);
+      appendFormData('contactInfo', formData.contactInfo);
+      appendFormData('dateLost', formData.dateLostISO); // Asegúrate de pasar la fecha en formato ISO
+      appendFormData('status', formData.status);
+      appendFormData('userId', formData.userId);
+      appendFormData('location', JSON.stringify(formData.location));
       if (animal.imgUrl) {
         const file = await convertUrlToFile(
           animal.imgUrl,
           `${animal.id}-image`
         );
-        data.append("file", file);
+        appendFormData('file', file);
       }
+
 
       const response = await fetch(`${API_URL}/posts`, {
         method: "POST",

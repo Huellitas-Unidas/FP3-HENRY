@@ -190,7 +190,7 @@ const PetRegister: React.FC = () => {
 
           {isSubmitted && formik.errors.file && (
             <span className="text-red-500 text-sm text-center">
-              {formik.errors.file}
+              {typeof formik.errors.file === "string" ? formik.errors.file : ""}
             </span>
           )}
 

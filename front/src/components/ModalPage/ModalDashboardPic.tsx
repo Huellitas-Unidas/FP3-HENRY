@@ -14,7 +14,7 @@ const ModalDashboardPic = ({
   const [isDeleted, setisDeleted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleDeletePic = async () => {
+  const handleDeletePic = async (): Promise<void> => {
     if (userId)
       try {
         await deletePic(userId);
@@ -24,7 +24,7 @@ const ModalDashboardPic = ({
       }
   };
 
-  const handlePicButton = async () => {
+  const handlePicButton = async (): Promise<void> => {
     const fileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
@@ -51,7 +51,7 @@ const ModalDashboardPic = ({
       console.error("Error al subir la foto de perfil:", error);
     }
 
-    if (!isOpen) return null;
+    if (!isOpen) return;
   };
 
   return (
