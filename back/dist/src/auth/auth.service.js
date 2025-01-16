@@ -29,6 +29,7 @@ let AuthService = class AuthService {
             role: user.role,
         };
         console.log("Payload del token:", payload);
+        return this.jwtService.sign(payload);
     }
     async validatePassword(plainPassword, hashedPassword) {
         return bcrypt.compare(plainPassword, hashedPassword);
