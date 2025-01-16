@@ -22,6 +22,9 @@ export class AuthService {
 
     console.log('Payload del token:', payload);
     return this.jwtService.sign(payload);
+
+    console.log('Payload del token:', payload);
+    return this.jwtService.sign(payload);
   }
 
   async validatePassword(

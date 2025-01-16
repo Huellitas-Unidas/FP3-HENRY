@@ -17,21 +17,16 @@ export class UserService {
     private authService: AuthService,
     private emailService: EmailService,
   ) {}
-  async create(createUserDto: CreateUserDto) {
-    const { id, email, password, name, phone, googleId, role } = createUserDto;
 
-    // Buscar usuario por email o googleId
-    const existingUser = await this.prisma.user.findFirst({
-      where: {
-        OR: [{ email }, { googleId }],
-      },
+  async create(createUserDto: CreateUserDto) {
+    const { id, email, password, name, phone, role } = createUserDto;
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
     });
 
     if (existingUser) {
-      throw new HttpException(
-        'El correo electrónico o Google ID ya están en uso',
-        409,
-      );
+      throw new HttpException('El correo electrónico ya está en uso', 409);
     }
 
     let hashedPassword = null;
@@ -41,12 +36,11 @@ export class UserService {
     }
 
     const userData = {
-      id: id || undefined, // UUID generado automáticamente por Prisma
+      id: id || undefined,
       email,
       password: hashedPassword,
       phone: String(phone),
       name,
-      googleId: googleId || null,
       role: role ? (role.toUpperCase() as Role) : 'USER',
     };
 
@@ -56,7 +50,7 @@ export class UserService {
 
     return {
       user,
-      message: 'Usuario creado exitosamente.',
+      message: 'Usuario creado exitosamente y correo enviado.',
     };
   }
 

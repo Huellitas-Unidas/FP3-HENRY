@@ -9,6 +9,8 @@ import { Autocomplete } from "@react-google-maps/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+
+
 interface ModalPageProps {
   onClose: () => void;
   onRefreshList: () => void;
@@ -111,8 +113,6 @@ const ModalPage: React.FC<ModalPageProps> = ({ onClose, onRefreshList }) => {
       );
       return;
     }
-
-    setLoading(true);
 
     try {
       const token = Cookies.get("token");
